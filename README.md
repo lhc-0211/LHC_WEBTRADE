@@ -67,5 +67,3 @@ LHC_WEBTRADE/
 ├─ package.json
 └─ vite.config.ts
 ```
-
-ádfasdf
