@@ -1,0 +1,59 @@
+body {
+  font-family: "Plus Jakarta Sans", sans-serif;
+}
+
+:root {
+  --app-height: 100vh; /* fallback */
+  user-select: none;
+  overflow: hidden;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-slate-600) transparent;
+  outline: none;
+  transition: color 0.25s, background-color 0.25s, border-color 0.25s,
+    opacity 0.25s, outline-color 0.25s;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none !important; /* Ẩn trên Chrome, Safari */
+}
+.hide-scrollbar {
+  -ms-overflow-style: none !important; /* Ẩn trên IE và Edge */
+  scrollbar-width: none !important; /* Ẩn trên Firefox */
+}
+
+button {
+  cursor: pointer;
+}
+
+.sidebar-item:hover,
+.sidebar-active {
+  background: linear-gradient(
+    90deg,
+    rgba(230, 232, 16) -71.91%,
+    rgba(255, 200, 0, 0) 100%
+  );
+}
+
+/* --- Ẩn active khi icon ở trạng thái normal --- */
+.sidebar-item__normal #iconACtive {
+  display: none;
+}
+
+/* --- Khi hover vào normal → hiển thị active và ẩn normal --- */
+.sidebar-item:hover .sidebar-item__normal #iconNormal {
+  display: none;
+}
+.sidebar-item:hover .sidebar-item__normal #iconACtive {
+  display: block;
+}
+
+/* --- Khi icon đang active (đã click) → luôn hiển thị active --- */
+.sidebar-item__active #iconNormal {
+  display: none;
+}
+.sidebar-item__active #iconACtive {
+  display: block;
+}

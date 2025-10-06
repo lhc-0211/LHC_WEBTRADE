@@ -1,14 +1,15 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import MainLayout from "../layouts/mainLayout";
-import NotFound from "../pages/about/notFound";
-import PriceBoardPage from "../pages/price-board/PriceBoardPage";
+import NotFound from "../pages/notFound";
+import PriceBoardPage from "../pages/PriceBoardPage";
 
 export default function AppRouter() {
   return (
     <BrowserRouter>
       <MainLayout>
         <Routes>
-          <Route path="/" element={<PriceBoardPage />} />
+          <Route path="/" element={<Navigate to="/price-board" replace />} />
+          <Route path="/price-board" element={<PriceBoardPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </MainLayout>
