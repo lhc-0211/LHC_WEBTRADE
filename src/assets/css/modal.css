@@ -1,0 +1,207 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(26, 32, 44, 0.3);
+}
+
+.ReactModal__Overlay {
+  z-index: 1000;
+  background-color: rgba(0, 0, 0, 0.76) !important;
+}
+
+.ReactModalPortal .card {
+  border: none;
+}
+
+.ReactModalPortal .card .card-header {
+  border-bottom: 0;
+  background: transparent;
+  padding: 0;
+  font-style: normal;
+  font-weight: normal;
+  line-height: 111%;
+}
+
+.ReactModalPortal .p-header {
+  background: #ffffff;
+  color: #1c1c1c;
+  margin-bottom: 0;
+}
+
+.ReactModalPortal {
+  color: var(--color-white-100);
+}
+
+.form-label {
+  font-weight: 600;
+}
+
+.react-datepicker-popper {
+  z-index: 1000000;
+}
+
+.react-confirm-alert-overlay {
+  z-index: 10000;
+}
+
+.react-confirm-alert .custom-ui-confirm {
+  text-align: center;
+  width: 500px;
+  padding: 40px;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 20px 75px rgb(0 0 0 / 23%);
+  color: #1a202c;
+}
+
+.custom-ui-confirm > h1 {
+  margin-top: 0;
+}
+
+.custom-ui-confirm > button {
+  width: 160px;
+  padding: 10px;
+  border: 1px solid #f4da9e;
+  border-radius: 8px;
+  margin: 10px;
+  cursor: pointer;
+  background: none;
+  color: #1a202c;
+  font-size: 14px;
+}
+
+.custom-ui-confirm > button:hover {
+  background-color: #fd7e14;
+  color: #fff;
+}
+
+.custom-ui-confirm > button:active,
+.custom-ui-confirm > button:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.input-order.hasError {
+  border-color: #ff5555;
+}
+
+.react-confirm-alert-button-group {
+  justify-content: center;
+}
+
+/* Stock detail modal */
+
+.ReactModal__Content .nav-tabs {
+  border-bottom: 1px solid var(--color-text-half-white);
+  border-top: 1px solid var(--color-text-half-white);
+}
+
+.ReactModal__Content .nav-tabs .nav-link {
+  height: 26px;
+  padding: 5px 1rem;
+  color: #27272d !important;
+  font-size: 12px;
+  border: none;
+  margin-bottom: 5px;
+}
+
+.ReactModal__Content .nav-tabs .nav-link.active {
+  border-radius: 3px;
+  background-color: var(--color-bg-primary);
+  color: #000000;
+}
+
+.ReactModal__Content .tab-history .table-borderless td,
+.ReactModal__Content .tab-finance .table-borderless td,
+.ReactModal__Content .tab-profile .table-borderless td {
+  border-bottom: 0.5px solid #cccccc;
+  padding: 0.3rem;
+}
+
+.ReactModal__Content .tab-history .table-borderless th,
+.ReactModal__Content .tab-finance .table-borderless th,
+.ReactModal__Content .tab-profile .table-borderless th {
+  border: 0.5px solid #cccccc;
+  padding: 0.3rem;
+}
+
+.ReactModal__Content .btn-secondary {
+  padding: 4px 18px;
+  height: 25px;
+  font-size: 12px;
+  color: #666666;
+  cursor: pointer;
+  background-color: #f2f4f6;
+  border-color: #f2f4f6;
+}
+
+.ReactModal__Content .btn-secondary.active {
+  background-color: var(--color-bg-primary) !important;
+  border-color: var(--color-bg-primary) !important;
+  color: #ffffff;
+}
+
+.ReactModal__Content .tab-history .btn-best {
+  padding: 4px 18px;
+  height: 25px;
+  font-size: 12px;
+  color: #666666;
+  background-color: #f2f4f6;
+  border-color: #f2f4f6;
+}
+
+.frame-per {
+  background: #d7d7d7;
+  display: flex;
+  height: 10px;
+}
+
+.frame-per .frame-per-buy {
+  background: #13ba7f;
+}
+
+.frame-per .frame-per-sell {
+  background: #f5465c;
+}
+
+.tab-finance .nav-link {
+  color: #007bff;
+  padding: 3.5px 16px;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+
+.tab-finance .nav-link.active {
+  color: #fff;
+  background-color: #007bff;
+}
+
+.tab-finance .list-item {
+  border-bottom: 1px solid #c4c9d0;
+  padding: 0.25rem;
+}
+
+.tab-finance .list-item-info {
+  color: #0c5460 !important;
+  background-color: #bee5eb;
+}
+
+.tab-finance .list-group-item-info {
+  color: #0c5460 !important;
+  background-color: #bee5eb;
+}
+
+.title-read {
+  color: #666666;
+}
+
+.react-modal-content {
+  width: 520px;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  right: 0;
+}

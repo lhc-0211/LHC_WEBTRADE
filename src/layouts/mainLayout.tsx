@@ -1,4 +1,5 @@
 import { useState } from "react";
+import LoginModal from "../components/auth/loginModal";
 import Header from "../components/header/header";
 import Sidebar from "../components/sidebar/sidebar";
 import { useViewportSize } from "../hooks/useViewportSize";
@@ -30,7 +31,7 @@ export default function MainLayout({
     localStorage.setItem("sidebarMode", mode);
   };
 
-  const { width, height } = useViewportSize(60 + 30, getSidebarWidth());
+  const { width, height } = useViewportSize(60, getSidebarWidth());
 
   return (
     <div className="flex flex-row h-screen bg-background-primary text-text-body">
@@ -57,7 +58,8 @@ export default function MainLayout({
           {children}
         </main>
 
-        <div className="h-[30px] w-full">Footer</div>
+        {/* Modal đăng nhập  */}
+        <LoginModal />
       </div>
     </div>
   );

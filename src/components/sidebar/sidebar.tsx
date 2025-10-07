@@ -101,7 +101,7 @@ export default function Sidebar(props: Props) {
           >
             <span className="flex flex-row items-center gap-1">
               <div className="bg-gray-200 w-2 h-2 rounded-full" />
-              {mode === "full" && <span>Mất kết nối</span>}
+              {mode === "full" && <span>Disconnect</span>}
             </span>
             <span>v.{packageJson.version}</span>
           </div>

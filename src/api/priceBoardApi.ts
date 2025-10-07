@@ -7,3 +7,8 @@ export const fetchStocksAPI = () => {
 export const fetchSnapshotAPI = () => {
   return axios.get("/api/snapshot");
 };
+
+// export async function loginAPI(data: LoginRequest) {
+//   const response = await apiClient.post<LoginResponse>("/auth/login", data);
+//   return response.data;
+// }
