@@ -11,7 +11,6 @@ import * as yup from "yup";
 import { loginApi } from "../../api/authApi";
 import bgLogin from "../../assets/imgs/bg-login.jpg";
 import logo from "../../assets/imgs/logo.png";
-import { useAppSelector } from "../../store/hook";
 import { loginSuccess } from "../../store/slices/authSlice";
 import { closeLoginModal } from "../../store/slices/clientSlice";
 import Button from "../button";
@@ -49,7 +48,9 @@ const customStyles = {
 
 export default function LoginModal() {
   const dispatch = useDispatch();
-  const isOpen = useAppSelector((state) => state.client.loginModalOpen);
+  // const isOpen = useAppSelector((state) => state.client.loginModalOpen);
+
+  const isOpen = false;
 
   const [error, setError] = React.useState("");
 

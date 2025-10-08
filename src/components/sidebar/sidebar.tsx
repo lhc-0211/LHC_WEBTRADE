@@ -6,7 +6,7 @@ import {
 import { useLocation } from "react-router-dom";
 import packageJson from "../../../package.json";
 import { sidebarGroups } from "../../configs/sidebar";
-import type { SidebarItem, SidebarMode } from "../../types/layout";
+import type { SidebarItem, SidebarMode } from "../../types";
 
 interface Props {
   mode: string;

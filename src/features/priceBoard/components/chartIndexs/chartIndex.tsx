@@ -3,7 +3,7 @@ import { FaArrowUpLong } from "react-icons/fa6";
 import { TiArrowSortedDown, TiArrowSortedUp } from "react-icons/ti";
 import { useSelector } from "react-redux";
 import { selectChartIndexsStatus } from "../../../../store/slices/priceboardSelector";
-import type { ChartDataIndex, InfoIndex } from "../../../../types/priceBoard";
+import type { ChartDataIndex, InfoIndex } from "../../../../types";
 import {
   getStatusIndex,
   mapIdToNameIndex,

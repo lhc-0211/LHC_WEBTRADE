@@ -2,16 +2,13 @@ import { useSelector } from "react-redux";
 import { Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { useAppDispatch } from "../../../../store/hook";
+import { fetchInfoIndexRequest } from "../../../../store/slices/priceboard/reducer";
 import {
   selectChartIndexs,
   selectInfoIndex,
   selectInfoIndexStatus,
 } from "../../../../store/slices/priceboardSelector";
-import {
-  fetchChartIndexs,
-  fetchInfoIndex,
-} from "../../../../store/slices/priceboardSlice";
-import type { InfoIndex } from "../../../../types/priceBoard";
+import type { InfoIndex } from "../../../../types";
 import { useIntervalApi } from "../../hooks/useIntervalApi";
 import ChartIndex from "./chartIndex";
 import ChartIndexSkeleton from "./chartIndexSkeleton";
@@ -25,13 +22,13 @@ export default function ListChartIndexs() {
   const { loading, error } = useSelector(selectInfoIndexStatus);
 
   useIntervalApi(async () => {
-    const info = await dispatch(fetchInfoIndex()).unwrap();
+    dispatch(fetchInfoIndexRequest());
 
-    info.forEach((dataIndex: InfoIndex) => {
-      if (!chartIndexs[dataIndex.indexsTypeCode]) {
-        dispatch(fetchChartIndexs(dataIndex.indexsTypeCode));
-      }
-    });
+    // info.forEach((dataIndex: InfoIndex) => {
+    //   if (!chartIndexs[dataIndex.indexsTypeCode]) {
+    //     dispatch(fetchChartIndexs(dataIndex.indexsTypeCode));
+    //   }
+    // });
   }, 5 * 60 * 1000);
 
   const swiperProps = {

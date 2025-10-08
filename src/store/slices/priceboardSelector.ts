@@ -1,13 +1,16 @@
 import type { RootState } from "..";
+import type { ApiStatus, ChartDataIndex, InfoIndex } from "../../types";
 
-export const selectInfoIndex = (state: RootState) =>
-  state.priceboard.data.infoIndex;
+// Selectors với type annotations
+export const selectInfoIndex = (state: RootState): InfoIndex[] =>
+  state.priceBoard.data.infoIndex;
 
-export const selectInfoIndexStatus = (state: RootState) =>
-  state.priceboard.status.fetchInfoIndex;
+export const selectInfoIndexStatus = (state: RootState): ApiStatus =>
+  state.priceBoard.status.fetchInfoIndex;
 
-export const selectChartIndexs = (state: RootState) =>
-  state.priceboard.data.chartIndexs;
+export const selectChartIndexs = (
+  state: RootState
+): Record<string, ChartDataIndex> => state.priceBoard.data.chartIndexs;
 
-export const selectChartIndexsStatus = (state: RootState) =>
-  state.priceboard.status.fetchChartIndexs;
+export const selectChartIndexsStatus = (state: RootState): ApiStatus =>
+  state.priceBoard.status.fetchChartIndexs;

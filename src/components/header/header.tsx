@@ -5,7 +5,7 @@ import AssetsIcon from "../../assets/imgs/icons/assets.svg?react";
 import LoginIcon from "../../assets/imgs/icons/login.svg?react";
 import OrderIcon from "../../assets/imgs/icons/order.svg?react";
 import RechargeIcon from "../../assets/imgs/icons/recharge.svg?react";
-import { useAppDispatch, useAppSelector } from "../../store/hook";
+import { useAppDispatch } from "../../store/hook";
 import { openLoginModal } from "../../store/slices/clientSlice";
 import Button from "../button";
 import InputFieldSearchMaster from "../inputs/inputFieldSearchMaster";
@@ -13,7 +13,9 @@ import InputFieldSearchMaster from "../inputs/inputFieldSearchMaster";
 export default function Header() {
   const dispatch = useAppDispatch();
 
-  const token = useAppSelector((state) => state.auth.token);
+  // const token = useAppSelector((state) => state.auth.token);
+
+  const token = false;
 
   const handleClickLogin = () => {
     dispatch(openLoginModal());

@@ -4,7 +4,7 @@ import {
   type PayloadAction,
 } from "@reduxjs/toolkit";
 import { fetchChartIndexAPI, fetchInfoIndexAPI } from "../../api/priceBoardApi";
-import type { ChartDataIndex, InfoIndex } from "../../types/priceBoard";
+import type { ApiStatus, ChartDataIndex, InfoIndex } from "../../types";
 
 //Gọi API bằng createAsyncThunk
 
@@ -24,12 +24,6 @@ export const fetchChartIndexs = createAsyncThunk(
     return { id: id, data: response.data };
   }
 );
-
-//Định nghĩa type cho status từng API
-interface ApiStatus {
-  loading: boolean;
-  error: string | null;
-}
 
 // Định nghĩa type cho state của slice
 interface PriceBoardState {

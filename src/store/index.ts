@@ -1,15 +1,24 @@
 import { configureStore } from "@reduxjs/toolkit";
-import authReducer from "./slices/authSlice";
-import clientReducer from "./slices/clientSlice";
-import priceboardReducer from "./slices/priceboardSlice";
+import createSagaMiddleware from "redux-saga";
+import { all } from "redux-saga/effects";
+import priceBoardReducer from "./slices/priceboard/reducer";
+import priceBoardSaga from "./slices/priceboard/saga";
+
+function* rootSaga() {
+  yield all([priceBoardSaga()]);
+}
+
+const sagaMiddleware = createSagaMiddleware();
 
 export const store = configureStore({
   reducer: {
-    priceboard: priceboardReducer,
-    client: clientReducer,
-    auth: authReducer,
+    priceBoard: priceBoardReducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({ thunk: false }).concat(sagaMiddleware),
 });
+
+sagaMiddleware.run(rootSaga);
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
