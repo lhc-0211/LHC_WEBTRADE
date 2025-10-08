@@ -31,7 +31,7 @@ export default function MainLayout({
     localStorage.setItem("sidebarMode", mode);
   };
 
-  const { width, height } = useViewportSize(60, getSidebarWidth());
+  const { width, height } = useViewportSize(getSidebarWidth(), 60);
 
   return (
     <div className="flex flex-row h-screen bg-background-primary text-text-body">

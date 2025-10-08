@@ -108,7 +108,7 @@ export default function Sidebar(props: Props) {
         </aside>
       )}
       <div
-        className={`size-[30px] border-2 border-yellow-100 bg-gray-300 rounded-full grid place-items-center absolute  ${
+        className={`size-[30px] border-2 border-yellow-100 bg-gray-300 rounded-full grid place-items-center absolute cursor-pointer ${
           mode === "hidden" ? "bottom-10 -right-11" : "bottom-10 -right-4"
         }`}
       >

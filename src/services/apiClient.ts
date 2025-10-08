@@ -5,7 +5,7 @@ export const apiClient = axios.create({
   timeout: 10000,
 });
 
-// 👉 Interceptor thêm token
+// Interceptor thêm token
 apiClient.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
   if (token) {
@@ -14,7 +14,7 @@ apiClient.interceptors.request.use((config) => {
   return config;
 });
 
-// 👉 Xử lý response
+// Xử lý response
 apiClient.interceptors.response.use(
   (res) => res,
   (err) => {
@@ -26,7 +26,7 @@ apiClient.interceptors.response.use(
   }
 );
 
-// 👉 Abort controller
+// Abort controller
 export const createAbortSignal = () => {
   const controller = new AbortController();
   return { signal: controller.signal, cancel: () => controller.abort() };

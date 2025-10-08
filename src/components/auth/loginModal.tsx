@@ -1,13 +1,34 @@
-import React, { useState } from "react";
+import { yupResolver } from "@hookform/resolvers/yup";
+import React from "react";
+import { useForm } from "react-hook-form";
 import { IoClose } from "react-icons/io5";
 import { MdPermPhoneMsg } from "react-icons/md";
+import { PiWarningFill } from "react-icons/pi";
 import Modal from "react-modal";
 import { useDispatch } from "react-redux";
+import ScaleLoader from "react-spinners/ScaleLoader";
+import * as yup from "yup";
 import { loginApi } from "../../api/authApi";
+import bgLogin from "../../assets/imgs/bg-login.jpg";
+import logo from "../../assets/imgs/logo.png";
 import { useAppSelector } from "../../store/hook";
 import { loginSuccess } from "../../store/slices/authSlice";
 import { closeLoginModal } from "../../store/slices/clientSlice";
 import Button from "../button";
+import InputField from "../inputs/inputField";
+
+const schema = yup.object({
+  username: yup.string().required("Vui lòng nhập tên đăng nhập"),
+  password: yup
+    .string()
+    .min(6, "Ít nhất 6 ký tự")
+    .required("Vui lòng nhập mật khẩu"),
+});
+
+type FormValues = {
+  username: string;
+  password: string;
+};
 
 const customStyles = {
   content: {
@@ -30,31 +51,37 @@ export default function LoginModal() {
   const dispatch = useDispatch();
   const isOpen = useAppSelector((state) => state.client.loginModalOpen);
 
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = React.useState("");
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<FormValues>({
+    resolver: yupResolver(schema),
+  });
 
   const onClose = () => {
     dispatch(closeLoginModal());
-    setUsername("");
-    setPassword("");
     setError("");
+    reset();
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
+  const onSubmit = async (data: FormValues) => {
     setError("");
 
     try {
-      const token = await loginApi(username, password);
+      const token = await loginApi({
+        accountCode: data.username,
+        password: data.password,
+        device: "device",
+      });
+
       dispatch(loginSuccess(token)); // lưu token vào Redux
       onClose(); // đóng modal
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Error logging in");
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -66,22 +93,26 @@ export default function LoginModal() {
       ariaHideApp={false}
       style={customStyles}
     >
-      <div className="flex flex-col justify-between p-4">
+      <div
+        className="flex flex-col gap-4 p-4 bg-cover bg-no-repeat bg-center rounded-2xl"
+        style={{
+          backgroundImage: `url(${bgLogin})`,
+        }}
+      >
         <div className="flex flex-row items-center justify-between">
           <h2 className="text-sm font-bold text-text-title">
             CHÀO MỪNG NHÀ ĐẦU TƯ
-            <br /> ĐẾN VỚI NỀN TẢNG GIAO DỊCH XTINVEST
+            <br /> ĐẾN VỚI NỀN TẢNG GIAO DỊCH DTND
           </h2>
-          <IoClose className="size-6 text-text-title" onClick={onClose} />
+          <IoClose
+            className="size-6 text-text-title cursor-pointer"
+            onClick={onClose}
+          />
         </div>
 
         <div className="flex flex-col gap-10">
           <div className="flex flex-col gap-6">
-            <img
-              src="../../assets/imgs/logo-short.png"
-              alt="logo"
-              className="w-16 h-16"
-            />
+            <img src={logo} alt="logo" className="w-36 h-13" />
             <div className="flex flex-col gap-3">
               <h2 className="text-2xl font-black text-text-title">ĐĂNG NHẬP</h2>
               <h3 className="text-sm font-medium text-text-subtitle">
@@ -90,11 +121,34 @@ export default function LoginModal() {
             </div>
           </div>
 
-          <form onSubmit={handleSubmit} className="flex flex-col gap-8">
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="flex flex-col gap-8"
+          >
+            <div className="flex flex-col gap-3">
+              <InputField
+                label="Tên đăng nhập"
+                placeholder="Nhập tên đăng nhập"
+                error={errors.username}
+                registration={register("username")}
+                className="!h-12"
+              />
+
+              <InputField
+                label="Mật khẩu"
+                type="password"
+                placeholder="Nhập mật khẩu"
+                error={errors.password}
+                registration={register("password")}
+                className="!h-12"
+              />
+            </div>
+
             <div className="flex flex-col gap-4">
               {error && (
-                <div className="py-2 px-3 bg-error-darker rounded-2xl">
-                  <p className="text-red-500 text-sm mb-2">{error}</p>
+                <div className="py-2 px-3 bg-error-darker rounded-xl flex items-center flex-row gap-1">
+                  <PiWarningFill className="size-5 text-red-500" />
+                  <span className="text-red-500 text-sm">{error}</span>
                 </div>
               )}
               <span className="text-sm font-semibold text-DTND-200 text-right">
@@ -106,18 +160,18 @@ export default function LoginModal() {
               variant="primary"
               fullWidth
               type="submit"
-              disabled={loading}
+              disabled={isSubmitting}
             >
-              {loading ? "Đang đăng nhập..." : "Đăng nhập"}
+              {isSubmitting ? <ScaleLoader height={25} /> : "Đăng nhập"}
             </Button>
           </form>
           <span className="text-sm font-medium text-text-title text-center">
-            Chưa có tài khoản{" "}
+            Chưa có tài khoản?{" "}
             <span className="font-semibold text-DTND-200">Mở tài khoản</span>
           </span>
         </div>
 
-        <div className="flex flex-row gap-2">
+        <div className="flex flex-row gap-2 items-center justify-center w-full">
           <MdPermPhoneMsg className="size-4 text-DTND-200" />
           <span className="text-xs text-text-body font-semibold">
             Hotline: <span className="text-text-subtitle">+84 123 456 789</span>

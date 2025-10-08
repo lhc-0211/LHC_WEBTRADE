@@ -1,18 +1,19 @@
 import { FaBell } from "react-icons/fa";
+import { IoIosArrowDown } from "react-icons/io";
+import ava from "../../assets/imgs/ava.png";
 import AssetsIcon from "../../assets/imgs/icons/assets.svg?react";
+import LoginIcon from "../../assets/imgs/icons/login.svg?react";
 import OrderIcon from "../../assets/imgs/icons/order.svg?react";
 import RechargeIcon from "../../assets/imgs/icons/recharge.svg?react";
-
 import { useAppDispatch, useAppSelector } from "../../store/hook";
 import { openLoginModal } from "../../store/slices/clientSlice";
 import Button from "../button";
+import InputFieldSearchMaster from "../inputs/inputFieldSearchMaster";
 
 export default function Header() {
   const dispatch = useAppDispatch();
 
-  const isOpen = useAppSelector((state) => state.client.loginModalOpen);
-
-  console.log("isOpen", isOpen);
+  const token = useAppSelector((state) => state.auth.token);
 
   const handleClickLogin = () => {
     dispatch(openLoginModal());
@@ -37,21 +38,52 @@ export default function Header() {
           Đặt lệnh nhanh
         </Button>
 
-        <div className="flex flex-row gap-2 items-center">
+        <InputFieldSearchMaster
+          className="w-[150px] h-9"
+          placeholder="Tìm kiếm"
+        />
+
+        <div
+          className={`flex flex-row gap-2 items-center ${
+            token ? "bg-button-gray rounded-xl" : ""
+          }`}
+        >
           <Button
             onClick={() => alert("Primary")}
             variant="close"
-            className="!p-2 !h-8"
+            className="!p-2 !h-9"
           >
             <FaBell />
           </Button>{" "}
-          <Button onClick={() => alert("Primary")} variant="normal">
-            Mở tài khoản
-          </Button>
-          <Button onClick={() => handleClickLogin()} variant="primary">
-            <OrderIcon />
-            Đăng nhập
-          </Button>
+          {token ? (
+            <>
+              <div className="h-[11px] w-[1.5px] bg-DTND-300 rounded-xl"></div>
+              <div className="py-1 px-2 flex flex-row gap-2 items-center">
+                <img
+                  src={ava}
+                  alt="ava-imgs"
+                  className="w-4 h-4 rounded-full"
+                />
+                <span className="text-xs font-normal text-text-body">
+                  TK-005650.1
+                </span>
+                <span className="py-[2px] px-[7px] rounded-[20px] bg-primary-default text-[10px] font-normal text-text-inverse">
+                  Thường
+                </span>
+                <IoIosArrowDown className="text-icon-medium text-lg" />
+              </div>
+            </>
+          ) : (
+            <>
+              <Button onClick={() => alert("Primary")} variant="normal">
+                Mở tài khoản
+              </Button>
+              <Button onClick={() => handleClickLogin()} variant="primary">
+                <LoginIcon />
+                Đăng nhập
+              </Button>
+            </>
+          )}
         </div>
       </div>
     </div>

@@ -1,3 +1,5 @@
+import { apiClient } from "../services/apiClient";
+
 export interface LoginRequest {
   username: string;
   password: string;
@@ -7,18 +9,21 @@ export interface LoginResponse {
   token: string;
 }
 
-// api/authApi.ts
-export async function loginApi(username: string, password: string) {
-  const response = await fetch("/api/login", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ username, password }),
-  });
+export async function loginApi({
+  accountCode,
+  password,
+  device,
+}: {
+  accountCode: string;
+  password: string;
+  device: string;
+}): Promise<string> {
+  const formData = new FormData();
+  formData.append("accountCode", accountCode);
+  formData.append("password", password);
+  formData.append("device", device);
 
-  if (!response.ok) {
-    throw new Error("Đăng nhập thất bại");
-  }
+  const res = await apiClient.post("/v1/auth/login", formData);
 
-  const data = await response.json();
-  return data.token;
+  return res.data;
 }

@@ -105,7 +105,7 @@
 
   --color-primary-darker: #032317;
   --color-primary-dark: #0b4d86;
-  --color-primary-default: #0f6cbd;
+  --color-primary-default: #bd720f;
   --color-primary-light: #10a86ecc;
   --color-primary-lighter: #10a86e99;
 
@@ -136,6 +136,7 @@
   --color-stock-text-yellow: #fdff12;
   --color-stock-text-purple: #f23aff;
   --color-stock-text-blue: #52d3f9;
+  --color-stock-text-blue-100: #00b2ff;
 
   --color-chart-line-green: #34c85a;
   --color-chart-line-red: #fd3b31;
@@ -189,4 +190,7 @@
   --color-sidebar-default: #101011;
 
   --color-DTND-200: #e1d091;
+  --color-DTND-300: #d3a35e;
+
+  --color-input: #1b1f29;
 }

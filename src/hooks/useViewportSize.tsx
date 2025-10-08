@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 
 export function useViewportSize(
-  offsetHeight: number = 0,
-  offsetWidth: number = 0
+  offsetWidth: number = 0,
+  offsetHeight: number = 0
 ) {
   const getSize = () => ({
     width: window.innerWidth - offsetWidth,
