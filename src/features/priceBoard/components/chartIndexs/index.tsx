@@ -1,13 +1,17 @@
+import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { useAppDispatch } from "../../../../store/hook";
-import { fetchInfoIndexRequest } from "../../../../store/slices/priceboard/reducer";
 import {
   selectChartIndexs,
   selectInfoIndex,
   selectInfoIndexStatus,
-} from "../../../../store/slices/priceboardSelector";
+} from "../../../../store/slices/priceboard/selector";
+import {
+  fetchChartIndexRequest,
+  fetchInfoIndexRequest,
+} from "../../../../store/slices/priceboard/slice";
 import type { InfoIndex } from "../../../../types";
 import { useIntervalApi } from "../../hooks/useIntervalApi";
 import ChartIndex from "./chartIndex";
@@ -21,18 +25,36 @@ export default function ListChartIndexs() {
 
   const { loading, error } = useSelector(selectInfoIndexStatus);
 
-  useIntervalApi(async () => {
+  useEffect(() => {
     dispatch(fetchInfoIndexRequest());
+  }, [dispatch]);
 
-    // info.forEach((dataIndex: InfoIndex) => {
-    //   if (!chartIndexs[dataIndex.indexsTypeCode]) {
-    //     dispatch(fetchChartIndexs(dataIndex.indexsTypeCode));
-    //   }
-    // });
-  }, 5 * 60 * 1000);
+  useEffect(() => {
+    if (infoIndex.length > 0) {
+      infoIndex.forEach((dataIndex: InfoIndex) => {
+        if (dataIndex.indexsTypeCode) {
+          dispatch(fetchChartIndexRequest(dataIndex.indexsTypeCode));
+        }
+      });
+    }
+  }, [infoIndex, dispatch]);
+
+  //polling api chartindex
+  useIntervalApi(() => {
+    const hour = new Date().getHours();
+    if (hour < 8 || hour >= 15) return;
+
+    if (infoIndex.length > 0) {
+      infoIndex.forEach((dataIndex: InfoIndex) => {
+        if (dataIndex.indexsTypeCode) {
+          dispatch(fetchChartIndexRequest(dataIndex.indexsTypeCode));
+        }
+      });
+    }
+  }, 5 * 10 * 1000);
 
   const swiperProps = {
-    spaceBetween: 12,
+    spaceBetween: 8,
     modules: [Navigation],
     pagination: { clickable: true },
     loop: true,
@@ -82,7 +104,11 @@ export default function ListChartIndexs() {
             <SwiperSlide key={item.indexsTypeCode} className="h-full">
               <ChartIndex
                 dataIndex={item}
-                dataChart={chartIndexs[item.indexsTypeCode]}
+                dataChart={
+                  chartIndexs[item.indexsTypeCode]?.data?.length > 0
+                    ? chartIndexs[item.indexsTypeCode].data
+                    : []
+                }
               />
             </SwiperSlide>
           ))}

@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import createSagaMiddleware from "redux-saga";
 import { all } from "redux-saga/effects";
-import priceBoardReducer from "./slices/priceboard/reducer";
+import priceBoardReducer from "./slices/priceboard/slice";
 import priceBoardSaga from "./slices/priceboard/saga";
+import authReducer from "./slices/auth/slice";
+import authSaga from "./slices/auth/saga";
 
 function* rootSaga() {
-  yield all([priceBoardSaga()]);
+  yield all([priceBoardSaga(), authSaga()]);
 }
 
 const sagaMiddleware = createSagaMiddleware();
@@ -13,6 +15,7 @@ const sagaMiddleware = createSagaMiddleware();
 export const store = configureStore({
   reducer: {
     priceBoard: priceBoardReducer,
+    auth: authReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ thunk: false }).concat(sagaMiddleware),

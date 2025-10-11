@@ -1,26 +1,37 @@
 import { useEffect, useRef } from "react";
 
-export function useIntervalApi(
-  callback: () => void, // Hàm gọi api
-  delay: number // Thời gian lăp (ms)
-) {
-  const savedCallback = useRef(callback);
+type UseIntervalApiOptions = {
+  enabled?: boolean; // Có bật interval không
+  immediate?: boolean; // Gọi ngay lần đầu khi mount
+};
 
-  // Lưu callback mới nhất
+export function useIntervalApi(
+  callback: () => Promise<void> | void,
+  delay: number,
+  options: UseIntervalApiOptions = {}
+) {
+  const { enabled = true, immediate = true } = options;
+  const savedCallback = useRef<() => Promise<void> | void>(() => {});
+
+  // Lưu callback mới nhất (tránh stale closure)
   useEffect(() => {
     savedCallback.current = callback;
   }, [callback]);
 
   useEffect(() => {
-    if (delay === null) return;
-    function tick() {
+    if (!enabled || delay === null) return;
+
+    // Nếu muốn gọi ngay lần đầu
+    if (immediate && savedCallback.current) {
       savedCallback.current();
     }
 
-    //Gọi lần đầu khi mount
-    tick();
+    const id = setInterval(() => {
+      if (savedCallback.current) {
+        savedCallback.current();
+      }
+    }, delay);
 
-    const id = setInterval(tick, delay);
     return () => clearInterval(id);
-  }, [delay]);
+  }, [delay, enabled, immediate]);
 }

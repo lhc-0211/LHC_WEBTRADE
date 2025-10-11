@@ -11,7 +11,7 @@ import * as yup from "yup";
 import { loginApi } from "../../api/authApi";
 import bgLogin from "../../assets/imgs/bg-login.jpg";
 import logo from "../../assets/imgs/logo.png";
-import { loginSuccess } from "../../store/slices/authSlice";
+import { loginSuccess } from "../../store/slices/auth/slice";
 import { closeLoginModal } from "../../store/slices/clientSlice";
 import Button from "../button";
 import InputField from "../inputs/inputField";

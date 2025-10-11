@@ -1,4 +1,4 @@
-import { call, put, takeLatest } from "redux-saga/effects";
+import { call, put, takeEvery, takeLatest } from "redux-saga/effects";
 import {
   fetchChartIndexAPI,
   fetchInfoIndexAPI,
@@ -11,7 +11,7 @@ import {
   fetchInfoIndexFailure,
   fetchInfoIndexRequest,
   fetchInfoIndexSuccess,
-} from "./reducer";
+} from "./slice";
 
 // Định nghĩa type cho action saga
 interface FetchChartIndexAction {
@@ -24,11 +24,9 @@ function* fetchInfoIndexSaga() {
     const response: { data: InfoIndex[] } = yield call(fetchInfoIndexAPI);
     yield put(fetchInfoIndexSuccess(response.data));
   } catch (error: unknown) {
-    if (error instanceof Error) {
-      yield put(fetchInfoIndexFailure(error.message));
-    } else {
-      yield put(fetchInfoIndexFailure("Unknown error"));
-    }
+    const errorMessage =
+      error instanceof Error ? error.message : "Failed to fetch info index";
+    yield put(fetchInfoIndexFailure(errorMessage));
   }
 }
 
@@ -38,17 +36,19 @@ function* fetchChartIndexSaga(action: FetchChartIndexAction) {
       fetchChartIndexAPI,
       action.payload
     );
-    yield put(fetchChartIndexSuccess({ id: action.payload, ...response }));
+
+    yield put(
+      fetchChartIndexSuccess({ id: action.payload, data: response.data })
+    );
   } catch (error: unknown) {
-    if (error instanceof Error) {
-      yield put(fetchChartIndexFailure(error.message));
-    } else {
-      yield put(fetchChartIndexFailure("Unknown error"));
-    }
+    const errorMessage =
+      error instanceof Error ? error.message : "Failed to fetch info index";
+    console.error(`Error fetching ${action.payload}:`, errorMessage); // Log lỗi
+    yield put(fetchChartIndexFailure(action.payload)); // Truyền id thay vì errorMessage
   }
 }
 
 export default function* priceBoardSaga() {
   yield takeLatest(fetchInfoIndexRequest.type, fetchInfoIndexSaga);
-  yield takeLatest(fetchChartIndexRequest.type, fetchChartIndexSaga);
+  yield takeEvery(fetchChartIndexRequest.type, fetchChartIndexSaga);
 }

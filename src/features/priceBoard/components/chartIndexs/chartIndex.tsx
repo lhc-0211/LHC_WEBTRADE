@@ -2,27 +2,30 @@ import { FaSquare } from "react-icons/fa";
 import { FaArrowUpLong } from "react-icons/fa6";
 import { TiArrowSortedDown, TiArrowSortedUp } from "react-icons/ti";
 import { useSelector } from "react-redux";
-import { selectChartIndexsStatus } from "../../../../store/slices/priceboardSelector";
-import type { ChartDataIndex, InfoIndex } from "../../../../types";
+import { selectChartIndexStatusById } from "../../../../store/slices/priceboard/selector";
+import type { ChartIndex, InfoIndex } from "../../../../types";
 import {
   getStatusIndex,
   mapIdToNameIndex,
   numberFormat,
 } from "../../../../utils";
+import ChartComponent from "./chart";
 
 interface Props {
   dataIndex: InfoIndex;
-  dataChart: ChartDataIndex;
+  dataChart: ChartIndex[];
 }
 
 export default function ChartIndex(props: Props) {
   const { dataIndex, dataChart } = props;
 
-  const { loading } = useSelector(selectChartIndexsStatus);
+  const { loading } = useSelector(
+    selectChartIndexStatusById(dataIndex.indexsTypeCode)
+  );
 
   return (
-    <div className="flex flex-row gap-3 items-center w-full h-full">
-      <div className="flex flex-col gap-2 w-2/5">
+    <div className="flex flex-row gap-3 items-center w-full h-full bg-sidebar-default rounded border border-border">
+      <div className="flex flex-col gap-2 w-2/5 p-1">
         {/* Name, change, changePC */}
         <div className="flex flex-col gap-1">
           <span className="text-xs font-bold text-text-title uppercase">
@@ -31,14 +34,14 @@ export default function ChartIndex(props: Props) {
           <div
             className={`flex flex-row gap-2 items-center ${dataIndex.status}`}
           >
-            <div className="p-[2px] rounded grid place-items-center bg-success-dark">
+            <div className="p-[2px] rounded grid place-items-center bg-status-index">
               <FaArrowUpLong className=" w-3 h-3" />
             </div>{" "}
             <div className="flex flex-row gap-[5px] items-center">
-              <span className="text-[10px] font-normal">
+              <span className="text-[10px] font-semibold">
                 {numberFormat(dataIndex.valueIndexes)}
               </span>
-              <span className="text-[10px] font-normal">
+              <span className="text-[10px] font-semibold">
                 ({dataIndex.change} - {dataIndex.percentChange}%)
               </span>
             </div>
@@ -60,7 +63,7 @@ export default function ChartIndex(props: Props) {
         {/* Mã tăng giảm, phiên */}
         <div className="flex flex-col gap-1">
           <div className="grid grid-cols-3">
-            <span className="text-[10px] font-normal text-stock-text-green flex flex-row items-center justify-center">
+            <span className="text-[10px] font-semibold text-stock-text-green flex flex-row items-center justify-center">
               <TiArrowSortedUp className="w-3 h-3" />
               <span>
                 {dataIndex.fluctuationUpIssueCount}{" "}
@@ -69,11 +72,11 @@ export default function ChartIndex(props: Props) {
                 </span>
               </span>
             </span>
-            <span className="text-[10px] font-normal text-stock-text-yellow flex flex-row items-center justify-center">
+            <span className="text-[10px] font-semibold text-stock-text-yellow flex flex-row items-center justify-center">
               <FaSquare className="w-[7px] h-[7px] mr-[2px]" />
               <span>{dataIndex.fluctuationSteadinessIssueCount}</span>
             </span>
-            <span className="text-[10px] font-normal text-stock-text-red flex flex-row items-center justify-center">
+            <span className="text-[10px] font-semibold text-stock-text-red flex flex-row items-center justify-center">
               <TiArrowSortedDown className="w-3 h-3" />
               <span>
                 {dataIndex.fluctuationDownIssueCount}{" "}
@@ -83,7 +86,7 @@ export default function ChartIndex(props: Props) {
               </span>
             </span>
           </div>
-          <ul className="list-disc text-[10px] font-normal text-text-title ml-4">
+          <ul className="list-disc text-[10px] font-medium text-text-title ml-4">
             <li className="">{getStatusIndex(dataIndex.tradingSessionId)}</li>
           </ul>
         </div>
@@ -94,12 +97,10 @@ export default function ChartIndex(props: Props) {
         <div className="w-3/5 animate-pulse h-full">
           <div className="w-full h-full bg-gray-300/40 rounded"></div>
         </div>
-      ) : !dataChart ? (
-        <div className="w-3/5"></div>
       ) : (
-        <span className="text-xs w-3/5 grid place-items-center bg-gray-300/40 h-full rounded ">
-          No data!
-        </span>
+        <div className="w-3/5 h-full flex items-center justify-center rounded">
+          <ChartComponent />
+        </div>
       )}
     </div>
   );
