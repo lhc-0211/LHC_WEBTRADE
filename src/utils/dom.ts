@@ -1,5 +1,10 @@
 import { StringToDouble } from "./format";
 
+export function setAppHeight() {
+  const vh = window.innerHeight;
+  document.documentElement.style.setProperty("--app-height", `${vh}px`);
+}
+
 export function colorFix(
   cPrice: number | string,
   oPrice: number,

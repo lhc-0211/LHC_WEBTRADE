@@ -1,3 +1,5 @@
+import moment from "moment-timezone";
+
 function pick<T>(...values: (T | undefined | null)[]): T | undefined {
   for (const v of values) {
     if (v !== undefined && v !== null) {
@@ -129,4 +131,19 @@ export function StringToDouble(pString: string | number): number {
   } else {
     return vFloat;
   }
+}
+
+export function convertTimeStringToUnix(timeString: string): number {
+  // Lấy ngày hiện tại theo giờ Việt Nam (UTC+7)
+  const today = moment().tz("Asia/Ho_Chi_Minh").format("YYYY-MM-DD");
+
+  // Kết hợp ngày hiện tại với giờ từ đầu vào
+  const localTime = moment.tz(
+    `${today} ${timeString}`,
+    "YYYY-MM-DD HH:mm:ss",
+    "Asia/Ho_Chi_Minh"
+  );
+
+  // Trả về Unix timestamp (giây)
+  return localTime.unix();
 }

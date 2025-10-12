@@ -67,6 +67,8 @@ export default function ListChartIndexs() {
       1280: { slidesPerView: 4 },
     },
     className: "w-full h-full",
+    noSwiping: true,
+    noSwipingClass: "no-swiping",
   };
 
   if (loading) {
