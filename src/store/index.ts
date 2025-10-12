@@ -1,10 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
 import createSagaMiddleware from "redux-saga";
 import { all } from "redux-saga/effects";
-import priceBoardReducer from "./slices/priceboard/slice";
-import priceBoardSaga from "./slices/priceboard/saga";
-import authReducer from "./slices/auth/slice";
 import authSaga from "./slices/auth/saga";
+import authReducer from "./slices/auth/slice";
+import priceBoardSaga from "./slices/priceboard/saga";
+import priceBoardReducer from "./slices/priceboard/slice";
 
 function* rootSaga() {
   yield all([priceBoardSaga(), authSaga()]);

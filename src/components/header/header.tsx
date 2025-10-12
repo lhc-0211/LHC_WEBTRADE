@@ -7,8 +7,8 @@ import OrderIcon from "../../assets/imgs/icons/order.svg?react";
 import RechargeIcon from "../../assets/imgs/icons/recharge.svg?react";
 import { useAppDispatch } from "../../store/hook";
 import { openLoginModal } from "../../store/slices/clientSlice";
-import Button from "../button";
-import InputFieldSearchMaster from "../inputs/inputFieldSearchMaster";
+import Button from "../Button";
+import InputFieldSearchMaster from "../inputs/InputFieldSearchMaster";
 
 export default function Header() {
   const dispatch = useAppDispatch();

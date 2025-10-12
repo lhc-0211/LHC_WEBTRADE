@@ -1,6 +1,6 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import MainLayout from "../layouts/mainLayout";
-import NotFound from "../pages/notFound";
+import MainLayout from "../layouts/MainLayout";
+import NotFound from "../pages/NotFound";
 import PriceBoardPage from "../pages/PriceBoardPage";
 
 export default function AppRouter() {

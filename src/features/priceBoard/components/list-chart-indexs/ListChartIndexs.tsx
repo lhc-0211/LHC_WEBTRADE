@@ -2,10 +2,9 @@ import { FaSquare } from "react-icons/fa";
 import { FaArrowUpLong } from "react-icons/fa6";
 import { TiArrowSortedDown, TiArrowSortedUp } from "react-icons/ti";
 import { useSelector } from "react-redux";
-import TradingChart from "../../../../components/chart/tradingChart";
 import { selectChartIndexStatusById } from "../../../../store/slices/priceboard/selector";
 import type {
-  ChartIndex,
+  ChartIndexItem,
   InfoIndex,
   MakeOptional,
   PriceVolumeChart,
@@ -16,20 +15,21 @@ import {
   mapIdToNameIndex,
   numberFormat,
 } from "../../../../utils";
+import ChartIndex from "./ChartIndex";
 
 interface Props {
   dataIndex: InfoIndex;
-  dataChart: ChartIndex[];
+  dataChart: ChartIndexItem[];
 }
 
-export default function ChartIndex(props: Props) {
+export default function ListChartIndexs(props: Props) {
   const { dataIndex, dataChart } = props;
 
   const { loading } = useSelector(
     selectChartIndexStatusById(dataIndex.indexsTypeCode)
   );
 
-  const handleProcessDataChart = (dataChart: ChartIndex[]) => {
+  const handleProcessDataChart = (dataChart: ChartIndexItem[]) => {
     const dataFormat: MakeOptional<PriceVolumeChart, "s"> = {
       c: [],
       h: [],
@@ -39,7 +39,7 @@ export default function ChartIndex(props: Props) {
       t: [],
     };
 
-    dataChart.forEach((item: ChartIndex) => {
+    dataChart.forEach((item: ChartIndexItem) => {
       dataFormat.c.push(item.close);
       dataFormat.h.push(item.high);
       dataFormat.l.push(item.low);
@@ -127,7 +127,7 @@ export default function ChartIndex(props: Props) {
         </div>
       ) : (
         <div className="w-3/5 h-full flex items-center justify-center rounded">
-          <TradingChart
+          <ChartIndex
             data={handleProcessDataChart(dataChart)}
             openIndex={dataIndex.openIndexes}
           />

@@ -1,8 +1,7 @@
 import { useState } from "react";
-import LoginModal from "../components/auth/loginModal";
-import Header from "../components/header/header";
-import Sidebar from "../components/sidebar/sidebar";
-import { useViewportSize } from "../hooks/useViewportSize";
+import LoginModal from "../components/auth/LoginModal";
+import Header from "../components/header/Header";
+import Sidebar from "../components/sidebar/Sidebar";
 import type { SidebarMode } from "../types/layout";
 
 export default function MainLayout({
@@ -31,32 +30,22 @@ export default function MainLayout({
     localStorage.setItem("sidebarMode", mode);
   };
 
-  const { width, height } = useViewportSize(getSidebarWidth(), 60);
-
   return (
-    <div className="flex flex-row h-screen bg-background-primary text-text-body">
+    <div
+      className="grid h-[calc(var(--app-height))] overflow-hidden bg-background-primary text-text-body"
+      style={{ gridTemplateColumns: `${getSidebarWidth()}px auto` }}
+    >
       <Sidebar
         mode={sidebarMode}
         width={sidebarMode === "mini" ? 68 : sidebarMode === "full" ? 180 : 0}
         changeModeSidebar={handleChangeModeSidebar}
       />
-      <div
-        className="flex flex-col gap-1 h-full px-5"
-        style={{
-          width,
-        }}
-      >
+      <div className="flex flex-col gap-1 h-full px-5">
         <div className="h-[60px] w-full">
           <Header />
         </div>
 
-        <main
-          style={{
-            height,
-          }}
-        >
-          {children}
-        </main>
+        <main className="h-[calc(var(--app-height)-60px)]">{children}</main>
 
         {/* Modal đăng nhập  */}
         <LoginModal />

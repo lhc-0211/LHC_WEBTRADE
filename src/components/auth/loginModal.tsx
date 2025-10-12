@@ -13,8 +13,8 @@ import bgLogin from "../../assets/imgs/bg-login.jpg";
 import logo from "../../assets/imgs/logo.png";
 import { loginSuccess } from "../../store/slices/auth/slice";
 import { closeLoginModal } from "../../store/slices/clientSlice";
-import Button from "../button";
-import InputField from "../inputs/inputField";
+import Button from "../Button";
+import InputField from "../inputs/InputField";
 
 const schema = yup.object({
   username: yup.string().required("Vui lòng nhập tên đăng nhập"),

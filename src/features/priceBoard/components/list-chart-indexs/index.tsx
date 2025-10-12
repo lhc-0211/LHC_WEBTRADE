@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { useIntervalApi } from "../../../../hooks/useIntervalApi";
 import { useAppDispatch } from "../../../../store/hook";
 import {
   selectChartIndexs,
@@ -13,9 +14,8 @@ import {
   fetchInfoIndexRequest,
 } from "../../../../store/slices/priceboard/slice";
 import type { InfoIndex } from "../../../../types";
-import { useIntervalApi } from "../../hooks/useIntervalApi";
-import ChartIndex from "./chartIndex";
-import ChartIndexSkeleton from "./chartIndexSkeleton";
+import ChartIndexSkeleton from "./ChartIndexSkeleton";
+import ChartIndex from "./ListChartIndexs";
 
 export default function ListChartIndexs() {
   const dispatch = useAppDispatch();
@@ -59,62 +59,45 @@ export default function ListChartIndexs() {
     pagination: { clickable: true },
     loop: true,
     breakpoints: {
-      0: { slidesPerView: 1 },
-      412: { slidesPerView: 2 },
-      618: { slidesPerView: 3 },
-      640: { slidesPerView: 1 },
-      820: { slidesPerView: 2 },
-      1280: { slidesPerView: 4 },
+      0: { slidesPerView: 3 },
     },
     className: "w-full h-full",
     noSwiping: true,
     noSwipingClass: "no-swiping",
   };
 
-  if (loading) {
-    return (
-      <Swiper {...swiperProps}>
-        {[...Array(4)].map((_, index: number) => (
-          <SwiperSlide key={index} className="h-full">
-            <ChartIndexSkeleton />
-          </SwiperSlide>
-        ))}
-      </Swiper>
-    );
-  }
-
-  if (error) {
-    return (
-      <Swiper {...swiperProps}>
-        {[...Array(4)].map((_, index: number) => (
-          <SwiperSlide key={index} className="h-full">
-            <div className="w-full h-full grid place-items-center text-red-500 text-xs font-medium bg-gray-300/40 rounded">
-              Error: {error}
-            </div>
-          </SwiperSlide>
-        ))}
-      </Swiper>
-    );
-  }
-
   return (
-    <div className="h-full">
-      <Swiper {...swiperProps} className="w-full h-full">
-        {infoIndex &&
-          infoIndex.length > 0 &&
-          infoIndex.map((item: InfoIndex) => (
-            <SwiperSlide key={item.indexsTypeCode} className="h-full">
-              <ChartIndex
-                dataIndex={item}
-                dataChart={
-                  chartIndexs[item.indexsTypeCode]?.data?.length > 0
-                    ? chartIndexs[item.indexsTypeCode].data
-                    : []
-                }
-              />
-            </SwiperSlide>
-          ))}
+    <div className="h-full grid grid-cols-3">
+      <Swiper {...swiperProps} className="w-full h-full col-span-2">
+        {loading || error
+          ? [...Array(infoIndex.length || 4)].map((_, index) => (
+              <SwiperSlide key={index} className="h-full">
+                {loading ? (
+                  <ChartIndexSkeleton />
+                ) : (
+                  <div className="w-full h-full grid place-items-center text-red-500 text-xs font-medium bg-gray-300/40 rounded p-2">
+                    Error: {error}
+                  </div>
+                )}
+              </SwiperSlide>
+            ))
+          : infoIndex.map((item: InfoIndex) => (
+              <SwiperSlide key={item.indexsTypeCode} className="h-full">
+                <ChartIndex
+                  dataIndex={item}
+                  dataChart={
+                    chartIndexs[item.indexsTypeCode]?.data?.length > 0
+                      ? chartIndexs[item.indexsTypeCode].data
+                      : []
+                  }
+                />
+              </SwiperSlide>
+            ))}
       </Swiper>
+
+      <div className="col-span-1">
+        <div className="w-full h-full grid place-items-center">Thống báo</div>
+      </div>
     </div>
   );
 }

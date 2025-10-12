@@ -9,15 +9,15 @@ import {
   type UTCTimestamp,
 } from "lightweight-charts";
 import { useEffect, useRef } from "react";
-import type { MakeOptional, PriceVolumeChart } from "../../types";
-import { numberFormat } from "../../utils";
+import type { MakeOptional, PriceVolumeChart } from "../../../../types";
+import { numberFormat } from "../../../../utils";
 
 interface Props {
   data: MakeOptional<PriceVolumeChart, "s">;
   openIndex: number;
 }
 
-const TradingChart = (props: Props) => {
+const ChartIndex = (props: Props) => {
   const { data, openIndex } = props;
   const chartContainerRef = useRef<HTMLDivElement | null>(null);
   const tooltipRef = useRef<HTMLDivElement | null>(null);
@@ -47,11 +47,7 @@ const TradingChart = (props: Props) => {
     tooltipRef.current = tooltip;
 
     const chart: IChartApi = createChart(chartContainerRef.current, {
-      handleScale: {
-        axisPressedMouseMove: true,
-        mouseWheel: false,
-        pinch: false,
-      },
+      handleScale: false,
       rightPriceScale: {
         visible: false,
       },
@@ -234,7 +230,7 @@ const TradingChart = (props: Props) => {
       if (chartContainerRef.current) {
         chart.resize(
           chartContainerRef.current.clientWidth,
-          chartContainerRef.current.clientWidth
+          chartContainerRef.current.clientHeight
         );
       }
     };
@@ -252,10 +248,10 @@ const TradingChart = (props: Props) => {
   return (
     <div
       ref={chartContainerRef}
-      className="chart-container w-full h-full no-swiping"
+      className="chart-container w-full h-full"
       style={{ position: "relative" }}
     />
   );
 };
 
-export default TradingChart;
+export default ChartIndex;

@@ -46,7 +46,7 @@ export interface InfoIndex {
   percentChange: number;
 }
 
-export interface ChartIndex {
+export interface ChartIndexItem {
   time: string;
   open: number;
   close: number;
@@ -59,7 +59,7 @@ export interface ChartIndex {
 
 export interface ChartDataIndex {
   id: string;
-  data: ChartIndex[];
+  data: ChartIndexItem[];
 }
 
 export interface PriceVolumeChart {

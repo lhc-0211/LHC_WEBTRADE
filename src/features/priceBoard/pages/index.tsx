@@ -1,4 +1,4 @@
-import ListChartIndexs from "../components/chartIndexs";
+import ListChartIndexs from "../components/list-chart-indexs";
 
 export default function PriceBoard() {
   return (
@@ -6,6 +6,7 @@ export default function PriceBoard() {
       <div className="w-full h-[148px] flex flex-col gap-3">
         <ListChartIndexs />
       </div>
+      <div>Bảng giá</div>
     </div>
   );
 }
