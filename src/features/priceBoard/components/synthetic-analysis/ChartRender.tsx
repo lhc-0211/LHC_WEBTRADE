@@ -3,6 +3,7 @@ import {
   createChart,
   HistogramSeries,
   type IChartApi,
+  type ISeriesApi,
   LastPriceAnimationMode,
   LineStyle,
   type Time,
@@ -17,18 +18,16 @@ interface Props {
   openIndex: number;
 }
 
-const ChartIndex = (props: Props) => {
+const ChartRender = (props: Props) => {
   const { data, openIndex } = props;
   const chartContainerRef = useRef<HTMLDivElement | null>(null);
   const tooltipRef = useRef<HTMLDivElement | null>(null);
+  const chartRef = useRef<IChartApi | null>(null);
+  const baselineSeriesRef = useRef<ISeriesApi<"Baseline"> | null>(null);
+  const volumeSeriesRef = useRef<ISeriesApi<"Histogram"> | null>(null);
 
   useEffect(() => {
-    if (
-      !chartContainerRef.current ||
-      data.c.length <= 0 ||
-      data.t.length <= 0 ||
-      data.v.length <= 0
-    ) {
+    if (!chartContainerRef.current) {
       return;
     }
 
@@ -46,8 +45,13 @@ const ChartIndex = (props: Props) => {
     chartContainerRef.current.appendChild(tooltip);
     tooltipRef.current = tooltip;
 
+    // Tạo chart
     const chart: IChartApi = createChart(chartContainerRef.current, {
-      handleScale: false,
+      handleScale: {
+        mouseWheel: false,
+        pinch: false,
+        axisPressedMouseMove: true,
+      },
       rightPriceScale: {
         visible: false,
       },
@@ -100,6 +104,10 @@ const ChartIndex = (props: Props) => {
       },
     });
 
+    // Lưu chart vào ref
+    chartRef.current = chart;
+
+    // Tạo series
     const baselineSeries = chart.addSeries(BaselineSeries, {
       baseValue: { type: "price", price: openIndex },
       topLineColor: "#34c85a",
@@ -119,7 +127,6 @@ const ChartIndex = (props: Props) => {
       },
       priceScaleId: "",
     });
-
     volumeSeries.priceScale().applyOptions({
       scaleMargins: {
         top: 0.3,
@@ -127,43 +134,9 @@ const ChartIndex = (props: Props) => {
       },
     });
 
-    const chartData: { time: UTCTimestamp; value: number }[] = [];
-    const barData: { time: UTCTimestamp; value: number; color: string }[] = [];
-
-    for (const i in data.t) {
-      const timestamp = data.t[i];
-      const price = data.c[i];
-      chartData.push({ time: timestamp as UTCTimestamp, value: price });
-      barData.push({
-        time: timestamp as UTCTimestamp,
-        value: data.v[i],
-        color: data.c[i] >= data.o[i] ? "#0bdf39" : "#ff0d0d",
-      });
-    }
-
-    // Sắp xếp dữ liệu theo thời gian
-    chartData.sort((a, b) => a.time - b.time);
-    barData.sort((a, b) => a.time - b.time);
-
-    baselineSeries.setData(chartData);
-    volumeSeries.setData(barData);
-
-    // Đường giá mở cửa
-    baselineSeries.createPriceLine({
-      price: openIndex,
-      color: "#fdff12",
-      lineWidth: 1,
-      lineStyle: LineStyle.Solid,
-      axisLabelVisible: true,
-    });
-
-    // Đặt phạm vi thời gian động
-    const minTime = Math.min(...data.t) as Time;
-    const maxTime = Math.max(...data.t) as Time;
-    chart.timeScale().setVisibleRange({
-      from: minTime,
-      to: maxTime,
-    });
+    // Lưu series vào refs
+    baselineSeriesRef.current = baselineSeries;
+    volumeSeriesRef.current = volumeSeries;
 
     // Tùy chỉnh tooltip
     chart.subscribeCrosshairMove((param) => {
@@ -185,7 +158,6 @@ const ChartIndex = (props: Props) => {
         }
       );
 
-      // Tạo nội dung tooltip
       let tooltipContent = `${time}<br>`;
       if (priceData && typeof priceData === "object" && "value" in priceData) {
         tooltipContent += `${numberFormat(priceData?.value + "", 0, "0")}<br>`;
@@ -198,21 +170,18 @@ const ChartIndex = (props: Props) => {
         tooltipContent += `${numberFormat(volumeData?.value + "", 0, "0")}`;
       }
 
-      // Cập nhật nội dung và vị trí tooltip
       tooltipRef.current.innerHTML = tooltipContent;
       tooltipRef.current.style.display = "block";
 
-      // Ước tính chiều cao tooltip
-      const tooltipHeight = 3 * 16 + 8 * 2; // 3 dòng, mỗi dòng 16px, cộng padding
+      const tooltipHeight = 3 * 16 + 8 * 2;
       const offsetX = 2;
       const offsetY = 2;
       let left =
         (param.point?.x || 0) - offsetX - tooltipRef.current.offsetWidth;
       let top = (param.point?.y || 0) - offsetY - tooltipHeight;
 
-      // Kiểm tra ranh giới để tránh tooltip bị cắt
-      if (left < 0) left = 0; // Không để tooltip vượt ra ngoài bên trái
-      if (top < 0) top = (param.point?.y || 0) + offsetY; // Nếu vượt lên trên, đặt dưới chuột
+      if (left < 0) left = 0;
+      if (top < 0) top = (param.point?.y || 0) + offsetY;
 
       tooltipRef.current.style.left = `${left}px`;
       tooltipRef.current.style.top = `${top}px`;
@@ -243,15 +212,73 @@ const ChartIndex = (props: Props) => {
       }
       chart.remove();
     };
+  }, []);
+
+  useEffect(() => {
+    if (
+      !chartRef.current ||
+      !baselineSeriesRef.current ||
+      !volumeSeriesRef.current ||
+      data.c.length <= 0 ||
+      data.t.length <= 0 ||
+      data.v.length <= 0
+    ) {
+      return;
+    }
+
+    // Cập nhật baseValue cho baselineSeries
+    baselineSeriesRef.current.applyOptions({
+      baseValue: { type: "price", price: openIndex },
+    });
+
+    // Xóa price line cũ và tạo mới
+    baselineSeriesRef.current.createPriceLine({
+      price: openIndex,
+      color: "#fdff12",
+      lineWidth: 1,
+      lineStyle: LineStyle.Solid,
+      axisLabelVisible: true,
+    });
+
+    // Chuẩn bị dữ liệu
+    const chartData: { time: UTCTimestamp; value: number }[] = [];
+    const barData: { time: UTCTimestamp; value: number; color: string }[] = [];
+
+    for (const i in data.t) {
+      const timestamp = data.t[i];
+      const price = data.c[i];
+      chartData.push({ time: timestamp as UTCTimestamp, value: price });
+      barData.push({
+        time: timestamp as UTCTimestamp,
+        value: data.v[i],
+        color: data.c[i] >= data.o[i] ? "#0bdf39" : "#ff0d0d",
+      });
+    }
+
+    // Sắp xếp dữ liệu theo thời gian
+    chartData.sort((a, b) => a.time - b.time);
+    barData.sort((a, b) => a.time - b.time);
+
+    // Cập nhật dữ liệu cho series
+    baselineSeriesRef.current.setData(chartData);
+    volumeSeriesRef.current.setData(barData);
+
+    // Đặt phạm vi thời gian động
+    const minTime = Math.min(...data.t) as Time;
+    const maxTime = Math.max(...data.t) as Time;
+    chartRef.current.timeScale().setVisibleRange({
+      from: minTime,
+      to: maxTime,
+    });
   }, [data, openIndex]);
 
   return (
     <div
       ref={chartContainerRef}
-      className="chart-container w-full h-full"
+      className="chart-container w-full h-full no-swiping"
       style={{ position: "relative" }}
     />
   );
 };
 
-export default ChartIndex;
+export default ChartRender;

@@ -19,7 +19,7 @@ interface LoginAction {
 function* loginSaga(action: LoginAction) {
   try {
     const { accountCode, password, device } = action.payload;
-    const token: string = yield call(loginApi, {
+    const token: object = yield call(loginApi, {
       accountCode,
       password,
       device,

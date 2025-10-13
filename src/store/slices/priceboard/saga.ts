@@ -2,8 +2,15 @@ import { call, put, takeEvery, takeLatest } from "redux-saga/effects";
 import {
   fetchChartIndexAPI,
   fetchInfoIndexAPI,
+  fetchTopForeignTradedAPI,
+  fetchTopStockTradedAPI,
 } from "../../../api/priceBoardApi";
-import type { ChartIndex, InfoIndex } from "../../../types";
+import type {
+  ChartIndexItem,
+  InfoIndex,
+  topForeignTradedItem,
+  topStockTradedItem,
+} from "../../../types";
 import {
   fetchChartIndexFailure,
   fetchChartIndexRequest,
@@ -11,10 +18,16 @@ import {
   fetchInfoIndexFailure,
   fetchInfoIndexRequest,
   fetchInfoIndexSuccess,
+  fetchTopForeignTradedFailure,
+  fetchTopForeignTradedRequest,
+  fetchTopForeignTradedSuccess,
+  fetchTopStockTradedFailure,
+  fetchTopStockTradedRequest,
+  fetchTopStockTradedSuccess,
 } from "./slice";
 
 // Định nghĩa type cho action saga
-interface FetchChartIndexAction {
+interface FetchApiByParamAction {
   type: string;
   payload: string; // id
 }
@@ -30,9 +43,9 @@ function* fetchInfoIndexSaga() {
   }
 }
 
-function* fetchChartIndexSaga(action: FetchChartIndexAction) {
+function* fetchChartIndexSaga(action: FetchApiByParamAction) {
   try {
-    const response: { data: ChartIndex[] } = yield call(
+    const response: { data: ChartIndexItem[] } = yield call(
       fetchChartIndexAPI,
       action.payload
     );
@@ -48,7 +61,39 @@ function* fetchChartIndexSaga(action: FetchChartIndexAction) {
   }
 }
 
+function* fetchTopStockTradedSaga(action: FetchApiByParamAction) {
+  try {
+    const response: { data: topStockTradedItem[] } = yield call(
+      fetchTopStockTradedAPI,
+      action.payload
+    );
+
+    yield put(fetchTopStockTradedSuccess(response.data));
+  } catch (error: unknown) {
+    const errorMessage =
+      error instanceof Error ? error.message : "Failed to fetch info index";
+    yield put(fetchTopStockTradedFailure(errorMessage));
+  }
+}
+
+function* fetchTopForeignTradedSaga(action: FetchApiByParamAction) {
+  try {
+    const response: { data: topForeignTradedItem[] } = yield call(
+      fetchTopForeignTradedAPI,
+      action.payload
+    );
+
+    yield put(fetchTopForeignTradedSuccess(response.data));
+  } catch (error: unknown) {
+    const errorMessage =
+      error instanceof Error ? error.message : "Failed to fetch info index";
+    yield put(fetchTopForeignTradedFailure(errorMessage));
+  }
+}
+
 export default function* priceBoardSaga() {
   yield takeLatest(fetchInfoIndexRequest.type, fetchInfoIndexSaga);
   yield takeEvery(fetchChartIndexRequest.type, fetchChartIndexSaga);
+  yield takeEvery(fetchTopStockTradedRequest.type, fetchTopStockTradedSaga);
+  yield takeEvery(fetchTopForeignTradedRequest.type, fetchTopForeignTradedSaga);
 }

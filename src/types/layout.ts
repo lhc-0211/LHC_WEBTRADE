@@ -14,3 +14,5 @@ export interface SidebarItemGroup {
   id: string;
   items: SidebarItem[];
 }
+
+export type ModeTableSynThetic = "INDAY" | "FOREIGN";

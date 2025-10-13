@@ -1,3 +1,4 @@
+import { HOLIDAYS } from "../configs";
 import { StringToDouble } from "./format";
 
 export function setAppHeight() {
@@ -89,3 +90,43 @@ export function getStatusIndex(st: string | number, mc = "10") {
   // }
   // return i18n.t('txt-opened');
 }
+
+function isHoliday(date: Date): boolean {
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  const key = `${month}-${day}`;
+  return HOLIDAYS.includes(key);
+}
+
+function isWeekday(date: Date): boolean {
+  const day = date.getDay(); // 0 = Chủ nhật, 6 = Thứ 7
+  return day >= 1 && day <= 5;
+}
+
+function isWithinTradingHours(date: Date): boolean {
+  const hour = date.getHours();
+  const minute = date.getMinutes();
+  const totalMinutes = hour * 60 + minute;
+
+  const openMorning = 9 * 60; // 09:00
+  const closeMorning = 11 * 60 + 30; // 11:30
+  const openAfternoon = 13 * 60; // 13:00
+  const closeAfternoon = 15 * 60; // 15:00
+
+  return (
+    (totalMinutes >= openMorning && totalMinutes < closeMorning) ||
+    (totalMinutes >= openAfternoon && totalMinutes < closeAfternoon)
+  );
+}
+
+export function isMarketOpen(): boolean {
+  const now = new Date();
+
+  if (!isWeekday(now)) return false;
+  if (isHoliday(now)) return false;
+
+  return isWithinTradingHours(now);
+}
+
+export const isEmptyObject = (obj?: object | string | null): boolean =>
+  !obj || Object.keys(obj).length === 0;

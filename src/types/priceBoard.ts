@@ -71,3 +71,26 @@ export interface PriceVolumeChart {
   t: number[];
   v: number[];
 }
+
+export interface topStockTradedItem {
+  boardId: string;
+  symbol: string;
+  totalVolumeTraded: number;
+  totalValueTraded: number;
+  lastPrice: number;
+  status: string;
+}
+
+export interface topForeignTradedItem {
+  marketId: string;
+  boardId: string;
+  symbol: string;
+  sellVolumeTotal: number;
+  sellTradeAmountTotal: number;
+  buyVolumeTotal: number;
+  volumeTotal: number;
+  buyTradeAmountTotal: number;
+  amountTotal: number;
+  lastPrice: number;
+  status: string;
+}

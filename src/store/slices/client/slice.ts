@@ -1,11 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-interface ClientState {
-  loginModalOpen: boolean;
+export interface ClientState {
+  data: {
+    loginModalOpen: boolean;
+  };
 }
 
 const initialState: ClientState = {
-  loginModalOpen: false,
+  data: {
+    loginModalOpen: false,
+  },
 };
 
 const clientSlice = createSlice({
@@ -13,10 +17,10 @@ const clientSlice = createSlice({
   initialState,
   reducers: {
     openLoginModal: (state) => {
-      state.loginModalOpen = true;
+      state.data.loginModalOpen = true;
     },
     closeLoginModal: (state) => {
-      state.loginModalOpen = false;
+      state.data.loginModalOpen = false;
     },
   },
 });

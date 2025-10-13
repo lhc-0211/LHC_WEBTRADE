@@ -3,7 +3,7 @@ import type { ApiStatus } from "../../../types";
 
 export interface AuthState {
   data: {
-    token: unknown;
+    token: object | null | string;
   };
   status: {
     fetchToken: ApiStatus;

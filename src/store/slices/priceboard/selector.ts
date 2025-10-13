@@ -1,5 +1,11 @@
 import type { RootState } from "../..";
-import type { ApiStatus, ChartDataIndex, InfoIndex } from "../../../types";
+import type {
+  ApiStatus,
+  ChartDataIndex,
+  InfoIndex,
+  topForeignTradedItem,
+  topStockTradedItem,
+} from "../../../types";
 
 // Selectors với type annotations
 export const selectInfoIndex = (state: RootState): InfoIndex[] =>
@@ -19,3 +25,19 @@ export const selectChartIndexStatusById =
       loading: false,
       error: null,
     };
+
+export const selectAllChartStatuses = (state: RootState) =>
+  state.priceBoard.status.fetchChartIndexs;
+
+export const selectTopStockTraded = (state: RootState): topStockTradedItem[] =>
+  state.priceBoard.data.topStockTraded;
+
+export const selectTopStockTradedStatus = (state: RootState): ApiStatus =>
+  state.priceBoard.status.fetchTopStockTraded;
+
+export const selecttopForeignTraded = (
+  state: RootState
+): topForeignTradedItem[] => state.priceBoard.data.topForeignTraded;
+
+export const selecttopForeignTradedStatus = (state: RootState): ApiStatus =>
+  state.priceBoard.status.fetchTopForeignTraded;

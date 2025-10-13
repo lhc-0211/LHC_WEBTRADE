@@ -1,21 +1,18 @@
 import { FaBell } from "react-icons/fa";
 import { IoIosArrowDown } from "react-icons/io";
 import ava from "../../assets/imgs/ava.png";
-import AssetsIcon from "../../assets/imgs/icons/assets.svg?react";
 import LoginIcon from "../../assets/imgs/icons/login.svg?react";
-import OrderIcon from "../../assets/imgs/icons/order.svg?react";
-import RechargeIcon from "../../assets/imgs/icons/recharge.svg?react";
-import { useAppDispatch } from "../../store/hook";
-import { openLoginModal } from "../../store/slices/clientSlice";
+import { useAppDispatch, useAppSelector } from "../../store/hook";
+import { selectToken } from "../../store/slices/auth/selector";
+import { openLoginModal } from "../../store/slices/client/slice";
+import { isEmptyObject } from "../../utils";
 import Button from "../Button";
-import InputFieldSearchMaster from "../inputs/InputFieldSearchMaster";
+import InputFieldSearchMaster from "../inputs/inputFieldSearchMaster";
 
 export default function Header() {
   const dispatch = useAppDispatch();
 
-  // const token = useAppSelector((state) => state.auth.token);
-
-  const token = false;
+  const token = useAppSelector(selectToken);
 
   const handleClickLogin = () => {
     dispatch(openLoginModal());
@@ -24,21 +21,24 @@ export default function Header() {
   return (
     <div className="flex items-center justify-between h-full w-full">
       <div className="flex flex-row gap-2">
-        <Button onClick={() => alert("Primary")} variant="close">
+        {isEmptyObject(token) && (
+          <img src="/src/assets/imgs/logo.png" alt="logo" />
+        )}
+        {/* <Button onClick={() => alert("Primary")} variant="close">
           <RechargeIcon />
           Nạp tiền
         </Button>
         <Button onClick={() => alert("Secondary")} variant="close">
           <AssetsIcon />
           Tài sản
-        </Button>
+        </Button> */}
       </div>
 
       <div className="flex flex-row gap-4 items-center">
-        <Button onClick={() => alert("Primary")} variant="success">
+        {/* <Button onClick={() => alert("Primary")} variant="success">
           <OrderIcon />
           Đặt lệnh nhanh
-        </Button>
+        </Button> */}
 
         <InputFieldSearchMaster
           className="w-[150px] h-9"
@@ -47,18 +47,19 @@ export default function Header() {
 
         <div
           className={`flex flex-row gap-2 items-center ${
-            token ? "bg-button-gray rounded-xl" : ""
+            !isEmptyObject(token) ? "bg-button-gray rounded-xl" : ""
           }`}
         >
-          <Button
-            onClick={() => alert("Primary")}
-            variant="close"
-            className="!p-2 !h-9"
-          >
-            <FaBell />
-          </Button>{" "}
-          {token ? (
+          {!isEmptyObject(token) ? (
             <>
+              {" "}
+              <Button
+                onClick={() => alert("Primary")}
+                variant="close"
+                className="!p-2 !h-9"
+              >
+                <FaBell />
+              </Button>
               <div className="h-[11px] w-[1.5px] bg-DTND-300 rounded-xl"></div>
               <div className="py-1 px-2 flex flex-row gap-2 items-center">
                 <img
@@ -77,9 +78,9 @@ export default function Header() {
             </>
           ) : (
             <>
-              <Button onClick={() => alert("Primary")} variant="normal">
+              {/* <Button onClick={() => alert("Primary")} variant="normal">
                 Mở tài khoản
-              </Button>
+              </Button> */}
               <Button onClick={() => handleClickLogin()} variant="primary">
                 <LoginIcon />
                 Đăng nhập

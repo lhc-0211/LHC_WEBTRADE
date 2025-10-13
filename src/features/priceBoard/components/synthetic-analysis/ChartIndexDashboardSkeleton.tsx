@@ -1,4 +1,4 @@
-export default function ChartIndexSkeleton() {
+export default function ChartIndexDashboardSkeleton() {
   return (
     <div className="flex flex-row gap-3 items-center w-full h-full animate-pulse">
       <div className="flex flex-col gap-2 w-2/5 h-full">

@@ -11,10 +11,12 @@ import * as yup from "yup";
 import { loginApi } from "../../api/authApi";
 import bgLogin from "../../assets/imgs/bg-login.jpg";
 import logo from "../../assets/imgs/logo.png";
+import { useAppSelector } from "../../store/hook";
 import { loginSuccess } from "../../store/slices/auth/slice";
-import { closeLoginModal } from "../../store/slices/clientSlice";
+import { selectLoginModalOpen } from "../../store/slices/client/selector";
+import { closeLoginModal } from "../../store/slices/client/slice";
 import Button from "../Button";
-import InputField from "../inputs/InputField";
+import InputField from "../inputs/inputField";
 
 const schema = yup.object({
   username: yup.string().required("Vui lòng nhập tên đăng nhập"),
@@ -48,9 +50,7 @@ const customStyles = {
 
 export default function LoginModal() {
   const dispatch = useDispatch();
-  // const isOpen = useAppSelector((state) => state.client.loginModalOpen);
-
-  const isOpen = false;
+  const isOpen = useAppSelector(selectLoginModalOpen);
 
   const [error, setError] = React.useState("");
 
