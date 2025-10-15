@@ -106,3 +106,10 @@ export interface PriceBoardMenuGroup {
     isCustom?: boolean;
   }[];
 }
+
+export interface Column {
+  key: string;
+  label: string;
+  width: number;
+  children?: Column[];
+}

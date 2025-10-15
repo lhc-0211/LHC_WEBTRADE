@@ -1,80 +1,55 @@
 import { useRef, type ReactNode } from "react";
-import { useDrag, useDrop, type DropTargetMonitor } from "react-dnd";
+import { useDrag, useDrop } from "react-dnd";
 
-export const DRAG_TYPE = "COLUMN_DIV";
-
-export interface Column {
-  key: string;
-  label: string;
-  default?: boolean;
-  width?: number;
-  children?: Column[];
-}
-
-interface DragItem {
-  index: number;
-  type: string;
-}
+export const DRAG_TYPE_PARENT = "PARENT_COLUMN" as const;
 
 interface DraggableColumnDivProps {
-  col: Column;
   index: number;
   moveColumn: (fromIndex: number, toIndex: number) => void;
-  children?: ReactNode;
+  children: ReactNode;
 }
 
-export default function DraggableColumnDiv({
-  col,
+interface DragItemParent {
+  type: typeof DRAG_TYPE_PARENT;
+  index: number;
+}
+
+export function DraggableColumnDiv({
   index,
   moveColumn,
-  children, // <---- nhận children
+  children,
 }: DraggableColumnDivProps) {
   const ref = useRef<HTMLDivElement | null>(null);
 
-  const [, drop] = useDrop<DragItem>({
-    accept: DRAG_TYPE,
-
-    hover(item, monitor: DropTargetMonitor<DragItem, unknown>) {
-      if (!ref.current) return;
-
-      const dragIndex = item.index;
-      const hoverIndex = index;
-      if (dragIndex === hoverIndex) return;
-
-      const hoverRect = ref.current.getBoundingClientRect();
-      const hoverMiddleX = (hoverRect.right - hoverRect.left) / 2;
-      const clientOffset = monitor.getClientOffset();
-      if (!clientOffset) return;
-      const hoverClientX = clientOffset.x - hoverRect.left;
-
-      if (dragIndex < hoverIndex && hoverClientX < hoverMiddleX) return;
-      if (dragIndex > hoverIndex && hoverClientX > hoverMiddleX) return;
-
-      moveColumn(dragIndex, hoverIndex);
-      item.index = hoverIndex;
-    },
+  const [, drag] = useDrag<DragItemParent>({
+    type: DRAG_TYPE_PARENT,
+    item: { type: DRAG_TYPE_PARENT, index },
   });
 
-  const [{ isDragging }, drag] = useDrag({
-    type: DRAG_TYPE,
-    item: { index },
-    collect: (monitor) => ({
-      isDragging: monitor.isDragging(),
-    }),
-  });
+  const [{ isOver }, drop] = useDrop<DragItemParent, void, { isOver: boolean }>(
+    {
+      accept: DRAG_TYPE_PARENT,
+      drop: (item) => {
+        if (item.index !== index) moveColumn(item.index, index);
+      },
+      collect: (monitor) => ({
+        isOver: monitor.isOver(),
+      }),
+    }
+  );
 
   drag(drop(ref));
 
   return (
     <div
       ref={ref}
-      className="h-[56px] flex-1 grid place-items-center text-text-body text-xs font-medium select-none bg-DTND-1000 "
+      className="cursor-move select-none"
       style={{
-        opacity: isDragging ? 0.4 : 1,
+        opacity: isOver ? 0.4 : 1,
         cursor: "grab",
       }}
     >
-      {children ?? col.label} {/* nếu không có children thì render col.label */}
+      {children}
     </div>
   );
 }
