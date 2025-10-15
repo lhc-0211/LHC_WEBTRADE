@@ -192,6 +192,12 @@
 
   --color-DTND-200: #e1d091;
   --color-DTND-300: #d3a35e;
+  --color-DTND-400: #fbbf24;
+  --color-DTND-500: #bda00f;
+  --color-DTND-600: #facc15;
+  --color-DTND-1000: rgba(255, 195, 77, 0.35);
 
   --color-input: #1b1f29;
+
+  --color-dark-blue: #0a1825;
 }

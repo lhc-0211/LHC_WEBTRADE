@@ -5,7 +5,7 @@ import {
 } from "react-icons/vsc";
 import { useLocation } from "react-router-dom";
 import packageJson from "../../../package.json";
-import { sidebarGroups } from "../../configs/sidebar";
+import { SIDE_BAR_GROUPS } from "../../configs/sidebar";
 import type { SidebarItem, SidebarMode } from "../../types";
 
 interface Props {
@@ -45,7 +45,7 @@ export default function Sidebar(props: Props) {
             )}
           </div>
           <div className="flex flex-col gap-2 w-full">
-            {sidebarGroups.map((group, gIdx) => (
+            {SIDE_BAR_GROUPS.map((group, gIdx) => (
               <div key={group.id}>
                 {group.items.map((item) => {
                   const isActive = location.pathname === item.path;
@@ -86,7 +86,7 @@ export default function Sidebar(props: Props) {
                 })}
 
                 {/* Divider giữa các group, trừ group cuối */}
-                {gIdx < sidebarGroups.length - 1 && (
+                {gIdx < SIDE_BAR_GROUPS.length - 1 && (
                   <div className="grid place-items-center w-full my-2 px-3">
                     <div className="border-t border-border-light my-2 w-full" />
                   </div>

@@ -1,5 +1,6 @@
 import { FaBell } from "react-icons/fa";
 import { IoIosArrowDown } from "react-icons/io";
+import { MdZoomOutMap } from "react-icons/md";
 import ava from "../../assets/imgs/ava.png";
 import LoginIcon from "../../assets/imgs/icons/login.svg?react";
 import { useAppDispatch, useAppSelector } from "../../store/hook";
@@ -18,6 +19,56 @@ export default function Header() {
     dispatch(openLoginModal());
   };
 
+  const handleToggleFullscreen = () => {
+    const elem = document.documentElement as HTMLElement;
+
+    if (!document.fullscreenElement) {
+      // Vào fullscreen
+      if (elem.requestFullscreen) {
+        elem.requestFullscreen().catch((err) => {
+          console.error("Không thể bật fullscreen:", err);
+        });
+      } else if (
+        (
+          elem as HTMLElement & {
+            webkitRequestFullscreen?: () => Promise<void>;
+          }
+        ).webkitRequestFullscreen
+      ) {
+        (
+          elem as HTMLElement & { webkitRequestFullscreen: () => Promise<void> }
+        ).webkitRequestFullscreen();
+      } else if (
+        (elem as HTMLElement & { msRequestFullscreen?: () => Promise<void> })
+          .msRequestFullscreen
+      ) {
+        (
+          elem as HTMLElement & { msRequestFullscreen: () => Promise<void> }
+        ).msRequestFullscreen();
+      }
+    } else {
+      // Thoát fullscreen
+      if (document.exitFullscreen) {
+        document.exitFullscreen().catch((err) => {
+          console.error("Không thể thoát fullscreen:", err);
+        });
+      } else if (
+        (document as Document & { webkitExitFullscreen?: () => Promise<void> })
+          .webkitExitFullscreen
+      ) {
+        (
+          document as Document & { webkitExitFullscreen: () => Promise<void> }
+        ).webkitExitFullscreen();
+      } else if (
+        (document as Document & { msExitFullscreen?: () => Promise<void> })
+          .msExitFullscreen
+      ) {
+        (
+          document as Document & { msExitFullscreen: () => Promise<void> }
+        ).msExitFullscreen();
+      }
+    }
+  };
   return (
     <div className="flex items-center justify-between h-full w-full">
       <div className="flex flex-row gap-2">
@@ -43,6 +94,11 @@ export default function Header() {
         <InputFieldSearchMaster
           className="w-[150px] h-9"
           placeholder="Tìm kiếm"
+        />
+
+        <MdZoomOutMap
+          className="text-lg"
+          onClick={() => handleToggleFullscreen()}
         />
 
         <div

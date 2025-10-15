@@ -28,7 +28,7 @@ export default function InputField({
         placeholder={placeholder}
         className={`${
           className ?? ""
-        } px-4 py-3 rounded-xl bg-input text-sm font-medium text-text-title placeholder:text-text-subtitle focus:outline-none focus:!border focus:!border-yellow-500 caret-DTND-200 ${
+        } px-4 py-3 rounded-xl bg-input text-sm font-medium text-text-title placeholder:text-text-subtitle focus:outline-none focus:!border focus:!border-yellow-500 focus:!shadow-[0_0_0_2px_rgba(250,204,21,0.3)] caret-DTND-200 ${
           error ? "!border !border-red-500" : ""
         }`}
         {...registration}

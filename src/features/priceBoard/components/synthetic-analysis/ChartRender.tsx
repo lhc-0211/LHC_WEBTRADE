@@ -251,7 +251,7 @@ const ChartRender = (props: Props) => {
       barData.push({
         time: timestamp as UTCTimestamp,
         value: data.v[i],
-        color: data.c[i] >= data.o[i] ? "#0bdf39" : "#ff0d0d",
+        color: data.c[i] >= data.o[i] ? "#34c85a40" : "#ff001740",
       });
     }
 

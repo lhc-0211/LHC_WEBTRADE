@@ -94,3 +94,15 @@ export interface topForeignTradedItem {
   lastPrice: number;
   status: string;
 }
+
+export interface PriceBoardMenuGroup {
+  label: string;
+  key: string;
+  items: {
+    id: string;
+    name: string;
+    market?: string;
+    type?: string;
+    isCustom?: boolean;
+  }[];
+}

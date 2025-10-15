@@ -7,7 +7,7 @@ import Portfolio from "../assets/imgs/icons/portfolio.svg?react";
 import PriceBoardIcon from "../assets/imgs/icons/price_board.svg?react";
 import TradeHistory from "../assets/imgs/icons/trade_history.svg?react";
 
-export const sidebarGroups: SidebarItemGroup[] = [
+export const SIDE_BAR_GROUPS: SidebarItemGroup[] = [
   {
     id: "group_1",
     items: [
