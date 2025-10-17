@@ -30,7 +30,6 @@ export default function CongfigHeaderBoardModal(props: Props) {
     <AnimatePresence>
       <Modal
         isOpen={isOpen}
-        onRequestClose={onClose}
         contentLabel="Đăng nhập"
         ariaHideApp={false}
         style={customStyles}

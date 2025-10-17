@@ -1,69 +1,40 @@
-// authSaga.ts
-import { call, put, takeLatest } from "redux-saga/effects";
-import { loginApi } from "../../../api/authApi"; // Giả sử loginApi nằm trong file này
 import {
-  loginFailure,
-  loginRequest,
-  loginSuccess,
-  logout,
-  restoreToken,
-} from "./slice";
+  call,
+  put,
+  takeLatest,
+  type CallEffect,
+  type ForkEffect,
+  type PutEffect,
+} from "redux-saga/effects";
+import { loginApi } from "../../../api/authApi";
+import type { LoginPayload, LoginResponse } from "../../../types";
+import { loginFailure, loginRequest, loginSuccess, logout } from "./slice";
 
-// Định nghĩa type cho action login
-interface LoginAction {
-  type: string;
-  payload: { accountCode: string; password: string; device: string };
-}
+type GeneratorYield = CallEffect | PutEffect | ForkEffect;
 
-// Saga xử lý đăng nhập
-function* loginSaga(action: LoginAction) {
+function* loginSaga(action: {
+  payload: LoginPayload;
+}): Generator<GeneratorYield, void, LoginResponse["data"]> {
   try {
     const { accountCode, password, device } = action.payload;
-    const token: object = yield call(loginApi, {
+    const tokenData: LoginResponse["data"] = yield call(loginApi, {
       accountCode,
       password,
       device,
     });
-    yield put(loginSuccess(token));
+    yield put(loginSuccess(tokenData));
   } catch (error: unknown) {
-    const errorMessage =
-      error instanceof Error ? error.message : "Login failed";
-    yield put(loginFailure(errorMessage));
+    const message =
+      error instanceof Error ? error.message : "Đăng nhập thất bại";
+    yield put(loginFailure(message));
   }
 }
 
-// Saga xử lý đăng xuất
-function* logoutSaga() {
-  try {
-    yield put(logout());
-  } catch (error: unknown) {
-    console.error("Logout failed:", error);
-  }
+function* logoutSaga(): Generator<GeneratorYield> {
+  yield put(logout());
 }
 
-// Saga xử lý restore token
-function* restoreTokenSaga() {
-  try {
-    const savedToken = localStorage.getItem("token");
-    if (savedToken) {
-      // Tùy chọn: Gọi API để validate token nếu cần
-      // const response = yield call(validateTokenApi, savedToken);
-      // if (response.valid) {
-      yield put(restoreToken());
-      // } else {
-      //   yield put(loginFailure("Invalid token"));
-      // }
-    }
-  } catch (error: unknown) {
-    const errorMessage =
-      error instanceof Error ? error.message : "Failed to restore token";
-    yield put(loginFailure(errorMessage));
-  }
-}
-
-// Saga chính
-export default function* authSaga() {
-  yield takeLatest(loginRequest.type, loginSaga);
-  yield takeLatest(logout.type, logoutSaga);
-  yield takeLatest(restoreToken.type, restoreTokenSaga);
+export default function* authSaga(): Generator<GeneratorYield> {
+  yield takeLatest(loginRequest, loginSaga);
+  yield takeLatest(logout, logoutSaga);
 }

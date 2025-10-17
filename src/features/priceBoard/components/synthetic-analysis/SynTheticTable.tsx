@@ -28,7 +28,7 @@ function RowComponentInday({
   const data = topStockTraded[index];
   return (
     <div
-      className={`flex flex-row items-center gap-2 px-2 text-xs font-medium text-text-body ${
+      className={`flex flex-row items-center gap-2 px-2 text-xs font-medium text-text-body rounded ${
         index % 2 === 0 && "bg-input"
       }`}
       style={style}
@@ -54,7 +54,7 @@ function RowComponentForeign({
   const data = topForeignTraded[index];
   return (
     <div
-      className={`flex flex-row items-center gap-2 px-2 text-xs font-medium text-text-body ${
+      className={`flex flex-row items-center gap-2 px-2 text-xs font-medium text-text-body rounded ${
         index % 2 === 0 && "bg-input"
       }`}
       style={style}
@@ -100,8 +100,8 @@ export default function SynTheticTable() {
   }, [modeTable, disatch]);
 
   return (
-    <div className="bg-surface rounded-xl">
-      <div className="flex flex-row items-center justify-between p-1 border-b border-border">
+    <div className="bg-surface rounded-xl pb-1 px-1">
+      <div className="flex flex-row items-center justify-between p-1 border-b border-border h-[33px]">
         <MdOutlineArrowLeft
           className="w-6 h-6 text-text-title cursor-pointer"
           onClick={() =>
@@ -130,7 +130,7 @@ export default function SynTheticTable() {
             </div>
             <div className="shrink" style={{ width: size }} />
           </div>
-          <div className="overflow-hidden h-[95px]">
+          <div className="overflow-hidden h-[91px]">
             {loadingStock ? (
               <SynTheticTableSkeleton type="INDAY" />
             ) : errorStock ? (
@@ -158,7 +158,7 @@ export default function SynTheticTable() {
             </div>
             <div className="shrink" style={{ width: size }} />
           </div>
-          <div className="overflow-hidden h-[95px]">
+          <div className="overflow-hidden h-[91px]">
             {loadingForeign ? (
               <SynTheticTableSkeleton type="FOREIGN" />
             ) : errorForeign ? (

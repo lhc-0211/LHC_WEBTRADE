@@ -37,7 +37,7 @@ export default function Sidebar(props: Props) {
             width,
           }}
         >
-          <div className="h-8 mb-2 grid place-items-center pt-2">
+          <div className="h-9 mb-2 grid place-items-center pt-2">
             {mode === "full" ? (
               <img src="/src/assets/imgs/logo.png" alt="logo" />
             ) : (

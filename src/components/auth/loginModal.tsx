@@ -1,36 +1,32 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { AnimatePresence, motion } from "framer-motion";
-import React from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { IoClose } from "react-icons/io5";
 import { MdPermPhoneMsg } from "react-icons/md";
 import { PiWarningFill } from "react-icons/pi";
 import Modal from "react-modal";
-import { useDispatch } from "react-redux";
 import ScaleLoader from "react-spinners/ScaleLoader";
 import * as yup from "yup";
-import { loginApi } from "../../api/authApi";
 import bgLogin from "../../assets/imgs/bg-login.jpg";
 import logo from "../../assets/imgs/logo.png";
-import { useAppSelector } from "../../store/hook";
-import { loginSuccess } from "../../store/slices/auth/slice";
+import { useAppDispatch, useAppSelector } from "../../store/hook";
+import { selectFetchTokenStatus } from "../../store/slices/auth/selector";
+import { loginFailure, loginRequest } from "../../store/slices/auth/slice";
 import { selectLoginModalOpen } from "../../store/slices/client/selector";
 import { closeLoginModal } from "../../store/slices/client/slice";
+import type { LoginPayload } from "../../types";
 import Button from "../Button";
 import InputField from "../inputs/inputField";
 
 const schema = yup.object({
-  username: yup.string().required("Vui lòng nhập tên đăng nhập"),
+  accountCode: yup.string().required("Vui lòng nhập tên đăng nhập"),
   password: yup
     .string()
     .min(6, "Ít nhất 6 ký tự")
     .required("Vui lòng nhập mật khẩu"),
+  device: yup.string().default("web"),
 });
-
-type FormValues = {
-  username: string;
-  password: string;
-};
 
 const customStyles = {
   content: {
@@ -49,41 +45,47 @@ const customStyles = {
 };
 
 export default function LoginModal() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const isOpen = useAppSelector(selectLoginModalOpen);
-
-  const [error, setError] = React.useState("");
-
+  const loginStatus = useAppSelector(selectFetchTokenStatus);
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm<FormValues>({
+  } = useForm<LoginPayload>({
     resolver: yupResolver(schema),
+    defaultValues: {
+      accountCode: "",
+      password: "",
+      device: "web",
+    },
   });
+
+  useEffect(() => {
+    if (loginStatus.error) {
+      const timer = setTimeout(() => {
+        dispatch(loginFailure(""));
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [loginStatus.error, dispatch]);
 
   const onClose = () => {
     dispatch(closeLoginModal());
-    setError("");
+    dispatch(loginFailure(""));
     reset();
   };
 
-  const onSubmit = async (data: FormValues) => {
-    setError("");
-
-    try {
-      const token = await loginApi({
-        accountCode: data.username,
-        password: data.password,
-        device: "device",
-      });
-
-      dispatch(loginSuccess(token)); // lưu token vào Redux
-      onClose(); // đóng modal
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Error logging in");
-    }
+  const onSubmit = async (data: LoginPayload) => {
+    const { accountCode, password } = data;
+    dispatch(
+      loginRequest({
+        accountCode,
+        password,
+        device: "web",
+      })
+    );
   };
 
   return (
@@ -91,7 +93,6 @@ export default function LoginModal() {
       {isOpen && (
         <Modal
           isOpen={isOpen}
-          onRequestClose={onClose}
           contentLabel="Đăng nhập"
           ariaHideApp={false}
           style={customStyles}
@@ -148,8 +149,8 @@ export default function LoginModal() {
                     <InputField
                       label="Tên đăng nhập"
                       placeholder="Nhập tên đăng nhập"
-                      error={errors.username}
-                      registration={register("username")}
+                      error={errors.accountCode}
+                      registration={register("accountCode")}
                       className="!h-12"
                     />
 
@@ -164,10 +165,12 @@ export default function LoginModal() {
                   </div>
 
                   <div className="flex flex-col gap-4">
-                    {error && (
+                    {loginStatus.error && (
                       <div className="py-2 px-3 bg-error-darker rounded-xl flex items-center flex-row gap-1">
                         <PiWarningFill className="size-5 text-red-500" />
-                        <span className="text-red-500 text-sm">{error}</span>
+                        <span className="text-red-500 text-sm">
+                          {loginStatus.error}
+                        </span>
                       </div>
                     )}
                     <span className="text-sm font-semibold text-DTND-200 text-right">
@@ -179,9 +182,13 @@ export default function LoginModal() {
                     variant="primary"
                     fullWidth
                     type="submit"
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || loginStatus.loading}
                   >
-                    {isSubmitting ? <ScaleLoader height={25} /> : "Đăng nhập"}
+                    {loginStatus.loading ? (
+                      <ScaleLoader height={25} />
+                    ) : (
+                      "Đăng nhập"
+                    )}
                   </Button>
                 </form>
                 <span className="text-sm font-medium text-text-title text-center">

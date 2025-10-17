@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import { Tooltip } from "react-tooltip";
-import LoginModal from "../components/auth/loginModal";
+import LoginModal from "../components/auth/LoginModal";
 import Header from "../components/header/header";
 import Sidebar from "../components/sidebar/sidebar";
 import { useAppSelector } from "../store/hook";

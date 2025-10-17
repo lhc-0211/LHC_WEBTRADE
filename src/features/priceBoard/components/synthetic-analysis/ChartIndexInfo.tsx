@@ -22,7 +22,9 @@ export default function ChartIndexInfo(props: Props) {
         <span className="text-xs font-bold text-text-title uppercase">
           {mapIdToNameIndex(dataIndex.indexsTypeCode)}
         </span>
-        <div className={`flex flex-row gap-2 items-center ${dataIndex.status}`}>
+        <div
+          className={`flex flex-row gap-2 items-center whitespace-nowrap ${dataIndex.status}`}
+        >
           <div className="p-[2px] rounded grid place-items-center bg-status-index">
             <FaArrowUpLong className=" w-3 h-3" />
           </div>{" "}
@@ -31,7 +33,7 @@ export default function ChartIndexInfo(props: Props) {
               {numberFormat(dataIndex.valueIndexes)}
             </span>
             <span className="text-[10px] font-semibold">
-              ({dataIndex.change} - {dataIndex.percentChange}%)
+              ({dataIndex.change} / {dataIndex.percentChange}%)
             </span>
           </div>
         </div>
@@ -52,7 +54,7 @@ export default function ChartIndexInfo(props: Props) {
       {/* Mã tăng giảm, phiên */}
       <div className="flex flex-col gap-1">
         <div className="grid grid-cols-3">
-          <span className="text-[10px] font-semibold text-stock-text-green flex flex-row items-center justify-center">
+          <span className="text-[10px] font-semibold text-stock-text-green flex flex-row items-center justify-center whitespace-nowrap">
             <TiArrowSortedUp className="w-3 h-3" />
             <span>
               {dataIndex.fluctuationUpIssueCount}{" "}
@@ -61,11 +63,11 @@ export default function ChartIndexInfo(props: Props) {
               </span>
             </span>
           </span>
-          <span className="text-[10px] font-semibold text-stock-text-yellow flex flex-row items-center justify-center">
+          <span className="text-[10px] font-semibold text-stock-text-yellow flex flex-row items-center justify-center whitespace-nowrap">
             <FaSquare className="w-[7px] h-[7px] mr-[2px]" />
             <span>{dataIndex.fluctuationSteadinessIssueCount}</span>
           </span>
-          <span className="text-[10px] font-semibold text-stock-text-red flex flex-row items-center justify-center">
+          <span className="text-[10px] font-semibold text-stock-text-red flex flex-row items-center justify-center whitespace-nowrap">
             <TiArrowSortedDown className="w-3 h-3" />
             <span>
               {dataIndex.fluctuationDownIssueCount}{" "}

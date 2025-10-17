@@ -1,17 +1,27 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { ApiStatus } from "../../../types";
+import type {
+  ApiStatus,
+  LoginPayload,
+  LoginResponse,
+  Token,
+} from "../../../types";
 
 export interface AuthState {
-  data: {
-    token: object | null | string;
-  };
-  status: {
-    fetchToken: ApiStatus;
-  };
+  data: { token: Token };
+  status: { fetchToken: ApiStatus };
 }
 
 const initialState: AuthState = {
-  data: { token: {} },
+  data: {
+    token: (() => {
+      try {
+        const saved = localStorage.getItem("token");
+        return saved ? JSON.parse(saved) : null;
+      } catch {
+        return null;
+      }
+    })(),
+  },
   status: { fetchToken: { loading: false, error: null } },
 };
 
@@ -19,13 +29,13 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    loginRequest: (state) => {
+    loginRequest: (state, action: PayloadAction<LoginPayload>) => {
       state.status.fetchToken = { loading: true, error: null };
     },
-    loginSuccess: (state, action: PayloadAction<string>) => {
+    loginSuccess: (state, action: PayloadAction<LoginResponse["data"]>) => {
       state.data.token = action.payload;
       state.status.fetchToken = { loading: false, error: null };
-      localStorage.setItem("token", action.payload);
+      localStorage.setItem("token", JSON.stringify(action.payload));
     },
     loginFailure: (state, action: PayloadAction<string>) => {
       state.data.token = null;
@@ -36,21 +46,10 @@ const authSlice = createSlice({
       state.status.fetchToken = { loading: false, error: null };
       localStorage.removeItem("token");
     },
-    restoreToken: (state) => {
-      const savedToken = localStorage.getItem("token");
-      if (savedToken) {
-        state.data.token = savedToken;
-        state.status.fetchToken = { loading: false, error: null };
-      }
-    },
   },
 });
 
-export const {
-  loginRequest,
-  loginSuccess,
-  loginFailure,
-  logout,
-  restoreToken,
-} = authSlice.actions;
+export const { loginRequest, loginSuccess, loginFailure, logout } =
+  authSlice.actions;
+
 export default authSlice.reducer;

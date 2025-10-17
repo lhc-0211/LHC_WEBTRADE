@@ -6,7 +6,6 @@ import App from "./App.tsx";
 import "./assets/css/index.css";
 import { store } from "./store/index.ts";
 
-// Ensure to set app element for accessibility
 Modal.setAppElement("#root");
 
 createRoot(document.getElementById("root")!).render(

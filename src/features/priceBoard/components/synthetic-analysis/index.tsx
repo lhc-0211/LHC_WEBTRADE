@@ -4,8 +4,8 @@ import TimeSystem from "./TimeSystem";
 
 export default function SynAnalysisPriceBoard() {
   return (
-    <div className="h-full grid grid-cols-3 gap-3">
-      <div className="col-span-2 h-[148px]">
+    <div className="w-full h-full grid grid-cols-3 gap-3">
+      <div className="col-span-2">
         <ChartIndexDashboard />
       </div>
 

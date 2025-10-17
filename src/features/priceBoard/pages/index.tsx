@@ -1,5 +1,4 @@
 import { useState } from "react";
-import HeaderColumns from "../components/board/HeaderColumns";
 import MenuDashboard from "../components/menu-board";
 import SynAnalysisPriceBoard from "../components/synthetic-analysis";
 
@@ -19,9 +18,7 @@ export default function PriceBoard() {
         <MenuDashboard active={active} onChange={onChange} />
 
         {/* Bảng giá */}
-        <div>
-          <HeaderColumns />
-        </div>
+        <div>{/* <HeaderColumns /> */}</div>
       </div>
     </div>
   );

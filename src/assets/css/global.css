@@ -117,6 +117,62 @@ input:-webkit-autofill {
   background-color: var(--color-features-darker) !important;
 }
 
+.loader {
+  width: 120px;
+  height: 22px;
+  border-radius: 20px;
+  color: #bd720f;
+  border: 2px solid;
+  position: relative;
+}
+.loader::before {
+  content: "";
+  position: absolute;
+  margin: 2px;
+  inset: 0 100% 0 0;
+  border-radius: inherit;
+  background: currentColor;
+  animation: l6 2s infinite;
+}
+@keyframes l6 {
+  100% {
+    inset: 0;
+  }
+}
+
+/* TODO: Animations */
+/* XUẤT HIỆN: Từ góc phải trên xuống */
+@keyframes fadeInFromTopRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) translateY(0);
+  }
+}
+
+.animate-fadeInFromTopRight {
+  animation: fadeInFromTopRight 0.25s ease forwards;
+}
+
+/* MẤT ĐI: Ngược lại - từ góc phải trên */
+@keyframes fadeOutToTopRight {
+  from {
+    opacity: 1;
+    transform: translateX(0) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(20px) translateY(-10px);
+  }
+}
+
+.animate-fadeOutToTopRight {
+  animation: fadeOutToTopRight 0.2s ease forwards;
+}
+
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -143,29 +199,22 @@ input:-webkit-autofill {
   }
 }
 
-.animate-fadeInDown {
-  animation: fadeInDown 0.2s ease-out;
-}
-
-.loader {
-  width: 120px;
-  height: 22px;
-  border-radius: 20px;
-  color: #bd720f;
-  border: 2px solid;
-  position: relative;
-}
-.loader::before {
-  content: "";
-  position: absolute;
-  margin: 2px;
-  inset: 0 100% 0 0;
-  border-radius: inherit;
-  background: currentColor;
-  animation: l6 2s infinite;
-}
-@keyframes l6 {
+@keyframes fadeOutUp {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
   100% {
-    inset: 0;
+    opacity: 0;
+    transform: translateY(-5px);
   }
 }
+
+.animate-fadeInDown {
+  animation: fadeInDown 0.2s ease-out forwards;
+}
+
+.animate-fadeOutUp {
+  animation: fadeOutUp 0.2s ease-out forwards;
+}
+/* End */

@@ -92,8 +92,8 @@ function* fetchTopForeignTradedSaga(action: FetchApiByParamAction) {
 }
 
 export default function* priceBoardSaga() {
-  yield takeLatest(fetchInfoIndexRequest.type, fetchInfoIndexSaga);
-  yield takeEvery(fetchChartIndexRequest.type, fetchChartIndexSaga);
-  yield takeEvery(fetchTopStockTradedRequest.type, fetchTopStockTradedSaga);
-  yield takeEvery(fetchTopForeignTradedRequest.type, fetchTopForeignTradedSaga);
+  yield takeLatest(fetchInfoIndexRequest, fetchInfoIndexSaga);
+  yield takeEvery(fetchChartIndexRequest, fetchChartIndexSaga);
+  yield takeEvery(fetchTopStockTradedRequest, fetchTopStockTradedSaga);
+  yield takeEvery(fetchTopForeignTradedRequest, fetchTopForeignTradedSaga);
 }

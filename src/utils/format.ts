@@ -147,3 +147,32 @@ export function convertTimeStringToUnix(timeString: string): number {
   // Trả về Unix timestamp (giây)
   return localTime.unix();
 }
+
+export const formatAccount = (inputStr: string) => {
+  if (!inputStr) return;
+  const lastDigit = inputStr.slice(-1);
+  const firstDigit = inputStr.slice(0, -1);
+
+  return `TK-${firstDigit}.${lastDigit}`;
+};
+
+export const formatAccountType = (inputStr: string) => {
+  if (!inputStr) return;
+  const lastDigit = inputStr.slice(-1);
+  const typeAcc =
+    inputStr?.length > 6
+      ? lastDigit === "1"
+        ? "(Thường)"
+        : lastDigit === "6"
+        ? "(Margin)"
+        : lastDigit === "7"
+        ? "(Margin)"
+        : lastDigit === "8"
+        ? "(Nâng cao)"
+        : lastDigit === "9"
+        ? "(Phái sinh)"
+        : ""
+      : "";
+
+  return `TK-${inputStr}${typeAcc}`;
+};
