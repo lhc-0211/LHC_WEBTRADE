@@ -33,36 +33,6 @@ button {
   cursor: pointer;
 }
 
-.sidebar-item:hover,
-.sidebar-active {
-  background: linear-gradient(
-    90deg,
-    rgba(230, 232, 16) -71.91%,
-    rgba(255, 200, 0, 0) 100%
-  );
-}
-
-/* --- Ẩn active khi icon ở trạng thái normal --- */
-.sidebar-item__normal #iconACtive {
-  display: none;
-}
-
-/* --- Khi hover vào normal → hiển thị active và ẩn normal --- */
-.sidebar-item:hover .sidebar-item__normal #iconNormal {
-  display: none;
-}
-.sidebar-item:hover .sidebar-item__normal #iconACtive {
-  display: block;
-}
-
-/* --- Khi icon đang active (đã click) → luôn hiển thị active --- */
-.sidebar-item__active #iconNormal {
-  display: none;
-}
-.sidebar-item__active #iconACtive {
-  display: block;
-}
-
 input:-webkit-autofill {
   -webkit-box-shadow: 0 0 0 30px var(--color-input) inset !important; /* đổi nền */
   -webkit-text-fill-color: var(--color-text-title) !important; /* màu chữ */

@@ -7,7 +7,6 @@ import Sidebar from "../components/sidebar/sidebar";
 import { useAppSelector } from "../store/hook";
 import { selectToken } from "../store/slices/auth/selector";
 import type { SidebarMode } from "../types/layout";
-import { isEmptyObject } from "../utils";
 
 export default function MainLayout({
   children,
@@ -17,7 +16,9 @@ export default function MainLayout({
   const token = useAppSelector(selectToken);
 
   const [sidebarMode, setSidebarMode] = useState<SidebarMode>(
-    (localStorage.getItem("sidebarMode") as SidebarMode) || "full"
+    !token
+      ? "hidden"
+      : (localStorage.getItem("sidebarMode") as SidebarMode) || "full"
   );
 
   const getSidebarWidth = () => {
@@ -42,7 +43,7 @@ export default function MainLayout({
       className="grid h-[calc(var(--app-height))] overflow-hidden bg-background-primary text-text-body"
       style={{ gridTemplateColumns: `${getSidebarWidth()}px auto` }}
     >
-      {!isEmptyObject(token) ? (
+      {token ? (
         <Sidebar
           mode={sidebarMode}
           width={sidebarMode === "mini" ? 68 : sidebarMode === "full" ? 180 : 0}

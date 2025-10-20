@@ -41,7 +41,7 @@ export default function TimeSystem() {
   }, []);
 
   return (
-    <div className="w-full grid place-items-center py-[19px] px-2 h-full bg-surface rounded-[20px]">
+    <div className="w-full grid place-items-center h-[148px] bg-surface rounded-[20px]">
       <div className="flex flex-col gap-3">
         <div className="flex flex-col gap-2 items-center justify-center">
           {time ? (

@@ -68,7 +68,7 @@ export default function Header() {
 
       <div className="flex flex-row gap-4 items-center">
         <InputFieldSearchMaster
-          className="w-[150px] h-9"
+          className="w-[200px] h-9"
           placeholder="Tìm kiếm"
         />
 

@@ -45,6 +45,7 @@ const authSlice = createSlice({
       state.data.token = null;
       state.status.fetchToken = { loading: false, error: null };
       localStorage.removeItem("token");
+      localStorage.removeItem("sessionId");
     },
   },
 });

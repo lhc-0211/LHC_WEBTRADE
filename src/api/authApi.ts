@@ -1,13 +1,13 @@
 import { apiClient } from "../services/apiClient";
-import type { LoginRequest, LoginResponse } from "../types";
+import type { LoginPayload, LoginResponse } from "../types";
 
 export async function loginApi({
   accountCode,
   password,
   device,
-}: LoginRequest): Promise<LoginResponse["data"]> {
+}: LoginPayload): Promise<LoginResponse["data"]> {
   const payload = { accountCode, password, device };
-  const res = await apiClient.post<LoginResponse>("/v1/auth/login", payload);
+  const res = await apiClient.post<LoginResponse>("/auth/login", payload);
   const { rc, msg, data } = res.data;
 
   if (rc === 1) {

@@ -1,7 +1,7 @@
 import type { SidebarItemGroup } from "../types/layout";
 
-import PlaceOrder from "../assets/imgs/icons/place_order.svg?react";
-import PriceBoardIcon from "../assets/imgs/icons/price_board.svg?react";
+import { HiCursorArrowRays } from "react-icons/hi2";
+import { MdCandlestickChart } from "react-icons/md";
 
 export const SIDE_BAR_GROUPS: SidebarItemGroup[] = [
   {
@@ -11,7 +11,7 @@ export const SIDE_BAR_GROUPS: SidebarItemGroup[] = [
         id: "price_board",
         title: "Bảng giá",
         path: "/price-board",
-        icon: PriceBoardIcon,
+        icon: MdCandlestickChart,
       },
       // {
       //   id: "market_overview",
@@ -29,7 +29,7 @@ export const SIDE_BAR_GROUPS: SidebarItemGroup[] = [
         id: "place_order",
         title: "Đặt lệnh",
         path: "/place-order",
-        icon: PlaceOrder,
+        icon: HiCursorArrowRays,
         requiresLogin: true,
       },
       // {

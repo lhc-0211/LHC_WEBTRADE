@@ -200,4 +200,13 @@
   --color-input: #1b1f29;
 
   --color-dark-blue: #0a1825;
+
+  --color-type-margin: linear-gradient(
+    127.72deg,
+    #4531e0 14.81%,
+    #ae5ef1 100.61%
+  );
+  --color-type-ps: linear-gradient(180deg, #0575e6 0%, #021b79 100%);
+
+  --color-neutral-950: #15151e;
 }

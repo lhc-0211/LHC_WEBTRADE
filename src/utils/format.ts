@@ -1,5 +1,3 @@
-import moment from "moment-timezone";
-
 function pick<T>(...values: (T | undefined | null)[]): T | undefined {
   for (const v of values) {
     if (v !== undefined && v !== null) {
@@ -133,21 +131,6 @@ export function StringToDouble(pString: string | number): number {
   }
 }
 
-export function convertTimeStringToUnix(timeString: string): number {
-  // Lấy ngày hiện tại theo giờ Việt Nam (UTC+7)
-  const today = moment().tz("Asia/Ho_Chi_Minh").format("YYYY-MM-DD");
-
-  // Kết hợp ngày hiện tại với giờ từ đầu vào
-  const localTime = moment.tz(
-    `${today} ${timeString}`,
-    "YYYY-MM-DD HH:mm:ss",
-    "Asia/Ho_Chi_Minh"
-  );
-
-  // Trả về Unix timestamp (giây)
-  return localTime.unix();
-}
-
 export const formatAccount = (inputStr: string) => {
   if (!inputStr) return;
   const lastDigit = inputStr.slice(-1);
@@ -157,22 +140,31 @@ export const formatAccount = (inputStr: string) => {
 };
 
 export const formatAccountType = (inputStr: string) => {
-  if (!inputStr) return;
+  if (!inputStr) return null;
   const lastDigit = inputStr.slice(-1);
-  const typeAcc =
-    inputStr?.length > 6
-      ? lastDigit === "1"
-        ? "(Thường)"
-        : lastDigit === "6"
-        ? "(Margin)"
-        : lastDigit === "7"
-        ? "(Margin)"
-        : lastDigit === "8"
-        ? "(Nâng cao)"
-        : lastDigit === "9"
-        ? "(Phái sinh)"
-        : ""
-      : "";
 
-  return `TK-${inputStr}${typeAcc}`;
+  let label = "";
+  let color = "";
+
+  switch (lastDigit) {
+    case "1":
+      label = "Thường";
+      color = "bg-DTND-400 text-black-white-100";
+      break;
+    case "6":
+    case "7":
+      label = "Margin";
+      color = "bg-type-margin text-orange-700";
+      break;
+    case "8":
+      label = "Nâng cao";
+      color = "bg-blue-200 text-blue-700";
+      break;
+    case "9":
+      label = "Phái sinh";
+      color = "bg-type-ps text-green-700";
+      break;
+  }
+
+  return { type: lastDigit, label, color };
 };

@@ -48,6 +48,8 @@ export default function LoginModal() {
   const dispatch = useAppDispatch();
   const isOpen = useAppSelector(selectLoginModalOpen);
   const loginStatus = useAppSelector(selectFetchTokenStatus);
+  const token = useAppSelector(selectFetchTokenStatus);
+
   const {
     register,
     handleSubmit,
@@ -61,6 +63,12 @@ export default function LoginModal() {
       device: "web",
     },
   });
+
+  useEffect(() => {
+    if (token) {
+      dispatch(closeLoginModal());
+    }
+  }, [token, dispatch]);
 
   useEffect(() => {
     if (loginStatus.error) {
@@ -123,7 +131,7 @@ export default function LoginModal() {
                   <br /> ĐẾN VỚI NỀN TẢNG GIAO DỊCH DTND
                 </h2>
                 <IoClose
-                  className="size-6 text-text-title cursor-pointer"
+                  className="w-7 h-7 text-text-title cursor-pointer"
                   onClick={onClose}
                 />
               </div>
@@ -183,6 +191,7 @@ export default function LoginModal() {
                     fullWidth
                     type="submit"
                     disabled={isSubmitting || loginStatus.loading}
+                    className="!h-10"
                   >
                     {loginStatus.loading ? (
                       <ScaleLoader height={25} />
