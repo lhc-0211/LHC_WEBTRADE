@@ -17,7 +17,7 @@ import { selectLoginModalOpen } from "../../store/slices/client/selector";
 import { closeLoginModal } from "../../store/slices/client/slice";
 import type { LoginPayload } from "../../types";
 import Button from "../common/button";
-import InputField from "../inputs/inputField";
+import InputField from "../inputs/InputField";
 
 const schema = yup.object({
   accountCode: yup.string().required("Vui lòng nhập tên đăng nhập"),

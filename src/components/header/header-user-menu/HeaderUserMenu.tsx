@@ -44,7 +44,6 @@ export default function HeaderUserMenu({ token }: { token: Token }) {
   } = useAnimationDelay(200);
 
   const refUserMenu = useRef<HTMLDivElement>(null);
-  const refUserMenuFunc = useRef<HTMLDivElement>(null); // chứ năng menu
 
   const [menuAccountType, setMenuAccountType] =
     useState<MenuAccountType | null>();
@@ -79,6 +78,7 @@ export default function HeaderUserMenu({ token }: { token: Token }) {
   const handleLogout = () => {
     dispatch(logout());
     navigate("/price-board");
+    close();
   };
 
   const handleClickFunc = (value: MenuAccountType) => {
@@ -98,7 +98,7 @@ export default function HeaderUserMenu({ token }: { token: Token }) {
           <>
             {" "}
             <Button
-              onClick={() => alert("Primary")}
+              onClick={() => alert("Thông báo của DTND!")}
               variant="close"
               className="!p-2 !h-9"
             >
@@ -231,7 +231,6 @@ export default function HeaderUserMenu({ token }: { token: Token }) {
                 ? "animate-fadeInFromTopRight"
                 : "animate-fadeOutToTopRight"
             }`}
-            ref={refUserMenuFunc}
           >
             {menuAccountType === "account" && (
               <AccountSetting

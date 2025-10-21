@@ -4,3 +4,5 @@ export const HOLIDAYS = [
   "05-01", // Quốc tế lao động
   "09-02", // Quốc khánh
 ];
+
+export const TIME_OTP = 300; // Giây

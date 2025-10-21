@@ -84,16 +84,10 @@ export default function ChartIndexDashboard() {
   return (
     <div className="w-full h-full">
       <Swiper {...swiperProps} className="w-full h-full ">
-        {loading || error
+        {loading
           ? [...Array(infoIndex.length || 4)].map((_, index) => (
               <SwiperSlide key={index} className="h-full">
-                {loading ? (
-                  <ChartIndexDashboardSkeleton />
-                ) : (
-                  <div className="w-full h-full grid place-items-center text-red-500 text-xs font-medium bg-gray-300/40 rounded p-2">
-                    Error: {error}
-                  </div>
-                )}
+                <ChartIndexDashboardSkeleton />
               </SwiperSlide>
             ))
           : infoIndex.map((item: InfoIndex) => {

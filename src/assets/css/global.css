@@ -193,6 +193,7 @@ input:-webkit-autofill {
 .Toastify__toast {
   border-radius: 10px;
   padding: 0 12px;
+  font-size: 12px !important;
 }
 /* .Toastify__toast.Toastify__toast--warning {
   background-color: var(--color-warning-darker) !important;

@@ -1,4 +1,5 @@
 import { RiEdit2Fill } from "react-icons/ri";
+import { usePerfectScrollbar } from "../../../../hooks/usePerfectScrollbar.ts";
 import { useAppSelector } from "../../../../store/hook";
 import { selectAccountProfileStatus } from "../../../../store/slices/client/selector";
 import type { AccountProfile } from "../../../../types/client";
@@ -6,13 +7,20 @@ import AccountInfoSkeleton from "./AccountInfoSkeleton";
 
 export default function AccountInfo({
   accountProfile,
+  handleOpenModalChangeAccountInfo,
 }: {
   accountProfile: AccountProfile | null;
+  handleOpenModalChangeAccountInfo: (type: "email" | "address") => void;
 }) {
+  const { containerRef } = usePerfectScrollbar();
+
   const { loading } = useAppSelector(selectAccountProfileStatus);
 
   return (
-    <>
+    <div
+      ref={containerRef}
+      className="h-[calc(var(--app-height)-377px)] w-[360px] bg-sidebar-default overflow-hidden relative"
+    >
       {" "}
       {loading ? (
         <AccountInfoSkeleton />
@@ -82,7 +90,10 @@ export default function AccountInfo({
                   {accountProfile?.C_CUST_EMAIL}
                 </span>
               </div>
-              <div className="cursor-pointer p-1 hover:bg-gray-300 rounded-full">
+              <div
+                className="cursor-pointer p-1 hover:bg-gray-300 rounded-full"
+                onClick={() => handleOpenModalChangeAccountInfo("email")}
+              >
                 <RiEdit2Fill className="w-4 h-4 min-w-4" />
               </div>
             </div>
@@ -95,13 +106,16 @@ export default function AccountInfo({
                   {accountProfile?.C_RESEDENCE_ADDRESS}
                 </span>
               </div>
-              <div className="cursor-pointer p-1 hover:bg-gray-300 rounded-full">
+              <div
+                className="cursor-pointer p-1 hover:bg-gray-300 rounded-full"
+                onClick={() => handleOpenModalChangeAccountInfo("address")}
+              >
                 <RiEdit2Fill className="w-4 h-4 min-w-4" />
               </div>
             </div>
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }

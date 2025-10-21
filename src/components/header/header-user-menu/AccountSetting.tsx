@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { IoClose } from "react-icons/io5";
 import { RiEdit2Fill } from "react-icons/ri";
 import { TbCameraPlus } from "react-icons/tb";
@@ -7,6 +7,7 @@ import { selectAccountProfileStatus } from "../../../store/slices/client/selecto
 import type { AccountProfile } from "../../../types/client";
 import AccountHeaderSkeleton from "./account-info/AccountHeaderSkeleton";
 import AccountInfo from "./account-info/AccountInfo";
+import ChangeAccountInfoModal from "./account-info/ChangeAccountInfoModal";
 import ChangeNicknameModal from "./ChangeNicknamModal";
 
 export default function AccountSetting({
@@ -21,8 +22,40 @@ export default function AccountSetting({
   const [isOpenChangeNickname, setIsOpenChangeNickname] =
     useState<boolean>(false);
 
+  const [isOpenChangeAccountInfo, setIsOpenChangeAccountInfo] =
+    useState<boolean>(false);
+
+  const refContainer = useRef<HTMLDivElement>(null);
+
+  const [typeChange, setTypeChange] = useState<"email" | "address">("email");
+
+  useEffect(() => {
+    const handlerCloseMenu = (e: MouseEvent) => {
+      if (
+        refContainer.current &&
+        !refContainer.current.contains(e.target as Node) &&
+        !isOpenChangeNickname &&
+        !isOpenChangeAccountInfo
+      ) {
+        close();
+      }
+    };
+    document.addEventListener("mousedown", handlerCloseMenu);
+    return () => {
+      document.removeEventListener("mousedown", handlerCloseMenu);
+    };
+  }, [close, isOpenChangeNickname, isOpenChangeAccountInfo]);
+
+  const handleOpenModalChangeAccountInfo = (type: "email" | "address") => {
+    setTypeChange(type);
+    setIsOpenChangeAccountInfo(true);
+  };
+
   return (
-    <div className="h-[calc(var(--app-height)-57px)] w-[360px] bg-sidebar-default">
+    <div
+      className="h-[calc(var(--app-height)-57px)] w-[360px] bg-sidebar-default"
+      ref={refContainer}
+    >
       <div className="w-full flex flex-row items-center justify-between p-4 border-b border-border">
         <h1 className="text-base font-medium text-text-title">
           Cài đặt tài khoản
@@ -85,7 +118,10 @@ export default function AccountSetting({
         </div>
 
         {/* Chức năng */}
-        <AccountInfo accountProfile={accountProfile} />
+        <AccountInfo
+          accountProfile={accountProfile}
+          handleOpenModalChangeAccountInfo={handleOpenModalChangeAccountInfo}
+        />
       </div>
 
       {/* modal change nickname */}
@@ -94,6 +130,16 @@ export default function AccountSetting({
           isOpen={isOpenChangeNickname}
           accountProfile={accountProfile}
           onClose={() => setIsOpenChangeNickname(false)}
+        />
+      )}
+
+      {/* modal change account info */}
+      {isOpenChangeAccountInfo && (
+        <ChangeAccountInfoModal
+          isOpen={isOpenChangeAccountInfo}
+          typeChange={typeChange}
+          accountProfile={accountProfile}
+          onClose={() => setIsOpenChangeAccountInfo(false)}
         />
       )}
     </div>

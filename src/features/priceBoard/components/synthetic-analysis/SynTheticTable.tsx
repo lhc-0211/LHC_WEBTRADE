@@ -133,10 +133,6 @@ export default function SynTheticTable() {
           <div className="overflow-hidden h-[91px]">
             {loadingStock ? (
               <SynTheticTableSkeleton type="INDAY" />
-            ) : errorStock ? (
-              <div className="w-full h-full text-red-500">
-                Error:{errorStock}
-              </div>
             ) : (
               <List
                 rowComponent={RowComponentInday}

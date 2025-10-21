@@ -1,5 +1,3 @@
-import type { Nullable } from "./common";
-
 interface AccountProfileValue {
   PK_CUST_CUSTOMER: string;
   C_BRANCH_CODE: string;
@@ -51,7 +49,13 @@ interface AccountProfileValue {
   C_PHONE_OTP: string;
 }
 
-export type AccountProfile = Nullable<AccountProfileValue>;
+export type AccountProfile = Partial<AccountProfileValue>;
+
+export type AccountProfileResponse = {
+  rc: number;
+  msg: string | undefined;
+  data?: AccountProfileValue;
+};
 
 export interface ChangeNicknamePayload {
   ACTION_TYPE: string;
@@ -76,3 +80,30 @@ export interface ChangeNicknameResponse {
 }
 
 export type CheckNicknameDataResponse = ChangeNicknameResponse["data"];
+
+export interface ChangeAccountInfoForm {
+  email: string;
+  address: string;
+  phoneNumber?: string;
+}
+
+export interface ChangeAccountInfoResponse {
+  rc: number;
+  msg: string | null;
+  data?: {
+    C_ACCOUNT_CODE: string;
+    C_CHANGE_DATE: string;
+  };
+}
+
+export type ChangeAccountInfoDataResponse = ChangeAccountInfoResponse["data"];
+
+export interface ChangeAccountInfoPayload {
+  CUST_MOBILE: string;
+  CUST_EMAIL: string;
+  CONTACT_ADDRESS: string;
+}
+
+export type ChangeAccountInfoActionPayload = ChangeAccountInfoPayload & {
+  otp: string;
+};

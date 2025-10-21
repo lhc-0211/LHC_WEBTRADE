@@ -2,7 +2,7 @@ import { MdZoomOutMap } from "react-icons/md";
 import { useAppSelector } from "../../store/hook";
 import { selectToken } from "../../store/slices/auth/selector";
 import { isEmptyObject } from "../../utils";
-import InputFieldSearchMaster from "../inputs/inputFieldSearchMaster";
+import InputFieldSearchMaster from "../inputs/InputFieldSearchMaster";
 import { HeaderUserMenu } from "./header-user-menu";
 
 export default function Header() {

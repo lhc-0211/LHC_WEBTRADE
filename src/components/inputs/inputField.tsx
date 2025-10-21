@@ -7,6 +7,7 @@ type InputProps = {
   error?: FieldError;
   registration?: UseFormRegisterReturn;
   className?: string;
+  requied?: boolean;
 };
 
 export default function InputField({
@@ -16,11 +17,15 @@ export default function InputField({
   error,
   registration,
   className,
+  requied,
 }: InputProps) {
   return (
     <div className="flex flex-col gap-1">
       {label && (
-        <label className="font-medium text-sm text-text-title">{label}</label>
+        <label className="font-medium text-sm text-text-title">
+          {label}
+          {requied && <span className="text-red-500"> *</span>}
+        </label>
       )}
 
       <input

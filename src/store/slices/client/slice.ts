@@ -1,7 +1,8 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { ApiStatus } from "../../../types";
 import type {
-  AccountProfile,
+  AccountProfileResponse,
+  ChangeAccountInfoActionPayload,
   ChangeNicknamePayload,
   CheckNicknameDataResponse,
 } from "../../../types/client";
@@ -9,7 +10,7 @@ import type {
 export interface ClientState {
   data: {
     loginModalOpen: boolean;
-    accountProfile: AccountProfile | null;
+    accountProfile: AccountProfileResponse | null;
     sessionExpired: boolean;
     checkNickname: CheckNicknameDataResponse | null;
   };
@@ -17,6 +18,7 @@ export interface ClientState {
     fetchAccountProfile: ApiStatus;
     fetchChangeNickname: ApiStatus;
     fetchCheckNickname: ApiStatus;
+    fetchChangeAccountInfo: ApiStatus;
   };
 }
 
@@ -31,6 +33,7 @@ const initialState: ClientState = {
     fetchAccountProfile: { loading: false, error: null },
     fetchChangeNickname: { loading: false, error: null, success: false },
     fetchCheckNickname: { loading: false, error: null },
+    fetchChangeAccountInfo: { loading: false, error: null, success: false },
   },
 };
 
@@ -55,7 +58,10 @@ const clientSlice = createSlice({
       state.status.fetchAccountProfile = { loading: true, error: null };
       state.data.accountProfile = null;
     },
-    fetchAccountProfileSuccess(state, action: PayloadAction<AccountProfile>) {
+    fetchAccountProfileSuccess(
+      state,
+      action: PayloadAction<AccountProfilePayload | null>
+    ) {
       state.status.fetchAccountProfile = { loading: false, error: null };
       state.data.accountProfile = action.payload;
     },
@@ -115,6 +121,32 @@ const clientSlice = createSlice({
         error: null,
       };
     },
+
+    //Đổi thông tin tài khoản
+    fetchChangeAccountInfoRequest: (
+      state,
+      action: PayloadAction<ChangeAccountInfoActionPayload>
+    ) => {
+      state.status.fetchChangeAccountInfo.loading = true;
+      state.status.fetchChangeAccountInfo.error = null;
+      state.status.fetchChangeAccountInfo.success = false;
+    },
+    fetchChangeAccountInfoSuccess: (state) => {
+      state.status.fetchChangeAccountInfo.loading = false;
+      state.status.fetchChangeAccountInfo.success = true;
+    },
+    fetchChangeAccountInfoFailure: (state, action: PayloadAction<string>) => {
+      state.status.fetchChangeAccountInfo.loading = false;
+      state.status.fetchChangeAccountInfo.error = action.payload;
+      state.status.fetchChangeAccountInfo.success = false;
+    },
+    resetFetchChangeAccountInfo: (state) => {
+      state.status.fetchChangeAccountInfo = {
+        loading: false,
+        success: false,
+        error: null,
+      };
+    },
   },
 });
 
@@ -132,5 +164,9 @@ export const {
   fetchChangeNicknameSuccess,
   fetchChangeNicknameFailure,
   resetFetchChangeNickname,
+  fetchChangeAccountInfoRequest,
+  fetchChangeAccountInfoSuccess,
+  fetchChangeAccountInfoFailure,
+  resetFetchChangeAccountInfo,
 } = clientSlice.actions;
 export default clientSlice.reducer;

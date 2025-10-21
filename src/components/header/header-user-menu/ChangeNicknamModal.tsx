@@ -24,7 +24,7 @@ import {
 import type { AccountProfile, ChangeNicknameForm } from "../../../types/client";
 import { _diff2Date, formatDate } from "../../../utils";
 import Button from "../../common/button";
-import InputField from "../../inputs/inputField";
+import InputField from "../../inputs/InputField";
 
 const nicknameRegex = /^[A-Za-z][A-Za-z0-9_-]{5,19}$/;
 
@@ -189,7 +189,7 @@ export default function ChangeNicknameModal({
             transition={{ duration: 0.25, ease: "easeOut" }}
             className="flex flex-col gap-4 bg-cover bg-no-repeat bg-center rounded-xl"
           >
-            <div className="flex flex-col gap-4 p-4 rounded-xl border border-border">
+            <div className="flex flex-col gap-4 p-4 rounded-xl border border-border bg-background-primary">
               <div className="flex flex-row items-center justify-between">
                 {step === 1 ? (
                   <div className="flex flex-row gap-2 items-center">

@@ -1,5 +1,10 @@
 import { apiClient } from "../services/apiClient";
-import type { LoginPayload, LoginResponse } from "../types";
+import type {
+  FetchOtpPayload,
+  FetchOtpResponse,
+  LoginPayload,
+  LoginResponse,
+} from "../types";
 
 export async function loginApi({
   accountCode,
@@ -18,3 +23,13 @@ export async function loginApi({
     throw new Error(msg || "Đăng nhập thất bại");
   }
 }
+
+export const fetchOtpApi = async (
+  payload: FetchOtpPayload
+): Promise<FetchOtpResponse> => {
+  const res = await apiClient.post<FetchOtpResponse>(
+    "/auth/otp/request",
+    payload
+  );
+  return res.data;
+};

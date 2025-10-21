@@ -24,3 +24,21 @@ export interface LoginResponse {
 }
 
 export type Token = LoginResponse["data"] | null;
+
+export interface FetchOtpPayload {
+  channel: string;
+}
+
+export interface ConfirmOtpForm {
+  otp: string;
+}
+
+export interface FetchOtpResponse {
+  rc: number;
+  msg: string | null;
+  data?: {
+    otp: string;
+  };
+}
+
+export type FetchOtpDataResponse = FetchOtpResponse["data"];

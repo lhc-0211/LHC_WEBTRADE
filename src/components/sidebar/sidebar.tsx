@@ -7,6 +7,8 @@ import {
 import { useLocation } from "react-router-dom";
 import packageJson from "../../../package.json";
 import { SIDE_BAR_GROUPS } from "../../configs/sidebar";
+import { useAppSelector } from "../../store/hook";
+import { selectToken } from "../../store/slices/auth/selector";
 import type { SidebarItem, SidebarMode } from "../../types";
 
 interface Props {
@@ -18,11 +20,13 @@ interface Props {
 export default function Sidebar({ mode, width, changeModeSidebar }: Props) {
   const location = useLocation();
 
+  const token = useAppSelector(selectToken);
+
   const handleClick = (item: SidebarItem) => {
-    if (item.requiresLogin) {
+    if (item.requiresLogin && !token) {
       alert("Chức năng cần đăng nhập");
     } else {
-      // item.action();
+      alert("oke");
     }
   };
 
@@ -132,25 +136,22 @@ export default function Sidebar({ mode, width, changeModeSidebar }: Props) {
         animate={{ scale: 1 }}
         whileTap={{ scale: 0.9 }}
         transition={{ type: "spring", stiffness: 200, damping: 12 }}
-        className={`size-[34px] bg-background-primary from-yellow-200 to-yellow-400 rounded-full border border-yellow-500 shadow-[0_0_0_2px_rgba(250,204,21,0.3)] grid place-items-center absolute cursor-pointer hover:shadow-lg transition-all duration-300 ${
+        className={`size-8 bg-background-primary from-yellow-200 to-yellow-400 rounded-full border border-yellow-500 shadow-[0_0_0_2px_rgba(250,204,21,0.3)] grid place-items-center absolute cursor-pointer hover:shadow-lg transition-all duration-300 ${
           mode === "hidden" ? "bottom-10 -right-11" : "bottom-10 -right-4"
         }`}
+        onClick={() => {
+          // Chuyển mode tuần tự: full -> mini -> hidden -> full
+          if (mode === "full") changeModeSidebar("mini");
+          else if (mode === "mini") changeModeSidebar("hidden");
+          else changeModeSidebar("full");
+        }}
       >
         {mode === "full" ? (
-          <VscLayoutActivitybarRight
-            className="text-lg text-yellow-700"
-            onClick={() => changeModeSidebar("mini")}
-          />
+          <VscLayoutActivitybarRight className="text-lg text-yellow-700" />
         ) : mode === "mini" ? (
-          <VscLayoutSidebarRightOff
-            className="text-lg text-yellow-700"
-            onClick={() => changeModeSidebar("hidden")}
-          />
+          <VscLayoutSidebarRightOff className="text-lg text-yellow-700" />
         ) : (
-          <VscLayoutSidebarRight
-            className="text-lg text-yellow-700"
-            onClick={() => changeModeSidebar("full")}
-          />
+          <VscLayoutSidebarRight className="text-lg text-yellow-700" />
         )}
       </motion.div>
     </div>

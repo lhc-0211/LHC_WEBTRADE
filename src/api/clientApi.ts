@@ -1,22 +1,16 @@
 import { apiClient } from "../services/apiClient";
 import type {
-  AccountProfile,
+  AccountProfileResponse,
+  ChangeAccountInfoPayload,
+  ChangeAccountInfoResponse,
   ChangeNicknamePayload,
   ChangeNicknameResponse,
 } from "../types/client";
 
-export async function fetchAccountProfileAPI(): Promise<AccountProfile> {
+export async function fetchAccountProfileAPI(): Promise<AccountProfileResponse> {
   const res = await apiClient.get("/accounts/profile");
 
-  const { rc, msg, data } = res.data;
-
-  if (rc === 1) {
-    return data;
-  } else {
-    throw new Error(
-      msg || "Không kết nối được server, Vui lòng kiểm tra đường truyền mạng!"
-    );
-  }
+  return res.data;
 }
 
 export const changeNicknameApi = async (
@@ -39,5 +33,23 @@ export const checkNicknameApi = async (
     method: "GET",
     data: payload,
   });
+  return res.data;
+};
+
+export const fetchChangeAccInfoApi = async (
+  payload: ChangeAccountInfoPayload,
+  otp: string
+): Promise<ChangeAccountInfoResponse> => {
+  const res = await apiClient.put<ChangeAccountInfoResponse>(
+    "/accounts/change",
+    payload,
+    {
+      headers: {
+        "X-Otp": otp,
+      },
+    }
+  );
+  console.log("test", res);
+
   return res.data;
 };

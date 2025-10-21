@@ -4,16 +4,24 @@ import {
   changeNicknameApi,
   checkNicknameApi,
   fetchAccountProfileAPI,
+  fetchChangeAccInfoApi,
 } from "../../../api/clientApi";
 import type {
-  AccountProfile,
+  AccountProfileResponse,
+  ChangeAccountInfoActionPayload,
+  ChangeAccountInfoResponse,
   ChangeNicknamePayload,
   ChangeNicknameResponse,
 } from "../../../types/client";
+import { getMsgByErrorCode } from "../../../utils";
+import { showToast } from "../global/slice";
 import {
   fetchAccountProfileFailure,
   fetchAccountProfileRequest,
   fetchAccountProfileSuccess,
+  fetchChangeAccountInfoFailure,
+  fetchChangeAccountInfoRequest,
+  fetchChangeAccountInfoSuccess,
   fetchChangeNicknameFailure,
   fetchChangeNicknameRequest,
   fetchChangeNicknameSuccess,
@@ -24,9 +32,20 @@ import {
 
 function* fetchAccountProfileSaga() {
   try {
-    const response: AccountProfile = yield call(fetchAccountProfileAPI);
+    const res: AccountProfileResponse = yield call(fetchAccountProfileAPI);
 
-    yield put(fetchAccountProfileSuccess(response));
+    if (res.rc < 1) {
+      yield put(
+        showToast({
+          msg: getMsgByErrorCode(res.rc + "") || res.msg || "Thất bại",
+          type: "error",
+        })
+      );
+      put(fetchAccountProfileFailure(res.msg || "Thất bại"));
+      throw Error(res.msg || "Thất bại");
+    }
+
+    yield put(fetchAccountProfileSuccess(res.data));
   } catch (error: unknown) {
     const errorMessage =
       error instanceof Error ? error.message : "Failed to fetch info index";
@@ -42,11 +61,19 @@ function* fetchCheckNicknameSaga(
       checkNicknameApi,
       action.payload
     );
-    if (res.rc === 1) {
-      yield put(fetchCheckNicknameSuccess(res.data));
-    } else {
-      yield put(fetchCheckNicknameFailure(res.msg || "Thất bại"));
+
+    if (res.rc < 1) {
+      yield put(
+        showToast({
+          msg: getMsgByErrorCode(res.rc + "") || res.msg || "Thất bại",
+          type: "error",
+        })
+      );
+      put(fetchCheckNicknameFailure(res.msg || "Thất bại"));
+      throw Error(res.msg || "Thất bại");
     }
+
+    yield put(fetchCheckNicknameSuccess(res.data));
   } catch (error: unknown) {
     const errorMessage =
       error instanceof Error ? error.message : "Failed to fetch info index";
@@ -62,11 +89,19 @@ function* fetchChangeNicknameSaga(
       changeNicknameApi,
       action.payload
     );
-    if (res.rc === 1) {
-      yield put(fetchChangeNicknameSuccess());
-    } else {
+
+    if (res.rc < 1) {
+      yield put(
+        showToast({
+          msg: getMsgByErrorCode(res.rc + "") || res.msg || "Thất bại",
+          type: "error",
+        })
+      );
       yield put(fetchChangeNicknameFailure(res.msg || "Thất bại"));
+      throw Error(res.msg || "Thất bại");
     }
+
+    yield put(fetchChangeNicknameSuccess());
   } catch (error: unknown) {
     const errorMessage =
       error instanceof Error ? error.message : "Failed to fetch info index";
@@ -74,8 +109,43 @@ function* fetchChangeNicknameSaga(
   }
 }
 
+function* fetchChangeAccountInfoSaga(
+  action: PayloadAction<ChangeAccountInfoActionPayload>
+) {
+  try {
+    const { otp, ...payload } = action.payload;
+
+    const res: ChangeAccountInfoResponse = yield call(
+      fetchChangeAccInfoApi,
+      payload,
+      otp
+    );
+
+    console.log("res", res);
+
+    if (res.rc < 1) {
+      console.log("tssost");
+
+      yield put(
+        showToast({
+          msg: getMsgByErrorCode(res.rc + "") || res.msg || "Thất bại",
+          type: "error",
+        })
+      );
+      yield put(fetchChangeAccountInfoFailure(res.msg || "Thất bại"));
+      throw Error(res.msg || "Thất bại");
+    }
+    yield put(fetchChangeAccountInfoSuccess());
+  } catch (error: unknown) {
+    const errorMessage =
+      error instanceof Error ? error.message : "Failed to fetch info index";
+    yield put(fetchChangeAccountInfoFailure(errorMessage));
+  }
+}
+
 export default function* clientSaga() {
   yield takeLatest(fetchAccountProfileRequest, fetchAccountProfileSaga);
   yield takeLatest(fetchCheckNicknameRequest, fetchCheckNicknameSaga);
   yield takeLatest(fetchChangeNicknameRequest, fetchChangeNicknameSaga);
+  yield takeLatest(fetchChangeAccountInfoRequest, fetchChangeAccountInfoSaga);
 }

@@ -26,3 +26,6 @@ export const selectCheckNicknameStatus = (state: RootState): ApiStatus =>
 export const selectCheckNickname = (
   state: RootState
 ): CheckNicknameDataResponse | null => state.client.data.checkNickname;
+
+export const selectFectchAccountInfoStatus = (state: RootState): ApiStatus =>
+  state.client.status.fetchChangeAccountInfo;

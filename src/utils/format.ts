@@ -1,3 +1,5 @@
+import type { IErrMsg } from "../types";
+
 function pick<T>(...values: (T | undefined | null)[]): T | undefined {
   for (const v of values) {
     if (v !== undefined && v !== null) {
@@ -168,3 +170,114 @@ export const formatAccountType = (inputStr: string) => {
 
   return { type: lastDigit, label, color };
 };
+
+export const hideMiddleDigits = (number: string) => {
+  const visibleDigits = 2; // Số chữ số ở đầu và cuối muốn hiển thị
+  const hiddenDigitsCount = number.length - visibleDigits * 2;
+  const hiddenDigits = "*".repeat(hiddenDigitsCount);
+  return `${number.slice(0, visibleDigits)}${hiddenDigits}${number.slice(
+    -visibleDigits
+  )}`;
+};
+
+export const formatTime = (seconds: number): string => {
+  if (seconds === 0) return "00:00";
+  const m = Math.floor(seconds / 60);
+  const s = seconds % 60;
+
+  const mm = m < 10 ? `0${m}` : `${m}`;
+  const ss = s < 10 ? `0${s}` : `${s}`;
+
+  return `${mm}:${ss}`;
+};
+
+export function checkInvalidSession(rs: string | undefined | null) {
+  if (
+    rs &&
+    (rs === "INVALID_ACCESSTOKEN" ||
+      rs.includes("InvalidSessionException") ||
+      rs.includes("NotLoginException"))
+  )
+    return true;
+
+  return false;
+}
+
+export const errMsg: IErrMsg = {
+  "-6004": { msg: "Lệnh đã được xử lý, không được gửi lại." },
+  "-6007": { msg: "Hủy lệnh không thành công." },
+  "-6012": { msg: "Tài khoản không đủ sức mua." },
+  "-6013": { msg: "Không đủ số dư chứng khoán." },
+  "-6014": { msg: "Lệnh không được hủy." },
+  "-6015": { msg: "Không được sửa lệnh này." },
+  "-6016": { msg: "Loại chứng khoán không hợp lệ." },
+  "-6017": { msg: "Tài Khoản đang chờ kích hoạt." },
+  "-6019": { msg: "Khối lượng đặt không hợp lệ." },
+  "-6020": { msg: "Không xác định được thị trường." },
+  "-6021": { msg: "Giá không phù hợp." },
+  "-6022": { msg: "Hết giờ giao dịch." },
+  "-6023": { msg: "Loại lệnh không phù hợp." },
+  "-6024": { msg: "Không được đặt loại lệnh phiên này." },
+  "-6025": { msg: "Hệ thống chưa sẵn sàng đặt lệnh ngoài giờ." },
+  "-6026": { msg: "Không được huỷ/sửa lệnh phiên này." },
+  "-6027": { msg: "Không được đặt lệnh điều kiện." },
+  "-6028": { msg: "Tài khoản không được mua - bán." },
+  "-6029": { msg: "Tài khoản không được ủy quyền." },
+  "-6030": { msg: "User không có quyền xem tài khoản." },
+  "-6031": { msg: "Chứng khoán không hợp lệ." },
+  "-6032": { msg: "Vượt qua tỷ lệ an toàn tài khoản." },
+  "-6033": { msg: "Chứng khoán đáo hạn không được giao dịch." },
+  "-6034": { msg: "Vượt qua khối lượng 1000 của phái sinh." },
+  "-6035": { msg: "Sai giá trần/sàn." },
+  "-6036": { msg: "Sai bước giá cho trái phiếu." },
+  "-6037": { msg: "Không được đặt lệnh." },
+  "-6038": { msg: "Vượt qua tổng vị thế tối đa." },
+  "-6039": { msg: "Tài khoản mới mở, chưa được giao dịch." },
+  "-6041": { msg: "Tài khoản hạn chế giao dịch." },
+  "-6043": { msg: "Không được mua bán cùng phiên." },
+  "-6045": { msg: "Chứng khoán hết room cho vay" },
+  "-6046": { msg: "Chứng khoán hết room nước ngoài" },
+  "-6047": { msg: "Hết hạn mức mã chứng khoán " },
+  "-6048": { msg: "Không được sửa đồng thời giá và khối lượng" },
+  "-6666": { msg: "Hết hạn mức nguồn." },
+  "-6667": { msg: "Hết hạn mức tài khoản." },
+  "-6668": { msg: "Tài khoản hạn chế bán do QTRR." },
+  "-6669": { msg: "Lệnh forcesell, KH không được thao tác." },
+  "-6670": { msg: "Hết hạn mức tổng của nhóm." },
+  "-6671": { msg: "Hết hạn mức công ty." },
+
+  "-8001": { msg: "Không kết nối được với gateway." },
+  "-8002": { msg: "Không được hủy/sửa lệnh phiên này" },
+  "-8003": { msg: "Không hủy/sửa phiên khớp lệnh định kỳ." },
+  "-8004": { msg: "Lệnh đã khớp hết, không được hủy/sửa." },
+  "-8005": { msg: "Sai mã PIN." },
+  "-8006": { msg: "Không dùng password cũ." },
+  "-8007": { msg: "Password không hợp lệ." },
+  "-8008": { msg: "Không có quyền truy cập từ IP ngoài." },
+  "-8009": { msg: "TRADER HALT." },
+  "-8010": { msg: "Hệ thống đang thi với HSX, KHÔNG ĐƯỢC ĐẶT LỆNH." },
+  "-8011": { msg: "BrokerID đang bị chặn MUA." },
+  "-8012": { msg: "BrokerID đang bị chặn BÁN." },
+  "-8013": { msg: "BrokerID đang bị chặn giao dịch." },
+  "-8014": { msg: "BrokerID bị chặn giao dịch thoả thuận." },
+  "-8015": { msg: "BrokerID bị chặn giao dịch thoả thuận BÁN." },
+  "-8016": { msg: "BrokerID bị chặn giao dịch thoả thuận MUA." },
+  "-9998": { msg: "Lệnh chưa được confirm!" },
+  "-9999": { msg: "Không đủ điều kiện sửa." },
+  "-9001": { msg: "Không được giao dịch mã chứng quyền trên TK margin" },
+  "-9501": {
+    msg: "Giá trị giao dịch vượt quá giá trị giao dịch cho phép trong ngày/tháng",
+  },
+  "-9502": {
+    msg: "Giá trị giao dịch vượt quá giá trị giao dịch cho phép trong ngày/tháng",
+  },
+  "-8": { msg: "Hệ thống chưa sẵn sàng nhận lệnh" },
+  "-111": { msg: "Không kết nối được hệ thống." },
+};
+
+export function getMsgByErrorCode(code: string) {
+  if (code == "-8005") {
+    localStorage.removeState("isAuthOtp");
+  }
+  return errMsg[code] ? errMsg[code]?.msg : "Error";
+}
