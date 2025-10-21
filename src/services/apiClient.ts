@@ -1,6 +1,6 @@
 import axios from "axios";
 import { store } from "../store";
-import { logout } from "../store/slices/auth/slice";
+import { setSessionExpired } from "../store/slices/client/slice";
 
 export const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -31,7 +31,8 @@ apiClient.interceptors.response.use(
   (err) => {
     if (err.response?.status === 401) {
       // TODO: Logout
-      store.dispatch(logout());
+      // store.dispatch(logout());
+      store.dispatch(setSessionExpired(true));
     }
     return Promise.reject(err);
   }

@@ -21,8 +21,8 @@ import {
 } from "../../../store/slices/client/slice";
 import type { Token } from "../../../types";
 import { formatAccount, formatAccountType } from "../../../utils";
-import Button from "../../Button";
-import AccountInfo from "./AccountInfo";
+import Button from "../../common/button";
+import AccountSetting from "./AccountSetting";
 import HeaderUserMenuSkeleton from "./HeaderUserMenuSkeleton";
 
 type MenuAccountType = "account" | "setting";
@@ -52,12 +52,6 @@ export default function HeaderUserMenu({ token }: { token: Token }) {
   const preToken = usePrevious(token);
 
   useEffect(() => {
-    /*************  ✨ Windsurf Command ⭐  *************/
-    /**
-     * Hàm đóng menu khi người dùng click ra ngoài menu
-     * @param {MouseEvent} e sự kiện click
-     */
-    /*******  5f718063-02b6-42ff-94ca-c2281605d869  *******/
     const handlerCloseMenu = (e: MouseEvent) => {
       if (
         refUserMenu.current &&
@@ -65,18 +59,12 @@ export default function HeaderUserMenu({ token }: { token: Token }) {
       ) {
         close();
       }
-      if (
-        refUserMenuFunc.current &&
-        !refUserMenuFunc.current.contains(e.target as Node)
-      ) {
-        closeFunc();
-      }
     };
     document.addEventListener("mousedown", handlerCloseMenu);
     return () => {
       document.removeEventListener("mousedown", handlerCloseMenu);
     };
-  }, [close, closeFunc]);
+  }, [close]);
 
   useEffect(() => {
     if (token && !_.isEqual(token, preToken)) {
@@ -122,7 +110,10 @@ export default function HeaderUserMenu({ token }: { token: Token }) {
             ) : (
               <div
                 className="px-1 flex flex-row gap-2 items-center cursor-pointer"
-                onClick={toggle}
+                onClick={() => {
+                  toggle();
+                  closeFunc();
+                }}
               >
                 <div
                   className="w-9 h-9 rounded-full bg-white bg-center bg-no-repeat bg-cover border border-yellow-500 shadow-[0_0_0_2px_rgba(250,204,21,0.3)]"
@@ -242,7 +233,12 @@ export default function HeaderUserMenu({ token }: { token: Token }) {
             }`}
             ref={refUserMenuFunc}
           >
-            {menuAccountType === "account" && <AccountInfo />}
+            {menuAccountType === "account" && (
+              <AccountSetting
+                accountProfile={accountProfile}
+                close={closeFunc}
+              />
+            )}
           </div>
         )}
       </div>

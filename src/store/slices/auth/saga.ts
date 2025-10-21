@@ -8,7 +8,7 @@ import {
 } from "redux-saga/effects";
 import { loginApi } from "../../../api/authApi";
 import type { LoginPayload, LoginResponse } from "../../../types";
-import { loginFailure, loginRequest, loginSuccess, logout } from "./slice";
+import { loginFailure, loginRequest, loginSuccess } from "./slice";
 
 type GeneratorYield = CallEffect | PutEffect | ForkEffect;
 
@@ -30,11 +30,6 @@ function* loginSaga(action: {
   }
 }
 
-function* logoutSaga(): Generator<GeneratorYield> {
-  yield put(logout());
-}
-
 export default function* authSaga(): Generator<GeneratorYield> {
   yield takeLatest(loginRequest, loginSaga);
-  yield takeLatest(logout, logoutSaga);
 }

@@ -1,6 +1,7 @@
 export interface ApiStatus {
   loading: boolean;
   error: string | null;
+  success?: boolean;
 }
 
 // lấy một hoặc nhieu key trong object chuyển sang ?:

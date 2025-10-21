@@ -1,6 +1,9 @@
 import type { RootState } from "../..";
 import type { ApiStatus } from "../../../types";
-import type { AccountProfile } from "../../../types/client";
+import type {
+  AccountProfile,
+  CheckNicknameDataResponse,
+} from "../../../types/client";
 
 export const selectLoginModalOpen = (state: RootState): boolean =>
   state.client.data.loginModalOpen;
@@ -8,5 +11,18 @@ export const selectLoginModalOpen = (state: RootState): boolean =>
 export const selectAccountProfile = (state: RootState): AccountProfile | null =>
   state.client.data.accountProfile;
 
+export const selectSessionExpired = (state: RootState): boolean | null =>
+  state.client.data.sessionExpired;
+
 export const selectAccountProfileStatus = (state: RootState): ApiStatus =>
   state.client.status.fetchAccountProfile;
+
+export const selectChangeNicknameStatus = (state: RootState): ApiStatus =>
+  state.client.status.fetchChangeNickname;
+
+export const selectCheckNicknameStatus = (state: RootState): ApiStatus =>
+  state.client.status.fetchCheckNickname;
+
+export const selectCheckNickname = (
+  state: RootState
+): CheckNicknameDataResponse | null => state.client.data.checkNickname;

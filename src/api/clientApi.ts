@@ -1,5 +1,9 @@
 import { apiClient } from "../services/apiClient";
-import type { AccountProfile } from "../types/client";
+import type {
+  AccountProfile,
+  ChangeNicknamePayload,
+  ChangeNicknameResponse,
+} from "../types/client";
 
 export async function fetchAccountProfileAPI(): Promise<AccountProfile> {
   const res = await apiClient.get("/accounts/profile");
@@ -14,3 +18,26 @@ export async function fetchAccountProfileAPI(): Promise<AccountProfile> {
     );
   }
 }
+
+export const changeNicknameApi = async (
+  payload: Pick<ChangeNicknamePayload, "NICK_NAME">
+): Promise<ChangeNicknameResponse> => {
+  const res = await apiClient.put<ChangeNicknameResponse>(
+    "/accounts/changeNickname",
+    payload
+  );
+  return res.data;
+};
+
+export const checkNicknameApi = async (
+  payload: Pick<ChangeNicknamePayload, "NICK_NAME">
+): Promise<ChangeNicknameResponse> => {
+  console.log("payload", payload);
+
+  const res = await apiClient.request<ChangeNicknameResponse>({
+    url: "/accounts/checkNickname",
+    method: "GET",
+    data: payload,
+  });
+  return res.data;
+};

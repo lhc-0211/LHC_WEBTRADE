@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
+import { ToastContainer } from "react-toastify";
 import { Tooltip } from "react-tooltip";
 import LoginModal from "../components/auth/LoginModal";
+import SessionExpiredModal from "../components/auth/SessionExpiredModal";
 import Header from "../components/header/header";
 import Sidebar from "../components/sidebar/sidebar";
 import { useAppSelector } from "../store/hook";
@@ -15,11 +17,19 @@ export default function MainLayout({
 }) {
   const token = useAppSelector(selectToken);
 
-  const [sidebarMode, setSidebarMode] = useState<SidebarMode>(
-    !token
-      ? "hidden"
-      : (localStorage.getItem("sidebarMode") as SidebarMode) || "full"
-  );
+  const [sidebarMode, setSidebarMode] = useState<SidebarMode>(() => {
+    const saved = localStorage.getItem("sidebarMode") as SidebarMode | null;
+    return token ? saved || "full" : "hidden";
+  });
+
+  useEffect(() => {
+    if (!token) {
+      setSidebarMode("hidden");
+    } else {
+      const saved = localStorage.getItem("sidebarMode") as SidebarMode | null;
+      setSidebarMode(saved || "full");
+    }
+  }, [token]);
 
   const getSidebarWidth = () => {
     switch (sidebarMode) {
@@ -62,12 +72,18 @@ export default function MainLayout({
 
         {/* Modal đăng nhập  */}
         <LoginModal />
+
+        {/* Modal thông báo hết phiên đăng nhập */}
+        <SessionExpiredModal />
       </div>
 
       <Tooltip
         id="global-tooltip"
         className="!bg-gray-800 !text-white !text-[10px] lg:!text-xs !px-2 !py-1 !rounded"
       />
+
+      {/* <ToastListener /> */}
+      <ToastContainer />
     </div>
   );
 }

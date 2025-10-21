@@ -51,7 +51,7 @@ export default function CongfigHeaderBoardModal(props: Props) {
                 Bảng giá: Thay đổi cột bảng
               </h2>
               <IoClose
-                className="size-6 text-text-title cursor-pointer"
+                className="size-6 text-text-subtitle cursor-pointer"
                 onClick={onClose}
               />
             </div>

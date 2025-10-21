@@ -16,7 +16,7 @@ import { loginFailure, loginRequest } from "../../store/slices/auth/slice";
 import { selectLoginModalOpen } from "../../store/slices/client/selector";
 import { closeLoginModal } from "../../store/slices/client/slice";
 import type { LoginPayload } from "../../types";
-import Button from "../Button";
+import Button from "../common/button";
 import InputField from "../inputs/inputField";
 
 const schema = yup.object({
@@ -131,7 +131,7 @@ export default function LoginModal() {
                   <br /> ĐẾN VỚI NỀN TẢNG GIAO DỊCH DTND
                 </h2>
                 <IoClose
-                  className="w-7 h-7 text-text-title cursor-pointer"
+                  className="w-7 h-7 text-text-subtitle cursor-pointer"
                   onClick={onClose}
                 />
               </div>

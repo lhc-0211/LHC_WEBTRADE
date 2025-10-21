@@ -52,3 +52,27 @@ interface AccountProfileValue {
 }
 
 export type AccountProfile = Nullable<AccountProfileValue>;
+
+export interface ChangeNicknamePayload {
+  ACTION_TYPE: string;
+  PASS_WORD: string;
+  NICK_NAME: string;
+}
+
+export interface ChangeNicknameForm {
+  actionType: string;
+  password: string;
+  nickname: string;
+}
+
+export interface ChangeNicknameResponse {
+  rc: number;
+  msg: string | null;
+  data?: {
+    C_ACCOUNT_CODE: string;
+    C_NICK_NAME: string;
+    C_CHANGE_DATE: string;
+  };
+}
+
+export type CheckNicknameDataResponse = ChangeNicknameResponse["data"];
