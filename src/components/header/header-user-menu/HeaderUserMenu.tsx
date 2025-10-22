@@ -87,6 +87,8 @@ export default function HeaderUserMenu({ token }: { token: Token }) {
     openFunc();
   };
 
+  console.log("accountProfile", accountProfile);
+
   return (
     <>
       <div
@@ -118,16 +120,16 @@ export default function HeaderUserMenu({ token }: { token: Token }) {
                 <div
                   className="w-9 h-9 rounded-full bg-white bg-center bg-no-repeat bg-cover border border-yellow-500 shadow-[0_0_0_2px_rgba(250,204,21,0.3)]"
                   style={{
-                    backgroundImage: `url(${accountProfile?.C_AVATAR_IMG})`,
+                    backgroundImage: `url(${accountProfile?.cAvatarImg})`,
                   }}
                 ></div>
                 <div className="py-1 flex flex-col gap-1">
                   <span className="text-xs font-normal text-text-body">
-                    {accountProfile?.C_USER_NAME}
+                    {accountProfile?.cUserName}
                   </span>
                   <span className="text-[10px] font-normal text-text-subtitle">
-                    {accountProfile?.C_ACCOUNT_DEFAULT &&
-                      formatAccount(accountProfile?.C_ACCOUNT_DEFAULT)}
+                    {accountProfile?.cAccountDefault &&
+                      formatAccount(accountProfile?.cAccountDefault)}
                   </span>
                 </div>
 
@@ -163,7 +165,7 @@ export default function HeaderUserMenu({ token }: { token: Token }) {
               <div
                 className="w-full h-[100px] bg-white rounded-b-[25px] border-none bg-center bg-no-repeat bg-cover"
                 style={{
-                  backgroundImage: `url(${accountProfile?.C_BACK_GROUND_IMG})`,
+                  backgroundImage: `url(${accountProfile?.cBackGroundImg})`,
                 }}
               ></div>
               <div className="px-12 flex flex-col gap-4 relative">
@@ -171,19 +173,19 @@ export default function HeaderUserMenu({ token }: { token: Token }) {
                   <div
                     className="w-16 h-16 rounded-full bg-white bg-center bg-no-repeat bg-cover border border-yellow-500 shadow-[0_0_0_2px_rgba(250,204,21,0.3)]"
                     style={{
-                      backgroundImage: `url(${accountProfile?.C_AVATAR_IMG})`,
+                      backgroundImage: `url(${accountProfile?.cAvatarImg})`,
                     }}
                   ></div>
                   <div className="flex flex-col py-1">
                     <span className="text-base font-semibold text-text-title">
-                      {accountProfile?.C_USER_NAME}
+                      {accountProfile?.cUserName}
                     </span>
                     <span className="text-xs font-medium text-text-subtitle flex flex-row items-center gap-1">
-                      TK: {accountProfile?.C_ACCOUNT_DEFAULT}{" "}
-                      {accountProfile?.C_ACCOUNT_DEFAULT &&
+                      TK: {accountProfile?.cAccountDefault}{" "}
+                      {accountProfile?.cAccountDefault &&
                         (() => {
                           const info = formatAccountType(
-                            accountProfile.C_ACCOUNT_DEFAULT
+                            accountProfile.cAccountDefault
                           );
                           return (
                             <span

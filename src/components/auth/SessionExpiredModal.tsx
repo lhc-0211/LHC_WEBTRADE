@@ -58,7 +58,7 @@ export default function SessionExpiredModal() {
             transition={{ duration: 0.25, ease: "easeOut" }}
             className="flex flex-col gap-4 bg-cover bg-no-repeat bg-center rounded-xl"
           >
-            <div className="flex flex-col gap-4 p-4 rounded-xl border border-border w-full">
+            <div className="flex flex-col gap-4 p-4 rounded-xl border border-border w-full bg-background-primary">
               <div className="p-6 rounded-xl shadow-md text-center">
                 <h2 className="text-lg font-semibold mb-4 text-red-500">
                   Phiên đăng nhập đã hết hạn!

@@ -130,7 +130,7 @@ export default function ConfirmOtpModal({
               <p className="text-sm text-text-subtitle font-medium pt-2">
                 Chúng tôi đã gửi một mã OTP xác nhận đến số điện thoại{" "}
                 <span className="text-stock-text-green">
-                  {hideMiddleDigits(accountProfile?.C_CUST_MOBILE + "")}
+                  {hideMiddleDigits(accountProfile?.cCustMobile + "")}
                 </span>
                 , mã sẽ có hiệu lực trong vòng 5 phút
               </p>

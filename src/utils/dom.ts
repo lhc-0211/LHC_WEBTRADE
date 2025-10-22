@@ -130,3 +130,35 @@ export function isMarketOpen(): boolean {
 
 export const isEmptyObject = (obj?: object | string | null): boolean =>
   !obj || Object.keys(obj).length === 0;
+
+export function getColorTypeAcc(type: string) {
+  const cleanType = type?.normalize("NFC").trim();
+
+  switch (cleanType) {
+    case "N":
+      return "bg-DTND-500";
+    case "M":
+      return "bg-type-margin";
+    default:
+      return "bg-DTND-500";
+  }
+}
+
+export function getBgColorStock(type: string) {
+  const cleanType = type?.normalize("NFC").trim();
+
+  switch (cleanType) {
+    case "i":
+      return "bg-success-darker";
+    case "d":
+      return "bg-error-darker";
+    case "r":
+      return "bg-warning-darker";
+    case "f":
+      return "bg-infomation-darker";
+    case "c":
+      return "bg-features-darker";
+    default:
+      return "bg-success-darker";
+  }
+}

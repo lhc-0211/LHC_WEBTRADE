@@ -1,7 +1,7 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { ApiStatus } from "../../../types";
 import type {
-  AccountProfileResponse,
+  AccountProfile,
   ChangeAccountInfoActionPayload,
   ChangeNicknamePayload,
   CheckNicknameDataResponse,
@@ -10,7 +10,7 @@ import type {
 export interface ClientState {
   data: {
     loginModalOpen: boolean;
-    accountProfile: AccountProfileResponse | null;
+    accountProfile: AccountProfile | null;
     sessionExpired: boolean;
     checkNickname: CheckNicknameDataResponse | null;
   };
@@ -60,7 +60,7 @@ const clientSlice = createSlice({
     },
     fetchAccountProfileSuccess(
       state,
-      action: PayloadAction<AccountProfilePayload | null>
+      action: PayloadAction<AccountProfile | null>
     ) {
       state.status.fetchAccountProfile = { loading: false, error: null };
       state.data.accountProfile = action.payload;

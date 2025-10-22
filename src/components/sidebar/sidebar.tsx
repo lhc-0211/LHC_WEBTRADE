@@ -4,7 +4,7 @@ import {
   VscLayoutSidebarRight,
   VscLayoutSidebarRightOff,
 } from "react-icons/vsc";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import packageJson from "../../../package.json";
 import { SIDE_BAR_GROUPS } from "../../configs/sidebar";
 import { useAppSelector } from "../../store/hook";
@@ -19,6 +19,7 @@ interface Props {
 
 export default function Sidebar({ mode, width, changeModeSidebar }: Props) {
   const location = useLocation();
+  const navigate = useNavigate();
 
   const token = useAppSelector(selectToken);
 
@@ -26,7 +27,8 @@ export default function Sidebar({ mode, width, changeModeSidebar }: Props) {
     if (item.requiresLogin && !token) {
       alert("Chức năng cần đăng nhập");
     } else {
-      alert("oke");
+      // alert("oke");
+      navigate(item.path);
     }
   };
 

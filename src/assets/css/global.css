@@ -253,3 +253,7 @@ input:-webkit-autofill {
   color: #ffffff;
   opacity: 1;
 }
+
+.bg-type-margin {
+  background: linear-gradient(127.72deg, #4531e0 14.81%, #ae5ef1 100.61%);
+}

@@ -74,7 +74,7 @@ export default function AccountSetting({
           <div
             className="h-[150px] w-full rounded-b-2xl relative bg-center bg-no-repeat bg-cover"
             style={{
-              backgroundImage: `url(${accountProfile?.C_BACK_GROUND_IMG})`,
+              backgroundImage: `url(${accountProfile?.cBackGroundImg})`,
             }}
           >
             <div className="bg-primary-darker rounded-md p-1 flex flex-row gap-1 absolute top-1 right-1">
@@ -89,7 +89,7 @@ export default function AccountSetting({
               <div
                 className="w-16 h-16 rounded-full relative bg-white bg-center bg-no-repeat bg-cover border border-yellow-500 shadow-[0_0_0_2px_rgba(250,204,21,0.3)]"
                 style={{
-                  backgroundImage: `url(${accountProfile?.C_AVATAR_IMG})`,
+                  backgroundImage: `url(${accountProfile?.cAvatarImg})`,
                 }}
               >
                 <div className="bg-primary-darker w-6 h-6 rounded-full grid place-items-center absolute -bottom-2 right-0">
@@ -98,7 +98,7 @@ export default function AccountSetting({
               </div>
               <div className="flex flex-row gap-1 items-center">
                 <span className="text-base font-medium text-text-title">
-                  {accountProfile?.C_USER_NAME}
+                  {accountProfile?.cUserName}
                 </span>
                 <div
                   className="cursor-pointer p-1 hover:bg-gray-300 rounded-full"

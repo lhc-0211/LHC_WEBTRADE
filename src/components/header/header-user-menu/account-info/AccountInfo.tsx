@@ -33,20 +33,20 @@ export default function AccountInfo({
             <div className="text-text-subtitle text-xs font-medium flex flex-col">
               Tên pháp lý
               <span className="text-text-title text-sm uppercase">
-                {accountProfile?.C_CUSTOMER_NAME}
+                {accountProfile?.cUserName}
               </span>
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div className="text-text-subtitle text-xs font-medium flex flex-col">
                 Giới tính
                 <span className="text-sm font-medium text-text-title">
-                  {accountProfile?.C_CUST_GENDER === "M" ? "Nam" : "Nữ"}
+                  {accountProfile?.cCustGender === "M" ? "Nam" : "Nữ"}
                 </span>
               </div>
               <div className="text-text-subtitle text-xs font-medium flex flex-col">
                 Ngày sinh
                 <span className="text-sm font-medium text-text-title">
-                  {accountProfile?.C_CUST_BIRTH_DAY}
+                  {accountProfile?.cCustBirthDay}
                 </span>
               </div>
             </div>
@@ -54,20 +54,20 @@ export default function AccountInfo({
               <div className="text-text-subtitle text-xs font-medium flex flex-col">
                 Số CCCD
                 <span className="text-sm font-medium text-text-title">
-                  {accountProfile?.C_CARD_ID}
+                  {accountProfile?.cCardId}
                 </span>
               </div>
               <div className="text-text-subtitle text-xs font-medium flex flex-col">
                 Ngày cấp
                 <span className="text-sm font-medium text-text-title">
-                  {accountProfile?.C_ID_ISSUE_DATE}
+                  {accountProfile?.cIdIssueDate}
                 </span>
               </div>
             </div>
             <div className="text-text-subtitle text-xs font-medium flex flex-col">
               Nơi cấp
               <span className="text-text-title text-sm ">
-                {accountProfile?.C_ISSUE_PLACE_NAME}
+                {accountProfile?.cIssuePlaceName}
               </span>
             </div>
           </div>
@@ -78,7 +78,7 @@ export default function AccountInfo({
             <div className="text-text-subtitle text-xs font-medium flex flex-col">
               Số điện thoại
               <span className="text-text-title text-sm uppercase">
-                {accountProfile?.C_CUST_MOBILE}
+                {accountProfile?.cCustMobile}
               </span>
             </div>
 
@@ -87,7 +87,7 @@ export default function AccountInfo({
               <div className="text-text-subtitle text-xs font-medium flex flex-col">
                 Email
                 <span className="text-text-title text-sm ">
-                  {accountProfile?.C_CUST_EMAIL}
+                  {accountProfile?.cCustEmail}
                 </span>
               </div>
               <div
@@ -103,7 +103,7 @@ export default function AccountInfo({
               <div className="text-text-subtitle text-xs font-medium flex flex-col">
                 Địa chỉ liên hệ
                 <span className="text-text-title text-sm ">
-                  {accountProfile?.C_RESEDENCE_ADDRESS}
+                  {accountProfile?.cContactAddress}
                 </span>
               </div>
               <div

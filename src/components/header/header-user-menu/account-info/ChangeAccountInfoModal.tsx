@@ -104,13 +104,10 @@ export default function ChangeAccountInfoModal({
   useEffect(() => {
     if (accountProfile && typeChange) {
       reset({
-        email:
-          typeChange === "address" ? accountProfile.C_CUST_EMAIL || "" : "",
+        email: typeChange === "address" ? accountProfile.cCustEmail || "" : "",
         address:
-          typeChange === "email"
-            ? accountProfile.C_RESEDENCE_ADDRESS || ""
-            : "",
-        phoneNumber: accountProfile.C_CUST_MOBILE || "",
+          typeChange === "email" ? accountProfile.cResedenceAddress || "" : "",
+        phoneNumber: accountProfile.cCustMobile || "",
       });
     }
   }, [accountProfile, reset, typeChange]);
