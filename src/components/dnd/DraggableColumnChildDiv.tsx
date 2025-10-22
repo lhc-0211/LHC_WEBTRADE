@@ -43,8 +43,6 @@ export function DraggableColumnChildDiv({
 
   drag(drop(ref));
 
-  console.log("isOver", isOver);
-
   return (
     <div
       ref={ref}

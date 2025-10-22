@@ -16,7 +16,7 @@ function InputOrderSide({ control, name }: InputOrderSideProps) {
     <div className="w-max grid grid-cols-2 gap-2">
       <div
         className={`flex items-center justify-center cursor-pointer rounded-3xl text-text-subtitle w-[64px] py-1 text-sm ${
-          value === "B" ? "bg-stock-text-green !text-text-title" : "bg-input"
+          value === "B" ? "bg-green-400 !text-text-title" : "bg-input"
         }`}
         onClick={() => onChange("B")}
       >
@@ -24,7 +24,7 @@ function InputOrderSide({ control, name }: InputOrderSideProps) {
       </div>
       <div
         className={`flex items-center justify-center cursor-pointer rounded-3xl text-text-subtitle w-[64px] text-sm ${
-          value === "S" ? "bg-stock-text-red !text-text-title" : "bg-input"
+          value === "S" ? "bg-red-400 !text-text-title" : "bg-input"
         }`}
         onClick={() => onChange("S")}
       >

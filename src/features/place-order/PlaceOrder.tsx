@@ -9,9 +9,9 @@ export default function PlaceOrder() {
       className="flex flex-col w-full h-[calc(var(--app-height)-64px)] relative "
       ref={containerRef}
     >
-      <div className="max-h-[728px] h-[580px] min-h-[580px] w-full grid grid-cols-5">
-        <div className="col-span-4 h-full "></div>
-        <div className="col-span-1 h-full ">
+      <div className="w-full flex items-stretch max-h-[728px]">
+        <div className="flex-1 min-w-0 "></div>
+        <div className="h-full min-h-[580px] min-w-[361px]">
           <OrderForm />
         </div>
       </div>

@@ -9,19 +9,15 @@ export default function OrderForm() {
   const renderForm = () => {
     switch (typeOrder) {
       case "1":
-        return (
-          <NormalOrderForm typeOrder={typeOrder} setTypeOrder={setTypeOrder} />
-        );
+        return <NormalOrderForm />;
       case "2":
         return <ConditionalOrderForm />;
       case "3":
         return <ProOrderForm />;
       default:
-        return (
-          <NormalOrderForm typeOrder={typeOrder} setTypeOrder={setTypeOrder} />
-        );
+        return <NormalOrderForm />;
     }
   };
 
-  return <div>{renderForm()}</div>;
+  return <div className="w-full h-full">{renderForm()}</div>;
 }

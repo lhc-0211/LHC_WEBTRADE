@@ -26,8 +26,6 @@ export const changeNicknameApi = async (
 export const checkNicknameApi = async (
   payload: Pick<ChangeNicknamePayload, "NICK_NAME">
 ): Promise<ChangeNicknameResponse> => {
-  console.log("payload", payload);
-
   const res = await apiClient.request<ChangeNicknameResponse>({
     url: "/accounts/checkNickname",
     method: "GET",
@@ -49,7 +47,6 @@ export const fetchChangeAccInfoApi = async (
       },
     }
   );
-  console.log("test", res);
 
   return res.data;
 };

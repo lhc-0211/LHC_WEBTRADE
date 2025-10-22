@@ -2,7 +2,7 @@ import { IoSearchOutline } from "react-icons/io5";
 import AsyncSelect from "react-select/async";
 
 export type OptionType = {
-  label: string;
+  label?: string;
   value: string;
   post_to?: string;
 };
@@ -24,6 +24,11 @@ export default function InputSearchField({
     { label: "Công ty cổ phần FPT", value: "FPT", post_to: "HOSE" },
     { label: "Ngân hàng Vietcombank", value: "VCB", post_to: "HOSE" },
     { label: "Tập đoàn Hòa Phát", value: "HPG", post_to: "HOSE" },
+    {
+      label: "Ngân hàng Thương mại Cổ phần Á Châu",
+      value: "ACB",
+      post_to: "HOSE",
+    },
   ];
 
   const filterStocks = (inputValue: string) =>
@@ -94,7 +99,7 @@ export default function InputSearchField({
         placeholder: () => "!text-text-subtitle !text-xs",
         singleValue: () => "!text-text-title !text-xs",
         menu: () =>
-          "!z-[9999] !bg-surface !rounded-md !mt-1 transition-all duration-200 ease-out !w-[300px] !opacity-100 animate-fadeInDown",
+          "!z-[9999] !bg-surface !rounded-md !mt-1 transition-all duration-200 ease-out !w-[250px] !opacity-100 animate-fadeInDown",
         option: ({ isFocused, isSelected }) =>
           `!cursor-pointer !text-xs !flex !items-center !px-3 !py-2.5 transition-colors duration-150 ${
             isSelected

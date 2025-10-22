@@ -121,11 +121,7 @@ function* fetchChangeAccountInfoSaga(
       otp
     );
 
-    console.log("res", res);
-
     if (res.rc < 1) {
-      console.log("tssost");
-
       yield put(
         showToast({
           msg: getMsgByErrorCode(res.rc + "") || res.msg || "Thất bại",

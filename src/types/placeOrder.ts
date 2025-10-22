@@ -3,7 +3,7 @@ import type { OptionType } from "../components/inputs/InputSearchField";
 export interface OrderForm {
   orderSymbol: OptionType | null;
   orderSide: "B" | "S";
-  orderVolumn: string;
+  orderVolume: string;
   orderPrice: string;
   accountOrder: string;
 }

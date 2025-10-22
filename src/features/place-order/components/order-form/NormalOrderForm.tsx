@@ -1,32 +1,40 @@
 import { Controller, useForm } from "react-hook-form";
+import { IoIosArrowDown } from "react-icons/io";
+import Button from "../../../../components/common/button";
+import InputOrderPrice from "../../../../components/inputs/InputOrderPrice";
 import InputOrderSide from "../../../../components/inputs/InputOrderSide";
+import InputOrderVolume from "../../../../components/inputs/InputOrderVolume";
 import InputSearchField from "../../../../components/inputs/InputSearchField";
 import SelectAccount from "../../../../components/inputs/SelectAccField";
 import type { OrderForm } from "../../../../types/placeOrder";
 import { colorFix, getBgColorStock, numberFormat } from "../../../../utils";
 
-interface Props {
-  typeOrder: string;
-  setTypeOrder: React.Dispatch<React.SetStateAction<"1" | "2" | "3">>;
-}
+// interface Props {
+//   typeOrder: string;
+//   setTypeOrder: React.Dispatch<React.SetStateAction<"1" | "2" | "3">>;
+// }
 
-export default function NormalOrderForm(props: Props) {
-  const { typeOrder, setTypeOrder } = props;
-
+export default function NormalOrderForm() {
   const {
-    register,
     handleSubmit,
-    reset,
     watch,
     control,
-    formState: { errors, isSubmitting },
-  } = useForm<OrderForm>();
+    formState: { isSubmitting },
+  } = useForm<OrderForm>({
+    defaultValues: {
+      orderSymbol: {
+        label: "Ngân hàng Thương mại Cổ phần Á Châu",
+        value: "ACB",
+        post_to: "HOSE",
+      },
+      orderSide: "B",
+    },
+  });
 
   const orderSymbol = watch("orderSymbol");
+  const orderSide = watch("orderSide");
 
-  const onSubmit = async (data: OrderForm) => {
-    console.log("data", data);
-  };
+  const onSubmit = async () => {};
 
   const stockReal = {
     sym: "FPT",
@@ -155,7 +163,7 @@ export default function NormalOrderForm(props: Props) {
               <span className="text-sm font-bold text-text-title items-center">
                 ({orderSymbol?.post_to})
               </span>{" "}
-              <span className="text-xs font-medium text-text-subtitle h-4 block truncate max-w-[120px]">
+              <span className="text-xs font-medium text-text-subtitle h-4 block truncate max-w-[200px]">
                 {orderSymbol?.label}
               </span>
             </div>
@@ -245,6 +253,124 @@ export default function NormalOrderForm(props: Props) {
       {/* side và loại lệnh */}
       <div className="flex flex-row items-center justify-between">
         <InputOrderSide control={control} name="orderSide" />
+
+        <div>
+          <span className="text-xs font-medium text-text-title flex flex-row gap-1 items-center cursor-pointer">
+            Lệnh cơ sở
+            <IoIosArrowDown />
+          </span>
+        </div>
+      </div>
+
+      {/* Sức mua bán và tỉ lệ kí quỹ */}
+      <div className="flex flex-row items-center justify-between">
+        <div className="flex flex-col gap-1 text-xs">
+          <span className="">Sức mua </span>
+          <span>-</span>
+        </div>
+        <div className="flex flex-col gap-1 text-xs items-end">
+          <span className="text-xs">Tỉ lệ kí quỹ</span>
+
+          <span className="text-stock-text-purple">-</span>
+        </div>
+      </div>
+
+      {/* input khối lượng */}
+      <div className="h-[88px] px-3.5 pt-[10px] pb-3 bg-input rounded-lg border border-transparent focus-within:outline-none focus-within:!border focus-within:!border-yellow-500 focus-within:!shadow-[0_0_0_2px_rgba(250,204,21,0.3)] caret-DTND-200 ">
+        <div className="flex flex-row items-center justify-between pb-3.5">
+          <h2 className="text-xs">Khối lượng</h2>
+
+          {orderSide === "B" ? (
+            <span className="text-xs">
+              {" "}
+              KL mua tối đa: <span className="text-green-400">0</span>
+            </span>
+          ) : (
+            <span className="text-xs">
+              {" "}
+              KL bán tối đa: <span className="text-red-400">0</span>
+            </span>
+          )}
+        </div>
+        <Controller
+          name="orderVolume"
+          control={control}
+          rules={{
+            required: "Vui lòng nhập số lượng",
+            min: { value: 0, message: "Số lượng phải >= 0" },
+          }}
+          render={({ field, fieldState }) => (
+            <InputOrderVolume
+              placeholder={`0 ${orderSymbol?.value || "ACB"}`}
+              error={fieldState.error}
+              step={100}
+              min={0}
+              max={9999999999999}
+              className="!h-7 text-[20px]"
+              required
+              {...field}
+            />
+          )}
+        />
+      </div>
+
+      {/* input giá */}
+      <div className="h-[88px] px-3.5 pt-[10px] pb-3 bg-input rounded-lg border border-transparent focus-within:outline-none focus-within:!border focus-within:!border-yellow-500 focus-within:!shadow-[0_0_0_2px_rgba(250,204,21,0.3)] caret-DTND-200 ">
+        <div className="flex flex-row items-center justify-between mb-3.5">
+          <h2 className="text-xs">Giá đặt</h2>
+        </div>
+        <Controller
+          name="orderPrice"
+          control={control}
+          rules={{
+            required: "Vui lòng nhập giá",
+            min: { value: 0, message: "Giá phải >= 0" },
+            pattern: {
+              value: /^\d+(\.\d{1,2})?$/,
+              message: "Giá phải là số với tối đa 2 chữ số thập phân",
+            },
+          }}
+          render={({ field, fieldState }) => (
+            <InputOrderPrice
+              placeholder={`0`}
+              error={fieldState.error}
+              step={0.05}
+              min={0}
+              max={1000}
+              className="!h-7 text-[20px]"
+              required
+              {...field}
+            />
+          )}
+        />
+      </div>
+
+      {/* btn submit */}
+      <div className="flex flex-col gap-3 mt-4">
+        <div className="flex flex-row items-center justify-between">
+          <span className="text-sm font-medium text-text-title">
+            Giá trị lệnh
+          </span>
+          <span className="text-text-title text-[20px] font-semibold ">
+            - ₫
+          </span>
+        </div>
+        <Button
+          variant={`${
+            orderSide === "B"
+              ? "success"
+              : orderSide === "S"
+              ? "danger"
+              : "close"
+          }`}
+          fullWidth
+          type="submit"
+          disabled={isSubmitting}
+          className="!h-10"
+        >
+          {/* {loginStatus.loading ? <ScaleLoader height={25} /> : "Đăng nhập"} */}
+          Đặt lệnh
+        </Button>
       </div>
     </form>
   );

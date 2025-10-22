@@ -129,9 +129,7 @@ export default function ChangeAccountInfoModal({
     reset();
   };
 
-  const onSubmit = async (data: ChangeAccountInfoForm) => {
-    console.log("data", data);
-
+  const onSubmit = async () => {
     if (step === 1) {
       setStep(2);
       return;

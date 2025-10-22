@@ -87,8 +87,6 @@ export default function HeaderUserMenu({ token }: { token: Token }) {
     openFunc();
   };
 
-  console.log("accountProfile", accountProfile);
-
   return (
     <>
       <div
@@ -118,14 +116,14 @@ export default function HeaderUserMenu({ token }: { token: Token }) {
                 }}
               >
                 <div
-                  className="w-9 h-9 rounded-full bg-white bg-center bg-no-repeat bg-cover border border-yellow-500 shadow-[0_0_0_2px_rgba(250,204,21,0.3)]"
+                  className="w-9 h-9 rounded-full bg-center bg-no-repeat bg-cover border border-yellow-500 bg-DTND-400 shadow-[0_0_0_2px_rgba(250,204,21,0.3)]"
                   style={{
                     backgroundImage: `url(${accountProfile?.cAvatarImg})`,
                   }}
                 ></div>
                 <div className="py-1 flex flex-col gap-1">
                   <span className="text-xs font-normal text-text-body">
-                    {accountProfile?.cUserName}
+                    {accountProfile?.cUserName || accountProfile?.cCustomerName}
                   </span>
                   <span className="text-[10px] font-normal text-text-subtitle">
                     {accountProfile?.cAccountDefault &&
@@ -163,7 +161,7 @@ export default function HeaderUserMenu({ token }: { token: Token }) {
           >
             <div className="flex flex-col w-full h-full">
               <div
-                className="w-full h-[100px] bg-white rounded-b-[25px] border-none bg-center bg-no-repeat bg-cover"
+                className="w-full h-[100px] bg-DTND-400 rounded-b-[25px] border-none bg-center bg-no-repeat bg-cover"
                 style={{
                   backgroundImage: `url(${accountProfile?.cBackGroundImg})`,
                 }}
@@ -171,7 +169,7 @@ export default function HeaderUserMenu({ token }: { token: Token }) {
               <div className="px-12 flex flex-col gap-4 relative">
                 <div className="flex flex-row gap-4 items-end absolute -top-[14px]">
                   <div
-                    className="w-16 h-16 rounded-full bg-white bg-center bg-no-repeat bg-cover border border-yellow-500 shadow-[0_0_0_2px_rgba(250,204,21,0.3)]"
+                    className="w-16 h-16 rounded-full bg-DTND-400 bg-center bg-no-repeat bg-cover border border-yellow-500 shadow-[0_0_0_2px_rgba(250,204,21,0.3)]"
                     style={{
                       backgroundImage: `url(${accountProfile?.cAvatarImg})`,
                     }}
