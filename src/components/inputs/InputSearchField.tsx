@@ -1,5 +1,11 @@
+import _ from "lodash";
+import { useEffect, useState } from "react";
 import { IoSearchOutline } from "react-icons/io5";
 import AsyncSelect from "react-select/async";
+import { usePrevious } from "../../hooks/usePrevious";
+import { useAppSelector } from "../../store/hook";
+import { selectListShareStock } from "../../store/slices/place-order/selector";
+import type { FetchShareStockItem } from "../../types/placeOrder";
 
 export type OptionType = {
   label?: string;
@@ -20,21 +26,40 @@ export default function InputSearchField({
   placeholder = "Nhập mã tìm kiếm",
   className,
 }: InputSearchFieldProps) {
-  const stockOptions: OptionType[] = [
-    { label: "Công ty cổ phần FPT", value: "FPT", post_to: "HOSE" },
-    { label: "Ngân hàng Vietcombank", value: "VCB", post_to: "HOSE" },
-    { label: "Tập đoàn Hòa Phát", value: "HPG", post_to: "HOSE" },
-    {
-      label: "Ngân hàng Thương mại Cổ phần Á Châu",
-      value: "ACB",
-      post_to: "HOSE",
-    },
-  ];
+  const listShareStock = useAppSelector(selectListShareStock);
 
-  const filterStocks = (inputValue: string) =>
-    stockOptions.filter((i) =>
+  const [stockOptions, setStockOptions] = useState<OptionType[]>([]);
+
+  const preListShareStock = usePrevious(listShareStock);
+
+  useEffect(() => {
+    if (
+      !listShareStock ||
+      listShareStock.length < 0 ||
+      _.isEqual(listShareStock, preListShareStock)
+    )
+      return;
+
+    const converListStock: OptionType[] = convertShareList(
+      listShareStock || []
+    );
+    setStockOptions(converListStock);
+  }, [listShareStock]);
+
+  const convertShareList = (data: FetchShareStockItem[]): OptionType[] => {
+    return data.map((item) => ({
+      label: item.fullName,
+      value: item.shareCode,
+      post_to: item.tradeTable,
+    }));
+  };
+
+  const filterStocks = (inputValue: string) => {
+    if (!inputValue) return stockOptions;
+    return stockOptions.filter((i) =>
       i.value.toLowerCase().includes(inputValue.toLowerCase())
     );
+  };
 
   const promiseOptions = (inputValue: string) =>
     new Promise<OptionType[]>((resolve) => {
@@ -48,7 +73,7 @@ export default function InputSearchField({
       value={value}
       onChange={onChange}
       cacheOptions
-      defaultOptions
+      defaultOptions={value?.value ? [value] : []}
       loadOptions={promiseOptions}
       placeholder={placeholder}
       noOptionsMessage={() => "Không có dữ liệu!"}
@@ -91,7 +116,7 @@ export default function InputSearchField({
       }}
       classNames={{
         control: ({ isFocused }) =>
-          `!bg-input !rounded-xl !min-h-9 !h-9 !text-text-title !text-xs !w-[150px] ${
+          `!bg-input !rounded-xl !min-h-9 !h-9 !text-text-title !text-xs !w-[10px] ${
             isFocused
               ? "!border !border-yellow-400 !shadow-[0_0_0_2px_rgba(250,204,21,0.3)]"
               : "!border !border-transparent"
@@ -99,7 +124,7 @@ export default function InputSearchField({
         placeholder: () => "!text-text-subtitle !text-xs",
         singleValue: () => "!text-text-title !text-xs",
         menu: () =>
-          "!z-[9999] !bg-surface !rounded-md !mt-1 transition-all duration-200 ease-out !w-[250px] !opacity-100 animate-fadeInDown",
+          "!z-[9999] !bg-surface !rounded-md !mt-1 transition-all duration-200 ease-out !w-[280px] !opacity-100 animate-fadeInDown",
         option: ({ isFocused, isSelected }) =>
           `!cursor-pointer !text-xs !flex !items-center !px-3 !py-2.5 transition-colors duration-150 ${
             isSelected

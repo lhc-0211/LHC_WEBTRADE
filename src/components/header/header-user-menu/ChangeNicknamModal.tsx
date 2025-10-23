@@ -1,4 +1,3 @@
-import { yupResolver } from "@hookform/resolvers/yup";
 import clsx from "clsx";
 import { AnimatePresence, motion } from "framer-motion";
 import _ from "lodash";
@@ -8,7 +7,6 @@ import { HiOutlineLightBulb } from "react-icons/hi";
 import { IoCheckmarkCircleOutline, IoClose } from "react-icons/io5";
 import Modal from "react-modal";
 import ScaleLoader from "react-spinners/ScaleLoader";
-import * as yup from "yup";
 import { usePrevious } from "../../../hooks/usePrevious";
 import { useToast } from "../../../hooks/useToast";
 import { useAppDispatch, useAppSelector } from "../../../store/hook";
@@ -27,20 +25,6 @@ import Button from "../../common/button";
 import InputField from "../../inputs/InputField";
 
 const nicknameRegex = /^[A-Za-z][A-Za-z0-9_-]{5,19}$/;
-
-const schema = yup.object({
-  nickname: yup
-    .string()
-    .required("Vui lòng nhập nickname mới")
-    .matches(nicknameRegex, "Nickname không hợp lệ"),
-  password: yup.string().when("$step", {
-    is: 2,
-    then: (schema) =>
-      schema.required("Vui lòng nhập mật khẩu").min(6, "Ít nhất 6 ký tự"),
-    otherwise: (schema) => schema.notRequired(),
-  }),
-  actionType: yup.string().default("CREATE"),
-});
 
 const customStyles = {
   content: {
@@ -78,8 +62,9 @@ export default function ChangeNicknameModal({
     watch,
     formState: { errors, isSubmitting },
   } = useForm<ChangeNicknameForm>({
-    resolver: yupResolver(schema as any),
-    context: { step },
+    defaultValues: {
+      actionType: "CREATE",
+    },
   });
 
   const toast = useToast();
@@ -156,7 +141,7 @@ export default function ChangeNicknameModal({
       dispatch(
         fetchChangeNicknameRequest({
           ACTION_TYPE: data.actionType,
-          PASS_WORD: data.password,
+          PASS_WORD: data.password || "",
           NICK_NAME: data.nickname,
         })
       );
@@ -196,11 +181,11 @@ export default function ChangeNicknameModal({
                     <div
                       className="w-8 h-8 rounded-full bg-white bg-center bg-no-repeat bg-cover border border-yellow-500 shadow-[0_0_0_2px_rgba(250,204,21,0.3)]"
                       style={{
-                        backgroundImage: `url(${accountProfile?.C_AVATAR_IMG})`,
+                        backgroundImage: `url(${accountProfile?.cAvatarImg})`,
                       }}
                     ></div>
                     <span className="text-sm font-medium text-text-title">
-                      {accountProfile?.C_USER_NAME}
+                      {accountProfile?.cUserName}
                     </span>
                   </div>
                 ) : (
@@ -233,7 +218,13 @@ export default function ChangeNicknameModal({
                         <InputField
                           placeholder="Nhập nickname mới ở đây"
                           error={errors.nickname}
-                          registration={register("nickname")}
+                          registration={register("nickname", {
+                            required: "Vui lòng nhập nickname mới",
+                            pattern: {
+                              value: nicknameRegex,
+                              message: "Nickname không hợp lệ",
+                            },
+                          })}
                           className="!h-12 !bg-transparent !w-[370px]"
                         />
                       </div>
@@ -291,7 +282,13 @@ export default function ChangeNicknameModal({
                       type="password"
                       placeholder="Nhập mật khẩu của bạn"
                       error={errors.password}
-                      registration={register("password")}
+                      registration={register("password", {
+                        required: "Vui lòng nhập mật khẩu",
+                        minLength: {
+                          value: 6,
+                          message: "Mật khẩu ít nhất 6 kí tự",
+                        },
+                      })}
                       className="!h-12"
                     />
                   </div>

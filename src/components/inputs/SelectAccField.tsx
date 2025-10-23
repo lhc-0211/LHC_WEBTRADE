@@ -1,5 +1,6 @@
 import _ from "lodash";
 import React, { useEffect, useRef, useState } from "react";
+import type { FieldError } from "react-hook-form";
 import { IoIosArrowDown } from "react-icons/io";
 import { getColorTypeAcc } from "../../utils";
 
@@ -17,6 +18,7 @@ interface Props {
   opts: Option[];
   disabled?: boolean;
   className?: string;
+  error?: FieldError;
 }
 
 const SelectAccount: React.FC<Props> = ({
@@ -26,6 +28,7 @@ const SelectAccount: React.FC<Props> = ({
   opts,
   disabled,
   className = "",
+  error,
 }) => {
   const [showSelect, setShowSelect] = useState(false);
   const [selected, setSelected] = useState<Option | null>(null);
@@ -59,7 +62,9 @@ const SelectAccount: React.FC<Props> = ({
       <div
         className={`h-full flex items-center justify-between gap-1 px-3 rounded-2xl border cursor-pointer text-text-body text-xs ${
           disabled ? "opacity-60 cursor-not-allowed" : "hover:bg-neutral-800"
-        } ${showSelect ? "border-yellow-500" : "border-neutral-700"}`}
+        } ${showSelect ? "border-yellow-500" : "border-neutral-700"} ${
+          error ? "!border !border-red-500" : ""
+        }`}
         onClick={() => !disabled && setShowSelect((s) => !s)}
       >
         <div className="flex items-center gap-2">

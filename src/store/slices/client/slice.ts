@@ -58,10 +58,7 @@ const clientSlice = createSlice({
       state.status.fetchAccountProfile = { loading: true, error: null };
       state.data.accountProfile = null;
     },
-    fetchAccountProfileSuccess(
-      state,
-      action: PayloadAction<AccountProfile | null>
-    ) {
+    fetchAccountProfileSuccess(state, action: PayloadAction<AccountProfile>) {
       state.status.fetchAccountProfile = { loading: false, error: null };
       state.data.accountProfile = action.payload;
     },

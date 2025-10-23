@@ -54,7 +54,7 @@ export type AccountProfile = Partial<AccountProfileValue>;
 export type AccountProfileResponse = {
   rc: number;
   msg: string | undefined;
-  data?: AccountProfileValue;
+  data?: AccountProfile;
 };
 
 export interface ChangeNicknamePayload {
@@ -65,7 +65,7 @@ export interface ChangeNicknamePayload {
 
 export interface ChangeNicknameForm {
   actionType: string;
-  password: string;
+  password: string | undefined;
   nickname: string;
 }
 

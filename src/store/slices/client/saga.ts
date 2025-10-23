@@ -6,6 +6,7 @@ import {
   fetchAccountProfileAPI,
   fetchChangeAccInfoApi,
 } from "../../../api/clientApi";
+import { showToast } from "../../../hooks/useToast";
 import type {
   AccountProfileResponse,
   ChangeAccountInfoActionPayload,
@@ -13,8 +14,6 @@ import type {
   ChangeNicknamePayload,
   ChangeNicknameResponse,
 } from "../../../types/client";
-import { getMsgByErrorCode } from "../../../utils";
-import { showToast } from "../global/slice";
 import {
   fetchAccountProfileFailure,
   fetchAccountProfileRequest,
@@ -35,17 +34,13 @@ function* fetchAccountProfileSaga() {
     const res: AccountProfileResponse = yield call(fetchAccountProfileAPI);
 
     if (res.rc < 1) {
-      yield put(
-        showToast({
-          msg: getMsgByErrorCode(res.rc + "") || res.msg || "Thất bại",
-          type: "error",
-        })
-      );
+      showToast(res.msg || "Thất bại", "error");
+
       put(fetchAccountProfileFailure(res.msg || "Thất bại"));
       throw Error(res.msg || "Thất bại");
     }
 
-    yield put(fetchAccountProfileSuccess(res.data));
+    if (res.data) yield put(fetchAccountProfileSuccess(res.data));
   } catch (error: unknown) {
     const errorMessage =
       error instanceof Error ? error.message : "Failed to fetch info index";
@@ -63,12 +58,8 @@ function* fetchCheckNicknameSaga(
     );
 
     if (res.rc < 1) {
-      yield put(
-        showToast({
-          msg: getMsgByErrorCode(res.rc + "") || res.msg || "Thất bại",
-          type: "error",
-        })
-      );
+      showToast(res.msg || "Thất bại", "error");
+
       put(fetchCheckNicknameFailure(res.msg || "Thất bại"));
       throw Error(res.msg || "Thất bại");
     }
@@ -91,12 +82,8 @@ function* fetchChangeNicknameSaga(
     );
 
     if (res.rc < 1) {
-      yield put(
-        showToast({
-          msg: getMsgByErrorCode(res.rc + "") || res.msg || "Thất bại",
-          type: "error",
-        })
-      );
+      showToast(res.msg || "Thất bại", "error");
+
       yield put(fetchChangeNicknameFailure(res.msg || "Thất bại"));
       throw Error(res.msg || "Thất bại");
     }
@@ -122,12 +109,7 @@ function* fetchChangeAccountInfoSaga(
     );
 
     if (res.rc < 1) {
-      yield put(
-        showToast({
-          msg: getMsgByErrorCode(res.rc + "") || res.msg || "Thất bại",
-          type: "error",
-        })
-      );
+      showToast(res.msg || "Thất bại", "error");
       yield put(fetchChangeAccountInfoFailure(res.msg || "Thất bại"));
       throw Error(res.msg || "Thất bại");
     }

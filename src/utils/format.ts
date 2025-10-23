@@ -10,7 +10,7 @@ function pick<T>(...values: (T | undefined | null)[]): T | undefined {
 }
 
 export function numberFormat(
-  input: string | number,
+  input: string | number | undefined | null,
   decimals: number = 0,
   fallback: string = "",
   decimalSeparator?: string,

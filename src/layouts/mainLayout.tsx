@@ -2,12 +2,13 @@ import { useEffect, useState } from "react";
 
 import { ToastContainer } from "react-toastify";
 import { Tooltip } from "react-tooltip";
-import LoginModal from "../components/auth/LoginModal";
+import LoginModal from "../components/auth/loginModal";
 import SessionExpiredModal from "../components/auth/SessionExpiredModal";
 import Header from "../components/header/header";
 import Sidebar from "../components/sidebar/sidebar";
-import { useAppSelector } from "../store/hook";
+import { useAppDispatch, useAppSelector } from "../store/hook";
 import { selectToken } from "../store/slices/auth/selector";
+import { fetchListShareStockRequest } from "../store/slices/place-order/slice";
 import type { SidebarMode } from "../types/layout";
 
 export default function MainLayout({
@@ -16,11 +17,17 @@ export default function MainLayout({
   children: React.ReactNode;
 }) {
   const token = useAppSelector(selectToken);
+  const dispatch = useAppDispatch();
 
   const [sidebarMode, setSidebarMode] = useState<SidebarMode>(() => {
     const saved = localStorage.getItem("sidebarMode") as SidebarMode | null;
     return token ? saved || "full" : "hidden";
   });
+
+  // Lấy list mã chứng khoán
+  useEffect(() => {
+    dispatch(fetchListShareStockRequest());
+  }, [dispatch]);
 
   useEffect(() => {
     if (!token) {

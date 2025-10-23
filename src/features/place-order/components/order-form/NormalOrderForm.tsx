@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { IoIosArrowDown } from "react-icons/io";
 import Button from "../../../../components/common/button";
@@ -6,8 +7,14 @@ import InputOrderSide from "../../../../components/inputs/InputOrderSide";
 import InputOrderVolume from "../../../../components/inputs/InputOrderVolume";
 import InputSearchField from "../../../../components/inputs/InputSearchField";
 import SelectAccount from "../../../../components/inputs/SelectAccField";
+import { useDebounce } from "../../../../hooks/useDebounce";
+import { useAppDispatch, useAppSelector } from "../../../../store/hook";
+import { selectAccountProfile } from "../../../../store/slices/client/selector";
+import { selectShareStock } from "../../../../store/slices/place-order/selector";
+import { fetchShareStockCodeRequest } from "../../../../store/slices/place-order/slice";
 import type { OrderForm } from "../../../../types/placeOrder";
-import { colorFix, getBgColorStock, numberFormat } from "../../../../utils";
+import { numberFormat, StringToDouble, StringToInt } from "../../../../utils";
+import ShareStockInfo from "./ShareStockInfo";
 
 // interface Props {
 //   typeOrder: string;
@@ -19,7 +26,8 @@ export default function NormalOrderForm() {
     handleSubmit,
     watch,
     control,
-    formState: { isSubmitting },
+    setValue,
+    formState: { isSubmitting, errors },
   } = useForm<OrderForm>({
     defaultValues: {
       orderSymbol: {
@@ -28,77 +36,50 @@ export default function NormalOrderForm() {
         post_to: "HOSE",
       },
       orderSide: "B",
+      orderVolume: "",
     },
   });
 
+  const dispatch = useAppDispatch();
+
+  const shareStock = useAppSelector(selectShareStock);
+  const accountProfile = useAppSelector(selectAccountProfile);
+
   const orderSymbol = watch("orderSymbol");
+  const orderSymbolValue = orderSymbol?.value;
   const orderSide = watch("orderSide");
+  const orderVolume = watch("orderVolume");
+  const orderPrice = watch("orderPrice");
 
-  const onSubmit = async () => {};
+  const debouncedOrderSymbol = useDebounce(orderSymbolValue, 500);
+  const debouncedOrderVolume = useDebounce(orderVolume, 500);
 
-  const stockReal = {
-    sym: "FPT",
-    mc: "STO",
-    c: 99.5,
-    f: 86.5,
-    r: 93,
-    lastPrice: 97,
-    lastVolume: 67540,
-    openPrice: 95.2,
-    lowPrice: 95,
-    highPrice: 99,
-    status_info: 99,
-    lot: 1831110,
-    avePrice: 96.8,
-    fRoom: 21501425,
-    fRoomAvai: 21501425,
-    fBVol: 441670,
-    fSVolume: 59350,
-    fBVal: 426629710000,
-    fSVal: 57560970000,
-    totalFBVol: 441683,
-    totalFSVol: 153193,
-    totalFBVal: 426642921500,
-    totalFSVal: 148406554150,
-    change: 4,
-    changePc: 4.3,
-    oP1: 97,
-    oV1: 16890,
-    oCl1: "i",
-    oVC1: "i",
-    bP1: 96.9,
-    bV1: 1260,
-    bCl1: "i",
-    bVC1: "i",
-    oP2: 97.1,
-    oV2: 3450,
-    oCl2: "i",
-    oVC2: "i",
-    bP2: 96.8,
-    bV2: 1380,
-    bCl2: "i",
-    bVC2: "i",
-    oP3: 97.2,
-    oV3: 6430,
-    oCl3: "i",
-    oVC3: "i",
-    bP3: 96.7,
-    bV3: 2270,
-    bCl3: "i",
-    bVC3: "i",
-    duMua: 0,
-    duBan: 0,
+  useEffect(() => {
+    if (!debouncedOrderSymbol) return;
+
+    dispatch(
+      fetchShareStockCodeRequest({
+        shareCode: debouncedOrderSymbol,
+        volume: StringToInt(debouncedOrderVolume) || 0,
+      })
+    );
+  }, [debouncedOrderSymbol, debouncedOrderVolume, dispatch]);
+
+  useEffect(() => {
+    if (shareStock) {
+      setValue("orderPrice", shareStock?.lastPrice);
+    }
+  }, [shareStock, setValue]);
+
+  useEffect(() => {
+    if (accountProfile && accountProfile?.cAccountDefault) {
+      setValue("accountOrder", accountProfile?.cAccountDefault);
+    }
+  }, [accountProfile, setValue]);
+
+  const onSubmit = async (data: OrderForm) => {
+    console.log(data);
   };
-
-  const color = colorFix(
-    stockReal?.lastPrice,
-    stockReal?.r,
-    stockReal?.c,
-    stockReal?.f,
-    stockReal?.r
-  );
-
-  const _div = stockReal && +stockReal?.r > 50 ? 1 : 2;
 
   return (
     <form
@@ -118,12 +99,15 @@ export default function NormalOrderForm() {
                 value={field.value}
                 onChange={field.onChange}
                 opts={[
-                  { accCode: "0003651", accType: "Thường", type: "N" },
-                  { accCode: "0003656", accType: "Margin", type: "M" },
-                  { accCode: "0003657", accType: "Margin", type: "M" },
+                  {
+                    accCode: accountProfile?.cAccountDefault + "",
+                    accType: "Thường",
+                    type: "N",
+                  },
                 ]}
                 placeholder="Chọn tài khoản"
                 className="!w-[200px] !h-9 !rounded-xl !text-xs"
+                error={fieldState.error}
               />
               {fieldState.error && (
                 <p className="text-red-500 text-xs mt-1">
@@ -172,83 +156,7 @@ export default function NormalOrderForm() {
       </div>
 
       {/* Thông tin mã chứng khoán */}
-      <div className="flex flex-col bg-skin-card rounded-xl gap-3">
-        <div className="flex items-center">
-          <div
-            className={`mr-3 p-2 rounded-lg h-[64px] w-[109px] flex flex-col items-center justify-center gap-1 " +
-              ${color} ${getBgColorStock(color)} 
-            `}
-          >
-            <div className="text-2xl font-semibold ">
-              {numberFormat(stockReal?.lastPrice, _div, "0")}
-            </div>
-            <div className="flex items-center text-xs font-medium">
-              <div className="flex flex-row gap-2 items-center text-xs font-medium">
-                <div className={"flex flex-row gap-2 text-xs font-medium"}>
-                  <span>{(stockReal?.change + "").trim()}</span>
-                  <span>
-                    {stockReal?.changePc
-                      ? (stockReal?.changePc + "").trim() + "%"
-                      : "0%"}
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div>
-            <div className="grid grid-cols-3 gap-3 place-items-end">
-              <div className="grid gap-1 min-w-[60px]">
-                <span className="text-skin-white-300  text-[10px] font-normal">
-                  Trần
-                </span>
-                <span className="text-skin-ceil text-xs font-semibold c">
-                  {numberFormat(stockReal?.c, _div, "0")}
-                </span>
-              </div>
-              <div className="grid gap-1 min-w-[60px] ml-4">
-                <span className="text-skin-white-300  text-[10px] font-normal">
-                  T.C
-                </span>
-                <span className="text-skin-ref text-xs font-semibold r">
-                  {numberFormat(stockReal?.r, _div, "0")}
-                </span>
-              </div>
-              <div className="grid gap-1 min-w-[60px] ml-4">
-                <span className="text-skin-white-300  text-[10px] font-normal">
-                  Sàn
-                </span>
-                <span className="text-skin-floor text-xs font-semibold f">
-                  {numberFormat(stockReal?.f, _div, "0")}
-                </span>
-              </div>
-              <div className="grid gap-1 min-w-[60px] ml-4">
-                <span className="text-skin-white-300  text-[10px] font-normal">
-                  Cao
-                </span>
-                <span className={"text-xs font-semibold " + color}>
-                  {numberFormat(stockReal?.highPrice, _div, "0")}
-                </span>
-              </div>
-              <div className="grid gap-1 min-w-[60px] ml-4">
-                <span className="text-skin-white-300  text-[10px] font-normal">
-                  TB
-                </span>
-                <span className={"text-xs font-semibold " + color}>
-                  {numberFormat(stockReal?.avePrice, _div, "0")}
-                </span>
-              </div>
-              <div className="grid gap-1 min-w-[60px] ml-4">
-                <span className="text-skin-white-300  text-[10px] font-normal">
-                  Thấp
-                </span>
-                <span className={"text-xs font-semibold " + color}>
-                  {numberFormat(stockReal?.lowPrice, _div, "0")}
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <ShareStockInfo shareStock={shareStock} />
 
       {/* side và loại lệnh */}
       <div className="flex flex-row items-center justify-between">
@@ -276,7 +184,11 @@ export default function NormalOrderForm() {
       </div>
 
       {/* input khối lượng */}
-      <div className="h-[88px] px-3.5 pt-[10px] pb-3 bg-input rounded-lg border border-transparent focus-within:outline-none focus-within:!border focus-within:!border-yellow-500 focus-within:!shadow-[0_0_0_2px_rgba(250,204,21,0.3)] caret-DTND-200 ">
+      <div
+        className={`h-[88px] px-3.5 pt-[10px] pb-3 bg-input rounded-lg border border-transparent focus-within:outline-none focus-within:!border focus-within:!border-yellow-500 focus-within:!shadow-[0_0_0_2px_rgba(250,204,21,0.3)] caret-DTND-200 ${
+          errors.orderVolume?.message ? "!border !border-red-500" : ""
+        }`}
+      >
         <div className="flex flex-row items-center justify-between pb-3.5">
           <h2 className="text-xs">Khối lượng</h2>
 
@@ -300,22 +212,32 @@ export default function NormalOrderForm() {
             min: { value: 0, message: "Số lượng phải >= 0" },
           }}
           render={({ field, fieldState }) => (
-            <InputOrderVolume
-              placeholder={`0 ${orderSymbol?.value || "ACB"}`}
-              error={fieldState.error}
-              step={100}
-              min={0}
-              max={9999999999999}
-              className="!h-7 text-[20px]"
-              required
-              {...field}
-            />
+            <div>
+              <InputOrderVolume
+                placeholder={`0 ${orderSymbol?.value || "ACB"}`}
+                step={100}
+                min={0}
+                max={9999999999999}
+                className="!h-7 text-[20px]"
+                required
+                {...field}
+              />
+              {fieldState.error && (
+                <p className="text-red-500 text-xs">
+                  {fieldState.error.message}
+                </p>
+              )}
+            </div>
           )}
         />
       </div>
 
       {/* input giá */}
-      <div className="h-[88px] px-3.5 pt-[10px] pb-3 bg-input rounded-lg border border-transparent focus-within:outline-none focus-within:!border focus-within:!border-yellow-500 focus-within:!shadow-[0_0_0_2px_rgba(250,204,21,0.3)] caret-DTND-200 ">
+      <div
+        className={`h-[88px] px-3.5 pt-[10px] pb-3 bg-input rounded-lg border border-transparent focus-within:outline-none focus-within:!border focus-within:!border-yellow-500 focus-within:!shadow-[0_0_0_2px_rgba(250,204,21,0.3)] caret-DTND-200 ${
+          errors.orderPrice?.message ? "!border !border-red-500" : ""
+        }`}
+      >
         <div className="flex flex-row items-center justify-between mb-3.5">
           <h2 className="text-xs">Giá đặt</h2>
         </div>
@@ -331,16 +253,22 @@ export default function NormalOrderForm() {
             },
           }}
           render={({ field, fieldState }) => (
-            <InputOrderPrice
-              placeholder={`0`}
-              error={fieldState.error}
-              step={0.05}
-              min={0}
-              max={1000}
-              className="!h-7 text-[20px]"
-              required
-              {...field}
-            />
+            <div>
+              <InputOrderPrice
+                placeholder={`0`}
+                step={0.05}
+                min={0}
+                max={1000}
+                className="!h-7 text-[20px]"
+                required
+                {...field}
+              />
+              {fieldState.error && (
+                <p className="text-red-500 text-xs">
+                  {fieldState.error.message}
+                </p>
+              )}
+            </div>
           )}
         />
       </div>
@@ -352,7 +280,12 @@ export default function NormalOrderForm() {
             Giá trị lệnh
           </span>
           <span className="text-text-title text-[20px] font-semibold ">
-            - ₫
+            {orderPrice && orderVolume
+              ? numberFormat(
+                  StringToDouble(orderPrice) * 1000 * StringToInt(orderVolume)
+                )
+              : "-"}{" "}
+            ₫
           </span>
         </div>
         <Button

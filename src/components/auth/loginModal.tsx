@@ -11,7 +11,10 @@ import * as yup from "yup";
 import bgLogin from "../../assets/imgs/bg-login.jpg";
 import logo from "../../assets/imgs/logo.png";
 import { useAppDispatch, useAppSelector } from "../../store/hook";
-import { selectFetchTokenStatus } from "../../store/slices/auth/selector";
+import {
+  selectFetchTokenStatus,
+  selectToken,
+} from "../../store/slices/auth/selector";
 import { loginFailure, loginRequest } from "../../store/slices/auth/slice";
 import { selectLoginModalOpen } from "../../store/slices/client/selector";
 import { closeLoginModal } from "../../store/slices/client/slice";
@@ -48,7 +51,7 @@ export default function LoginModal() {
   const dispatch = useAppDispatch();
   const isOpen = useAppSelector(selectLoginModalOpen);
   const loginStatus = useAppSelector(selectFetchTokenStatus);
-  const token = useAppSelector(selectFetchTokenStatus);
+  const token = useAppSelector(selectToken);
 
   const {
     register,

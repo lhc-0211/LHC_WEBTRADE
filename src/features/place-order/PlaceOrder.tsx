@@ -1,5 +1,6 @@
 import { usePerfectScrollbar } from "../../hooks/usePerfectScrollbar.ts";
 import OrderForm from "./components/order-form/OrderForm.tsx";
+import OrderTable from "./components/order-table/OrderTable.tsx";
 
 export default function PlaceOrder() {
   const { containerRef } = usePerfectScrollbar();
@@ -15,7 +16,9 @@ export default function PlaceOrder() {
           <OrderForm />
         </div>
       </div>
-      <div className="w-full h-[500px] "></div>
+      <div className="w-full h-[500px] ">
+        <OrderTable />
+      </div>
     </div>
   );
 }
