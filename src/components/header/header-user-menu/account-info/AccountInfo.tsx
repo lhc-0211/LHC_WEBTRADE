@@ -33,7 +33,7 @@ export default function AccountInfo({
             <div className="text-text-subtitle text-xs font-medium flex flex-col">
               Tên pháp lý
               <span className="text-text-title text-sm uppercase">
-                {accountProfile?.cUserName}
+                {accountProfile?.cCustomerName}
               </span>
             </div>
             <div className="grid grid-cols-2 gap-3">
