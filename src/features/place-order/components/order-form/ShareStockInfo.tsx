@@ -1,6 +1,4 @@
 import { memo } from "react";
-import { useAppSelector } from "../../../../store/hook";
-import { selectShareStockStatus } from "../../../../store/slices/place-order/selector";
 import type { FetchShareCodeResponse } from "../../../../types/placeOrder";
 import {
   colorFix,
@@ -12,11 +10,11 @@ import ShareStockInfoSkeleton from "./ShareStockInfoSkeleton";
 
 function ShareStockInfo({
   shareStock,
+  loading,
 }: {
   shareStock: FetchShareCodeResponse["data"] | null;
+  loading: boolean;
 }) {
-  const { loading } = useAppSelector(selectShareStockStatus);
-
   if (loading || !shareStock) return <ShareStockInfoSkeleton />;
 
   const color =

@@ -7,7 +7,7 @@ export default function PlaceOrder() {
 
   return (
     <div
-      className="flex flex-col w-full h-[calc(var(--app-height)-64px)] relative "
+      className="flex flex-col w-full h-[calc(var(--app-height)-64px)] relative gap-4 hide-scrollbar"
       ref={containerRef}
     >
       <div className="w-full flex items-stretch max-h-[728px]">

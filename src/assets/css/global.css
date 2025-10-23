@@ -257,3 +257,47 @@ input:-webkit-autofill {
 .bg-type-margin {
   background: linear-gradient(127.72deg, #4531e0 14.81%, #ae5ef1 100.61%);
 }
+
+/**------------------------------------------------------------
+*!perfect scrollbar
+---------------------------------------------------------------*/
+
+.ps__rail-x {
+  height: 6px;
+}
+
+.ps__rail-x:hover > .ps__thumb-x,
+.ps__rail-x:focus > .ps__thumb-x,
+.ps__rail-x.ps--clicking .ps__thumb-x {
+  height: 6px;
+}
+
+.ps .ps__rail-x:hover,
+.ps .ps__rail-x:focus,
+.ps .ps__rail-x.ps--clicking {
+  opacity: 0.9;
+  height: 6px;
+}
+
+.ps__thumb-x {
+  height: 6px;
+  bottom: 0;
+}
+
+.ps__thumb-y,
+.ps__rail-y {
+  width: 0px;
+}
+
+.ps__rail-y:hover > .ps__thumb-y,
+.ps__rail-y:focus > .ps__thumb-y,
+.ps__rail-y.ps--clicking .ps__thumb-y {
+  width: 6px;
+}
+
+.ps .ps__rail-y:hover,
+.ps .ps__rail-y:focus,
+.ps .ps__rail-y.ps--clicking {
+  opacity: 0.9;
+  width: 6px;
+}

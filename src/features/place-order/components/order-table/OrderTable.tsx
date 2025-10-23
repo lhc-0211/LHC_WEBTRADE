@@ -1,4 +1,5 @@
 import { useState } from "react";
+import OrderHisTable from "./OrderHisTable";
 
 export default function OrderTable() {
   const [tabActive, setTabActive] = useState<
@@ -6,7 +7,7 @@ export default function OrderTable() {
   >("ORDER");
 
   return (
-    <div className="w-full h-full">
+    <div className="w-full h-full flex flex-col gap-4">
       <div className="flex mr-auto">
         <div
           className={`flex items-center h-9 py-1 px-3 cursor-pointer ml-2 gap-2 text-sm rounded-lg hover:bg-input ${
@@ -40,6 +41,9 @@ export default function OrderTable() {
         >
           Danh mục đầu tư
         </div>
+      </div>
+      <div className="h-[calc(100%-52px)]">
+        {tabActive === "ORDER" && <OrderHisTable />}
       </div>
     </div>
   );
