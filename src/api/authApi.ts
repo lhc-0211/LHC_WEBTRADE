@@ -7,11 +7,17 @@ import type {
 } from "../types";
 
 export async function loginApi({
-  accountCode,
+  user,
   password,
   device,
+  channel,
 }: LoginPayload): Promise<LoginResponse["data"]> {
-  const payload = { accountCode, password, device };
+  const payload = {
+    user,
+    password,
+    device,
+    channel,
+  };
   const res = await apiClient.post<LoginResponse>("/auth/login", payload);
   const { rc, msg, data } = res.data;
 

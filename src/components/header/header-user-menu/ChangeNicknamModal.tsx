@@ -21,7 +21,7 @@ import {
 } from "../../../store/slices/client/slice";
 import type { AccountProfile, ChangeNicknameForm } from "../../../types/client";
 import { _diff2Date, formatDate } from "../../../utils";
-import Button from "../../common/button";
+import Button from "../../common/Button";
 import InputField from "../../inputs/InputField";
 
 const nicknameRegex = /^[A-Za-z][A-Za-z0-9_-]{5,19}$/;

@@ -10,7 +10,7 @@ import { fetchOtpRequest } from "../../store/slices/auth/slice";
 import { selectAccountProfile } from "../../store/slices/client/selector";
 import type { ConfirmOtpForm } from "../../types";
 import { formatTime, hideMiddleDigits } from "../../utils";
-import Button from "../common/button";
+import Button from "../common/Button";
 import InputFieldOTP from "../inputs/InputFieldOtp";
 
 const customStyles = {
@@ -34,11 +34,13 @@ export default function ConfirmOtpModal({
   onPre,
   onSubmit,
   onClose,
+  loading,
 }: {
   isOpen: boolean;
   onClose: () => void;
   onPre: () => void;
   onSubmit: (id: string) => void;
+  loading?: boolean;
 }) {
   const {
     register,
@@ -164,7 +166,7 @@ export default function ConfirmOtpModal({
                   disabled={isSubmitting}
                   className="!h-10"
                 >
-                  {isSubmitting ? <ScaleLoader height={25} /> : "Tiếp tục"}
+                  {loading ? <ScaleLoader height={25} /> : "Tiếp tục"}
                 </Button>
                 <Button
                   variant="close"

@@ -19,7 +19,7 @@ import type {
   ChangeAccountInfoForm,
 } from "../../../../types/client";
 import ConfirmOTPModal from "../../../auth/ConfirmOTPModal";
-import Button from "../../../common/button";
+import Button from "../../../common/Button";
 import InputField from "../../../inputs/InputField";
 
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;

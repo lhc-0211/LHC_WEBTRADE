@@ -21,7 +21,7 @@ import {
 } from "../../../store/slices/client/slice";
 import type { Token } from "../../../types";
 import { formatAccount, formatAccountType } from "../../../utils";
-import Button from "../../common/button";
+import Button from "../../common/Button";
 import AccountSetting from "./AccountSetting";
 import HeaderUserMenuSkeleton from "./HeaderUserMenuSkeleton";
 

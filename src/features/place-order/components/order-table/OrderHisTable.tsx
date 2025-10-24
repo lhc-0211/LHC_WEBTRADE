@@ -4,11 +4,20 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { memo } from "react";
+import _ from "lodash";
+import { memo, useEffect, useState } from "react";
 import { FaPen, FaTrash } from "react-icons/fa";
+import { usePrevious } from "../../../../hooks/usePrevious";
+import { useAppDispatch, useAppSelector } from "../../../../store/hook";
+import { selectAccountProfile } from "../../../../store/slices/client/selector";
+import {
+  selectListOrdersInday,
+  selectListOrdersIndayStatus,
+} from "../../../../store/slices/place-order/selector";
+import { fetchListOrdersIndayRequest } from "../../../../store/slices/place-order/slice";
 
 type Order = {
-  time: string;
+  time: string | number;
   side: string;
   symbol: string;
   price: string;
@@ -16,18 +25,6 @@ type Order = {
   total: string;
   status: string;
 };
-
-const data: Order[] = [
-  {
-    time: "10:23:45",
-    side: "Mua",
-    symbol: "FPT",
-    price: "89,000",
-    volume: "100",
-    total: "8,900,000",
-    status: "Chờ khớp",
-  },
-];
 
 const columns: ColumnDef<Order>[] = [
   {
@@ -87,8 +84,54 @@ const columns: ColumnDef<Order>[] = [
 ];
 
 function OrderHisTable() {
+  const dispatch = useAppDispatch();
+
+  const listOrdersInday = useAppSelector(selectListOrdersInday);
+  const { loading } = useAppSelector(selectListOrdersIndayStatus);
+  const accountProfile = useAppSelector(selectAccountProfile);
+
+  const [tableData, setTableData] = useState<Order[]>([]);
+
+  const preListOrdersInday = usePrevious(listOrdersInday);
+
+  useEffect(() => {
+    if (!accountProfile || !accountProfile?.cAccountDefault) return;
+
+    dispatch(
+      fetchListOrdersIndayRequest({
+        accountCode: accountProfile?.cAccountDefault || "",
+      })
+    );
+  }, [accountProfile, dispatch]);
+
+  useEffect(() => {
+    if (
+      !listOrdersInday ||
+      _.isEqual(listOrdersInday, preListOrdersInday) ||
+      listOrdersInday.length < 0
+    )
+      return;
+
+    const tableData = listOrdersInday.map((item) => ({
+      time: new Date(item.orderTime).toLocaleTimeString(), // convert timestamp -> HH:MM:SS
+      side: item.side === "B" ? "Mua" : "Bán",
+      symbol: item.shareCode,
+      price: item.orderShowPrice || item.orderPrice.toLocaleString(),
+      volume: item.orderVolume.toString(),
+      total: (item.orderPrice * item.orderVolume).toLocaleString(),
+      status:
+        item.orderStatus === "P"
+          ? "Chờ khớp"
+          : item.orderStatus === "M"
+          ? "Đã khớp"
+          : "Đã hủy",
+    }));
+
+    setTableData(tableData);
+  }, [listOrdersInday, preListOrdersInday]);
+
   const table = useReactTable({
-    data,
+    data: tableData,
     columns,
     getCoreRowModel: getCoreRowModel(),
   });

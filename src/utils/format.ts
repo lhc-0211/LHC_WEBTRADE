@@ -281,3 +281,14 @@ export function getMsgByErrorCode(code: string) {
   }
   return errMsg[code] ? errMsg[code]?.msg : "Error";
 }
+
+export function getRandom() {
+  let text = "";
+  const possible =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+  for (let i = 0; i < 23; i++)
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+  return text;
+}

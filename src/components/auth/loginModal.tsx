@@ -19,16 +19,17 @@ import { loginFailure, loginRequest } from "../../store/slices/auth/slice";
 import { selectLoginModalOpen } from "../../store/slices/client/selector";
 import { closeLoginModal } from "../../store/slices/client/slice";
 import type { LoginPayload } from "../../types";
-import Button from "../common/button";
+import Button from "../common/Button";
 import InputField from "../inputs/InputField";
 
 const schema = yup.object({
-  accountCode: yup.string().required("Vui lòng nhập tên đăng nhập"),
+  user: yup.string().required("Vui lòng nhập tên đăng nhập"),
   password: yup
     .string()
     .min(6, "Ít nhất 6 ký tự")
     .required("Vui lòng nhập mật khẩu"),
   device: yup.string().default("web"),
+  channel: yup.string().default("I"),
 });
 
 const customStyles = {
@@ -61,9 +62,10 @@ export default function LoginModal() {
   } = useForm<LoginPayload>({
     resolver: yupResolver(schema),
     defaultValues: {
-      accountCode: "",
+      user: "",
       password: "",
       device: "web",
+      channel: "I",
     },
   });
 
@@ -89,12 +91,13 @@ export default function LoginModal() {
   };
 
   const onSubmit = async (data: LoginPayload) => {
-    const { accountCode, password } = data;
+    const { user, password } = data;
     dispatch(
       loginRequest({
-        accountCode,
+        user,
         password,
         device: "web",
+        channel: "I",
       })
     );
   };
@@ -160,8 +163,8 @@ export default function LoginModal() {
                     <InputField
                       label="Tên đăng nhập"
                       placeholder="Nhập tên đăng nhập"
-                      error={errors.accountCode}
-                      registration={register("accountCode")}
+                      error={errors.user}
+                      registration={register("user")}
                       className="!h-12"
                     />
 

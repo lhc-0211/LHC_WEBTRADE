@@ -1,24 +1,39 @@
+import _ from "lodash";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { IoIosArrowDown } from "react-icons/io";
 import ScaleLoader from "react-spinners/ScaleLoader";
 import ConfirmOtpModal from "../../../../components/auth/ConfirmOTPModal";
-import Button from "../../../../components/common/button";
+import Button from "../../../../components/common/Button";
 import InputOrderPrice from "../../../../components/inputs/InputOrderPrice";
 import InputOrderSide from "../../../../components/inputs/InputOrderSide";
 import InputOrderVolume from "../../../../components/inputs/InputOrderVolume";
 import InputSearchField from "../../../../components/inputs/InputSearchField";
 import SelectAccount from "../../../../components/inputs/SelectAccField";
 import { useDebounce } from "../../../../hooks/useDebounce";
+import { usePrevious } from "../../../../hooks/usePrevious";
+import { useToast } from "../../../../hooks/useToast";
 import { useAppDispatch, useAppSelector } from "../../../../store/hook";
+import { selectToken } from "../../../../store/slices/auth/selector";
 import { selectAccountProfile } from "../../../../store/slices/client/selector";
 import {
+  selectOrdersStatus,
   selectShareStock,
   selectShareStockStatus,
 } from "../../../../store/slices/place-order/selector";
-import { fetchShareStockCodeRequest } from "../../../../store/slices/place-order/slice";
+import {
+  fetchListOrdersIndayRequest,
+  fetchOrdersRequest,
+  fetchShareStockCodeRequest,
+  resetFetchOrders,
+} from "../../../../store/slices/place-order/slice";
 import type { OrderForm } from "../../../../types/placeOrder";
-import { numberFormat, StringToDouble, StringToInt } from "../../../../utils";
+import {
+  getRandom,
+  numberFormat,
+  StringToDouble,
+  StringToInt,
+} from "../../../../utils";
 import OrderConfirmModal from "./OrderConfirmModal";
 import ShareStockInfo from "./ShareStockInfo";
 
@@ -47,22 +62,50 @@ export default function NormalOrderForm() {
   });
 
   const dispatch = useAppDispatch();
+  const toast = useToast();
 
+  const token = useAppSelector(selectToken);
   const shareStock = useAppSelector(selectShareStock);
   const accountProfile = useAppSelector(selectAccountProfile);
   const { loading: loadingShareStock } = useAppSelector(selectShareStockStatus);
+  const { loading: loadingOrder, success: successOrder } =
+    useAppSelector(selectOrdersStatus);
 
   const orderSymbol = watch("orderSymbol");
   const orderSymbolValue = orderSymbol?.value;
   const orderSide = watch("orderSide");
   const orderVolume = watch("orderVolume");
   const orderPrice = watch("orderPrice");
+  const accountCode = watch("accountOrder");
 
   const debouncedOrderSymbol = useDebounce(orderSymbolValue, 500);
   const debouncedOrderVolume = useDebounce(orderVolume, 500);
 
   const [stepOrder, setStepOrder] = useState<0 | 1 | 2>(0);
   const [dataSubmitOrder, setDateSubmitOrder] = useState<OrderForm>();
+
+  const preSucccessOrder = usePrevious(successOrder);
+
+  useEffect(() => {
+    if (
+      !successOrder ||
+      _.isEqual(successOrder, preSucccessOrder) ||
+      !accountCode
+    )
+      return;
+
+    const handleSuccessOrder = async () => {
+      await toast("Đặt lệnh thành công!", "success");
+      await dispatch(resetFetchOrders());
+      dispatch(
+        fetchListOrdersIndayRequest({
+          accountCode: accountCode || "",
+        })
+      );
+    };
+
+    handleSuccessOrder();
+  }, [successOrder, preSucccessOrder, dispatch, toast, accountCode]);
 
   useEffect(() => {
     if (!debouncedOrderSymbol) return;
@@ -87,8 +130,22 @@ export default function NormalOrderForm() {
     }
   }, [accountProfile, setValue]);
 
-  const handleSubmitOrder = () => {
-    alert("submit");
+  const handleSubmitOrder = async () => {
+    if (!dataSubmitOrder || !token) return;
+
+    const params = {
+      accountCode: dataSubmitOrder?.accountOrder || "",
+      symbol: dataSubmitOrder?.orderSymbol?.value || "",
+      showPrice: dataSubmitOrder?.orderPrice || "",
+      volume: dataSubmitOrder?.orderVolume || "",
+      orderType: "1",
+      refId: token.cUserCode + ".H." + getRandom(),
+    };
+
+    const side = orderSide === "B" ? "BUY" : "SELL";
+
+    await dispatch(fetchOrdersRequest({ side, params }));
+    setStepOrder(0);
   };
 
   const onSubmit = async (data: OrderForm) => {
@@ -336,6 +393,7 @@ export default function NormalOrderForm() {
           onClose={() => setStepOrder(0)}
           onPre={() => setStepOrder(1)}
           onSubmit={() => handleSubmitOrder()}
+          loading={loadingOrder}
         />
       )}
     </>

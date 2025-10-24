@@ -36,14 +36,22 @@ const SelectAccount: React.FC<Props> = ({
 
   // Click outside
   useEffect(() => {
+    if (!showSelect) return;
+
     const handleClickOutside = (event: MouseEvent) => {
-      if (showRef.current && !showRef.current.contains(event.target as Node)) {
+      console.time("mousedownHandler");
+      if (
+        showRef.current &&
+        !showRef.current.contains(event.target as Node) &&
+        showSelect
+      ) {
         setShowSelect(false);
       }
     };
+
     window.addEventListener("mousedown", handleClickOutside);
     return () => window.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  }, [showSelect]);
 
   // Update selected option
   useEffect(() => {
@@ -89,7 +97,10 @@ const SelectAccount: React.FC<Props> = ({
       </div>
 
       {showSelect && (
-        <ul className="absolute left-0 top-full mt-1 w-full z-20 bg-dark-blue rounded-lg border border-none shadow-lg animate-fadeInDown">
+        <ul
+          className="absolute left-0 top-full mt-1 w-full z-20 bg-dark-blue rounded-lg border border-none shadow-lg animate-fadeInDown"
+          ref={showRef}
+        >
           <div className="max-h-60 overflow-y-auto custom-scrollbar p-2">
             {opts.map((item) => (
               <li

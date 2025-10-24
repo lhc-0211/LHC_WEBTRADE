@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 
 import { ToastContainer } from "react-toastify";
 import { Tooltip } from "react-tooltip";
-import LoginModal from "../components/auth/loginModal";
+import LoginModal from "../components/auth/LoginModal";
 import SessionExpiredModal from "../components/auth/SessionExpiredModal";
-import Header from "../components/header/header";
+import Header from "../components/header/Header";
 import Sidebar from "../components/sidebar/sidebar";
 import { useAppDispatch, useAppSelector } from "../store/hook";
 import { selectToken } from "../store/slices/auth/selector";

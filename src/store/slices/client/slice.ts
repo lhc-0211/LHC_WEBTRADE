@@ -124,18 +124,25 @@ const clientSlice = createSlice({
       state,
       action: PayloadAction<ChangeAccountInfoActionPayload>
     ) => {
-      state.status.fetchChangeAccountInfo.loading = true;
-      state.status.fetchChangeAccountInfo.error = null;
-      state.status.fetchChangeAccountInfo.success = false;
+      state.status.fetchChangeAccountInfo = {
+        loading: true,
+        error: null,
+        success: false,
+      };
     },
     fetchChangeAccountInfoSuccess: (state) => {
-      state.status.fetchChangeAccountInfo.loading = false;
-      state.status.fetchChangeAccountInfo.success = true;
+      state.status.fetchChangeAccountInfo = {
+        loading: false,
+        error: null,
+        success: true,
+      };
     },
     fetchChangeAccountInfoFailure: (state, action: PayloadAction<string>) => {
-      state.status.fetchChangeAccountInfo.loading = false;
-      state.status.fetchChangeAccountInfo.error = action.payload;
-      state.status.fetchChangeAccountInfo.success = false;
+      state.status.fetchChangeAccountInfo = {
+        loading: false,
+        error: action.payload,
+        success: false,
+      };
     },
     resetFetchChangeAccountInfo: (state) => {
       state.status.fetchChangeAccountInfo = {

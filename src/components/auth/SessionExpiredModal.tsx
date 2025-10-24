@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from "../../store/hook";
 import { logout } from "../../store/slices/auth/slice";
 import { selectSessionExpired } from "../../store/slices/client/selector";
 import { setSessionExpired } from "../../store/slices/client/slice";
-import Button from "../common/button";
+import Button from "../common/Button";
 
 const customStyles = {
   content: {

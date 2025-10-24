@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { IoClose } from "react-icons/io5";
 import Modal from "react-modal";
-import Button from "../../../../components/common/button";
+import Button from "../../../../components/common/Button";
 import type { OrderForm } from "../../../../types/placeOrder";
 import {
   formatAccount,

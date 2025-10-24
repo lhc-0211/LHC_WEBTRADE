@@ -1,4 +1,5 @@
 import type { PayloadAction } from "@reduxjs/toolkit";
+import axios from "axios";
 import { call, put, takeLatest } from "redux-saga/effects";
 import {
   changeNicknameApi,
@@ -42,8 +43,16 @@ function* fetchAccountProfileSaga() {
 
     if (res.data) yield put(fetchAccountProfileSuccess(res.data));
   } catch (error: unknown) {
-    const errorMessage =
-      error instanceof Error ? error.message : "Failed to fetch info index";
+    let errorMessage = "Failed to fetch info index";
+
+    if (axios.isAxiosError(error)) {
+      // Nếu server trả về JSON chứa msg
+      errorMessage = error.response?.data?.msg || error.message;
+    } else if (error instanceof Error) {
+      errorMessage = error.message;
+    }
+
+    showToast(errorMessage, "error");
     yield put(fetchAccountProfileFailure(errorMessage));
   }
 }
@@ -66,8 +75,16 @@ function* fetchCheckNicknameSaga(
 
     yield put(fetchCheckNicknameSuccess(res.data));
   } catch (error: unknown) {
-    const errorMessage =
-      error instanceof Error ? error.message : "Failed to fetch info index";
+    let errorMessage = "Failed to fetch info index";
+
+    if (axios.isAxiosError(error)) {
+      // Nếu server trả về JSON chứa msg
+      errorMessage = error.response?.data?.msg || error.message;
+    } else if (error instanceof Error) {
+      errorMessage = error.message;
+    }
+
+    showToast(errorMessage, "error");
     yield put(fetchCheckNicknameFailure(errorMessage));
   }
 }
@@ -90,8 +107,16 @@ function* fetchChangeNicknameSaga(
 
     yield put(fetchChangeNicknameSuccess());
   } catch (error: unknown) {
-    const errorMessage =
-      error instanceof Error ? error.message : "Failed to fetch info index";
+    let errorMessage = "Failed to fetch info index";
+
+    if (axios.isAxiosError(error)) {
+      // Nếu server trả về JSON chứa msg
+      errorMessage = error.response?.data?.msg || error.message;
+    } else if (error instanceof Error) {
+      errorMessage = error.message;
+    }
+
+    showToast(errorMessage, "error");
     yield put(fetchChangeNicknameFailure(errorMessage));
   }
 }
@@ -115,8 +140,16 @@ function* fetchChangeAccountInfoSaga(
     }
     yield put(fetchChangeAccountInfoSuccess());
   } catch (error: unknown) {
-    const errorMessage =
-      error instanceof Error ? error.message : "Failed to fetch info index";
+    let errorMessage = "Failed to fetch info index";
+
+    if (axios.isAxiosError(error)) {
+      // Nếu server trả về JSON chứa msg
+      errorMessage = error.response?.data?.msg || error.message;
+    } else if (error instanceof Error) {
+      errorMessage = error.message;
+    }
+
+    showToast(errorMessage, "error");
     yield put(fetchChangeAccountInfoFailure(errorMessage));
   }
 }

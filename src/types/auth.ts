@@ -1,7 +1,8 @@
 export interface LoginPayload {
-  accountCode: string;
+  user: string;
   password: string;
   device: string;
+  channel: string;
 }
 
 export interface LoginResponse {
@@ -9,17 +10,17 @@ export interface LoginResponse {
   msg: string;
   data: {
     sessionId: string;
-    C_ACCOUNT_CODE: string;
-    C_USER_CODE: string;
-    C_ACCOUNT_NAME: string;
-    C_CUSTOMER_CODE: string;
-    C_AUTHEN_FLAG: string;
-    C_RESET_FLAG: number;
-    C_COUNT_LOGIN: number;
-    C_AUTHEN_TYPE: string;
-    C_LIST_FUNC: string;
-    C_SERIAL_NUMBER: string;
-    C_COUNT_DAY: number | null;
+    cAccountCode: string;
+    cUserCode: string;
+    cAccountName: string;
+    cCustomerCode: string;
+    cAuthenFlag: string;
+    cResetFlag: number;
+    cCountLogin: number;
+    cAuthenType: string;
+    cListFunc: string;
+    cSerialNumber: string;
+    cCountDay: number | null;
   };
 }
 
