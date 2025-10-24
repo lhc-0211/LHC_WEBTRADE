@@ -26,10 +26,10 @@ export default function AccountInfo({
         <AccountInfoSkeleton />
       ) : (
         <div className="flex flex-col">
-          <div className="flex flex-row items-center justify-between text-sm font-medium h-9 bg-gray-300 text-text-body px-[20px]">
+          <div className="flex flex-row items-center justify-between text-sm font-medium h-9 bg-gray-300 text-text-body px-5">
             Thông tin cá nhân
           </div>
-          <div className="grid grid-rows-1 gap-4 px-[20px] pt-[16px] pb-[32px]">
+          <div className="grid grid-rows-1 gap-4 px-5 pt-4 pb-8">
             <div className="text-text-subtitle text-xs font-medium flex flex-col">
               Tên pháp lý
               <span className="text-text-title text-sm uppercase">

@@ -5,7 +5,7 @@ import { Tooltip } from "react-tooltip";
 import LoginModal from "../components/auth/LoginModal";
 import SessionExpiredModal from "../components/auth/SessionExpiredModal";
 import Header from "../components/header/Header";
-import Sidebar from "../components/sidebar/sidebar";
+import Sidebar from "../components/sidebar/Sidebar";
 import { useAppDispatch, useAppSelector } from "../store/hook";
 import { selectToken } from "../store/slices/auth/selector";
 import { fetchListShareStockRequest } from "../store/slices/place-order/slice";
@@ -89,7 +89,6 @@ export default function MainLayout({
         className="!bg-gray-800 !text-white !text-[10px] lg:!text-xs !px-2 !py-1 !rounded"
       />
 
-      {/* <ToastListener /> */}
       <ToastContainer />
     </div>
   );

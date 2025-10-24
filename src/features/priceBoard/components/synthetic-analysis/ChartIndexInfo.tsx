@@ -25,7 +25,7 @@ export default function ChartIndexInfo(props: Props) {
         <div
           className={`flex flex-row gap-2 items-center whitespace-nowrap ${dataIndex.status}`}
         >
-          <div className="p-[2px] rounded grid place-items-center bg-status-index">
+          <div className="p-0.5 rounded grid place-items-center bg-status-index">
             <FaArrowUpLong className=" w-3 h-3" />
           </div>{" "}
           <div className="flex flex-row gap-[5px] items-center">

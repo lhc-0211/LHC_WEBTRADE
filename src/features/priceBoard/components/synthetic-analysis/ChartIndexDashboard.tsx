@@ -29,7 +29,7 @@ export default function ChartIndexDashboard() {
   const infoIndex = useAppSelector(selectInfoIndex);
   const chartIndexs = useAppSelector(selectChartIndexs);
 
-  const { loading, error } = useAppSelector(selectInfoIndexStatus);
+  const { loading } = useAppSelector(selectInfoIndexStatus);
   const chartStatuses = useAppSelector(selectAllChartStatuses);
 
   useEffect(() => {

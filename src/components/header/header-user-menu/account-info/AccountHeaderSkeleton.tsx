@@ -6,7 +6,7 @@ export default function AccountHeaderSkeleton() {
 
       {/* Ảnh đại diện + tên */}
       <div className="relative px-6">
-        <div className="flex flex-row gap-4 items-center absolute -top-[14px]">
+        <div className="flex flex-row gap-4 items-center absolute -top-3.5">
           {/* Avatar */}
           <div className="w-16 h-16 rounded-full bg-gray-300/40 animate-pulse border border-yellow-300 shadow-[0_0_0_2px_rgba(250,204,21,0.3)] relative" />
 

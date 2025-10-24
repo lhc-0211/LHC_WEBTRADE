@@ -18,7 +18,7 @@ import type {
   AccountProfile,
   ChangeAccountInfoForm,
 } from "../../../../types/client";
-import ConfirmOTPModal from "../../../auth/ConfirmOTPModal";
+import ConfirmOTPModal from "../../../auth/ConfirmOtpModal";
 import Button from "../../../common/Button";
 import InputField from "../../../inputs/InputField";
 

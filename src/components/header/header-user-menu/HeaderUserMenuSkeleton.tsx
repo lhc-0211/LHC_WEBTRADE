@@ -1,6 +1,6 @@
 export default function HeaderUserMenuSkeleton() {
   return (
-    <div className="flex items-center gap-3 animate-pulse py-[2px]">
+    <div className="flex items-center gap-3 animate-pulse py-0.5">
       {/* Avatar giả */}
       <div className="w-9 h-9 bg-gray-300 rounded-full" />
 

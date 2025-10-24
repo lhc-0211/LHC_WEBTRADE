@@ -2,7 +2,7 @@ import type { ModeTableSynThetic } from "../../../../types";
 
 export function SynTheticTableSkeleton({ type }: { type: ModeTableSynThetic }) {
   return (
-    <div className="flex flex-col gap-[2px] w-full h-full">
+    <div className="flex flex-col gap-0.5 w-full h-full">
       {[...Array(4)].map((_, index) => (
         <div
           className="flex flex-row items-center gap-2 px-2 text-xs font-medium text-text-body animate-pulse"
